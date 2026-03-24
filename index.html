@@ -5,7 +5,7 @@
     <title>Tex Axes | Houston Axe Throwing</title>
     <meta
       name="description"
-      content="Houston’s axe throwing destination for first-timers, parties, date nights, team events, and league throwers."
+      content="Tex Axes is a Houston WATL axe throwing facility for first-timers, parties, date nights, team events, and league throwers."
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#101318" />
@@ -15,18 +15,16 @@
         --bg-elevated: #141922;
         --bg-soft: #1a2130;
         --card: rgba(255, 255, 255, 0.06);
-        --card-strong: rgba(255, 255, 255, 0.1);
         --text: #f5f7fb;
         --muted: #b8c2d1;
         --line: rgba(255, 255, 255, 0.12);
         --blue: #5d7dff;
-        --blue-2: #89a0ff;
         --red: #c55345;
         --red-2: #df6d5d;
         --gold: #f0c36b;
+        --green: #8ce3a5;
         --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
         --radius: 22px;
-        --radius-sm: 16px;
         --max: 1200px;
       }
 
@@ -70,7 +68,7 @@
         top: 0;
         z-index: 30;
         backdrop-filter: blur(16px);
-        background: rgba(10, 13, 19, 0.8);
+        background: rgba(10, 13, 19, 0.82);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
 
@@ -204,7 +202,7 @@
         border: 1px solid rgba(255, 255, 255, 0.12);
         background:
           linear-gradient(140deg, rgba(15, 19, 28, 0.78), rgba(18, 24, 35, 0.74)),
-          url("./assets/image_tex_axes_outside_01.jpg") center/cover no-repeat;
+          url("/assets/image_tex_axes_outside_01.jpg") center/cover no-repeat;
         box-shadow: var(--shadow);
       }
 
@@ -214,7 +212,7 @@
         background:
           radial-gradient(circle at 18% 18%, rgba(93, 125, 255, 0.2), transparent 28%),
           radial-gradient(circle at 82% 28%, rgba(197, 83, 69, 0.18), transparent 26%),
-          linear-gradient(90deg, rgba(8, 10, 15, 0.9) 0%, rgba(8, 10, 15, 0.72) 48%, rgba(8, 10, 15, 0.44) 100%);
+          linear-gradient(90deg, rgba(8, 10, 15, 0.92) 0%, rgba(8, 10, 15, 0.75) 48%, rgba(8, 10, 15, 0.45) 100%);
         pointer-events: none;
       }
 
@@ -222,7 +220,7 @@
         position: relative;
         z-index: 1;
         display: grid;
-        grid-template-columns: 1.08fr 0.92fr;
+        grid-template-columns: 1.06fr 0.94fr;
         gap: 36px;
         padding: 64px;
       }
@@ -241,6 +239,26 @@
         margin-bottom: 18px;
       }
 
+      .hero-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 0 0 18px;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #eef3ff;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
       h1 {
         margin: 0;
         font-size: clamp(2.6rem, 5vw, 5rem);
@@ -257,7 +275,7 @@
       .hero-copy {
         font-size: 1.1rem;
         color: #d7dfec;
-        max-width: 55ch;
+        max-width: 58ch;
         margin: 22px 0 28px;
       }
 
@@ -467,7 +485,7 @@
       }
 
       .story-media {
-        min-height: 320px;
+        min-height: 300px;
         background:
           linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.34)),
           center/cover no-repeat;
@@ -573,7 +591,7 @@
       }
 
       .price {
-        margin: 14px 0 12px;
+        margin: 14px 0 6px;
         font-size: 2.4rem;
         font-weight: 900;
         letter-spacing: -0.04em;
@@ -606,6 +624,27 @@
         content: "✓ ";
         color: #9bffcb;
         font-weight: 800;
+      }
+
+      .pricing-note {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 0.88rem;
+      }
+
+      .pricing-callout {
+        margin-top: 20px;
+        padding: 16px 18px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #e7eefb;
+      }
+
+      .pricing-callout strong {
+        display: block;
+        margin-bottom: 6px;
       }
 
       .gallery-grid {
@@ -875,33 +914,40 @@
             <div class="hero-grid">
               <div>
                 <div class="eyebrow">Houston’s axe throwing destination</div>
+
+                <div class="hero-badges">
+                  <div class="hero-badge">WATL Facility</div>
+                  <div class="hero-badge">League Play</div>
+                  <div class="hero-badge">BYOB Available</div>
+                </div>
+
                 <h1>
                   Throw harder.
                   <span class="accent">Celebrate better.</span>
                 </h1>
                 <p class="hero-copy">
                   First-timers, birthday crews, date nights, work teams, and league
-                  throwers all come to Tex Axes for the same reason: a real venue,
-                  real energy, and a night people actually remember.
+                  throwers come to Tex Axes for the same reason: a real venue, real
+                  energy, and a night people actually remember.
                 </p>
 
                 <div class="hero-actions">
                   <a class="btn btn-primary" href="#book">Book Your Session</a>
-                  <a class="btn btn-secondary" href="#play">Explore Experiences</a>
+                  <a class="btn btn-secondary" href="#pricing">See Pricing</a>
                 </div>
 
                 <div class="hero-points">
                   <div class="point">
-                    <strong>First-timer friendly</strong>
-                    <span>Coaching that helps new throwers feel confident fast.</span>
+                    <strong>$29 / thrower / hour</strong>
+                    <span>Simple base pricing with tax added at checkout.</span>
                   </div>
                   <div class="point">
-                    <strong>Groups & parties</strong>
-                    <span>Built for birthdays, celebrations, and memorable nights out.</span>
+                    <strong>$5 BYOB</strong>
+                    <span>Optional add-on for guests who want to bring their own beer.</span>
                   </div>
                   <div class="point">
-                    <strong>League ready</strong>
-                    <span>Strong atmosphere for repeat throwers and competitive play.</span>
+                    <strong>WATL + WKTL ready</strong>
+                    <span>Knife rental available for $20 per set.</span>
                   </div>
                 </div>
               </div>
@@ -910,32 +956,32 @@
                 <div class="panel-card" id="book">
                   <div class="panel-top">
                     <div class="panel-title">Live booking</div>
-                    <div class="pill">New site rollout</div>
+                    <div class="pill">Book by the hour</div>
                   </div>
 
                   <div class="booking-grid">
                     <div class="booking-row">
                       <div>
-                        <strong>General Sessions</strong>
-                        <span>Simple booking for casual visits and first-time groups.</span>
+                        <strong>Axe Throwing</strong>
+                        <span>$29 per hour per thrower, plus 8.25% tax.</span>
                       </div>
                       <em>Book now</em>
                     </div>
 
                     <div class="booking-row">
                       <div>
-                        <strong>Parties & Events</strong>
-                        <span>Birthdays, work outings, and larger group coordination.</span>
+                        <strong>BYOB Option</strong>
+                        <span>Add BYOB for $5 when you want to bring your own beer.</span>
                       </div>
-                      <em>Plan event</em>
+                      <em>Optional</em>
                     </div>
 
                     <div class="booking-row">
                       <div>
-                        <strong>Waivers</strong>
-                        <span>Fast pre-arrival access to keep check-in moving.</span>
+                        <strong>WKTL Knife Rental</strong>
+                        <span>$20 per set for guests who want the knife-throwing add-on.</span>
                       </div>
-                      <em>Sign online</em>
+                      <em>Add-on</em>
                     </div>
                   </div>
 
@@ -947,17 +993,17 @@
 
                 <div class="mini-grid">
                   <div class="info-card">
-                    <strong>Perfect for groups</strong>
+                    <strong>WATL Facility</strong>
                     <p>
-                      Friends, families, coworkers, birthdays, and celebrations with
-                      energy built in.
+                      Tex Axes is a World Axe Throwing League facility with competitive
+                      credibility built into the venue.
                     </p>
                   </div>
                   <div class="info-card">
-                    <strong>Real venue feel</strong>
+                    <strong>Good for groups</strong>
                     <p>
-                      Strong visuals, great lane energy, and the kind of experience
-                      people talk about after.
+                      Date nights, families, birthdays, work outings, and repeat
+                      throwers all fit naturally here.
                     </p>
                   </div>
                 </div>
@@ -973,9 +1019,9 @@
             <div>
               <h2>Play your way at Tex Axes</h2>
               <p>
-                The homepage should make it instantly obvious what Tex Axes does
-                best: memorable group energy, easy first-timer entry, and a clear path
-                into booking.
+                Tex Axes should feel instantly clear: first-timer friendly, strong for
+                parties, and real enough for league-minded throwers who want more than
+                a novelty stop.
               </p>
             </div>
           </div>
@@ -994,8 +1040,8 @@
               <div class="feature-icon">🎉</div>
               <h3>Birthday parties</h3>
               <p>
-                A stronger celebration format for groups who want more than a dinner
-                table.
+                A stronger celebration format for groups who want more energy than a
+                normal dinner outing.
               </p>
             </article>
 
@@ -1003,8 +1049,8 @@
               <div class="feature-icon">🏢</div>
               <h3>Corporate events</h3>
               <p>
-                Team outings with real interaction, competition, and way better
-                energy than the usual routine.
+                Team outings with real interaction, competition, and better energy
+                than the usual routine.
               </p>
             </article>
 
@@ -1026,14 +1072,14 @@
             <article class="story-card">
               <div
                 class="story-media"
-                style="background-image: url('./assets/image_group_party_01.jpg');"
+                style="background-image: url('/assets/image_group_party_01.jpg');"
               ></div>
               <div class="story-copy">
                 <h3>Built for nights that actually feel alive</h3>
                 <p>
                   Tex Axes works because it is active, social, competitive, and easy
-                  for groups to step into. This should be one of the strongest visual
-                  selling points on the site.
+                  for groups to step into. That feeling should be one of the strongest
+                  reasons people book.
                 </p>
               </div>
             </article>
@@ -1041,13 +1087,13 @@
             <article class="story-card">
               <div
                 class="story-media"
-                style="background-image: url('./assets/image_bcc_tournament_01.jpeg');"
+                style="background-image: url('/assets/image_bcc_tournament_01.jpeg');"
               ></div>
               <div class="story-copy">
                 <h3>Not just for first-timers</h3>
                 <p>
-                  The venue should reassure newcomers while still signaling to league
-                  throwers and competitive guests that this is the real thing.
+                  The venue should reassure newcomers while also signaling that this is
+                  a legitimate home for league and competitive throwing.
                 </p>
               </div>
             </article>
@@ -1062,15 +1108,14 @@
               <div class="experience-block">
                 <h3>Built for first-timers without feeling beginner-only</h3>
                 <p>
-                  The site should make new customers comfortable immediately while
-                  still giving experienced throwers a reason to take Tex Axes
-                  seriously.
+                  New customers should feel comfortable immediately, while experienced
+                  throwers should still recognize Tex Axes as the real thing.
                 </p>
                 <ul class="experience-list">
                   <li>Simple booking path with low friction</li>
                   <li>Clear group, party, and event positioning</li>
                   <li>Visible waiver access before arrival</li>
-                  <li>Stronger emphasis on atmosphere and confidence</li>
+                  <li>WATL facility credibility for return throwers</li>
                 </ul>
               </div>
             </div>
@@ -1087,8 +1132,8 @@
               <div class="experience-block">
                 <h3>Why they come back</h3>
                 <p>
-                  Because the venue feels real, the throwing feels real, and the
-                  experience stays fun after the first visit.
+                  Because the venue feels real, the throwing feels real, and there is
+                  room to keep growing into league and knife play.
                 </p>
               </div>
             </div>
@@ -1102,49 +1147,55 @@
             <div>
               <h2>Pricing that is easy to understand</h2>
               <p>
-                These are still placeholder blocks. Once you give me the actual Tex
-                Axes pricing model, I’ll convert this into the real live structure.
+                Simple base pricing, optional add-ons, and clear expectations before
+                guests arrive.
               </p>
             </div>
           </div>
 
           <div class="pricing-grid">
-            <article class="pricing-card">
-              <h3>Walk-In Fun</h3>
-              <div class="price">$-- <small>/ guest</small></div>
-              <p>Best for casual visits and smaller groups.</p>
-              <ul>
-                <li>Fast booking path</li>
-                <li>Beginner-friendly experience</li>
-                <li>Ideal for spontaneous visits</li>
-              </ul>
-              <a class="btn btn-secondary" href="#book">Choose this</a>
-            </article>
-
             <article class="pricing-card featured">
-              <div class="pricing-label">Most Popular</div>
-              <h3>Groups & Parties</h3>
-              <div class="price">$-- <small>/ group</small></div>
-              <p>For birthdays, celebrations, and event planning.</p>
+              <div class="pricing-label">Core Experience</div>
+              <h3>Axe Throwing</h3>
+              <div class="price">$29 <small>/ thrower / hour</small></div>
+              <p>Main booking rate for the Tex Axes experience.</p>
               <ul>
-                <li>Clearer event coordination</li>
-                <li>Built for larger reservations</li>
-                <li>Best for memorable gatherings</li>
+                <li>Per thrower, per hour</li>
+                <li>8.25% tax added at checkout</li>
+                <li>Great for casual visits and group bookings</li>
               </ul>
-              <a class="btn btn-primary" href="#book">Book a party</a>
+              <a class="btn btn-primary" href="#book">Book axe throwing</a>
             </article>
 
             <article class="pricing-card">
-              <h3>League & Repeat Play</h3>
-              <div class="price">$-- <small>/ season</small></div>
-              <p>For return customers and competitive throwers.</p>
+              <h3>BYOB Option</h3>
+              <div class="price">$5 <small>/ guest</small></div>
+              <p>Optional add-on for guests who want to bring their own beer.</p>
               <ul>
-                <li>Consistent throwing nights</li>
-                <li>Competitive progression</li>
-                <li>Community-driven format</li>
+                <li>Optional upgrade</li>
+                <li>Easy add-on during booking flow</li>
+                <li>Keeps party and group visits flexible</li>
               </ul>
-              <a class="btn btn-secondary" href="#book">Join interest list</a>
+              <a class="btn btn-secondary" href="#book">Add BYOB</a>
             </article>
+
+            <article class="pricing-card">
+              <h3>WKTL Knife Rental</h3>
+              <div class="price">$20 <small>/ set</small></div>
+              <p>Knife rental for guests who want the WKTL-style add-on experience.</p>
+              <ul>
+                <li>Rental priced per set</li>
+                <li>Strong add-on for repeat throwers</li>
+                <li>Pairs well with WATL facility positioning</li>
+              </ul>
+              <a class="btn btn-secondary" href="#book">Add knife rental</a>
+            </article>
+          </div>
+
+          <div class="pricing-callout">
+            <strong>Pricing note</strong>
+            Axe throwing is $29 per hour per thrower plus 8.25% tax. BYOB is optional
+            at $5. WKTL knife rental is $20 per set.
           </div>
         </div>
       </section>
@@ -1165,7 +1216,7 @@
             <article class="gallery-card">
               <div
                 class="gallery-media"
-                style="background-image: url('./assets/image_group_party_01.jpeg');"
+                style="background-image: url('/assets/image_group_party_01.jpeg');"
               ></div>
               <div class="gallery-copy">
                 <h3>Group energy</h3>
@@ -1176,7 +1227,7 @@
             <article class="gallery-card">
               <div
                 class="gallery-media"
-                style="background-image: url('./assets/image_duals_don_brandy_01.jpg');"
+                style="background-image: url('/assets/image_duals_don_brandy_01.jpg');"
               ></div>
               <div class="gallery-copy">
                 <h3>Real competition</h3>
@@ -1187,7 +1238,7 @@
             <article class="gallery-card">
               <div
                 class="gallery-media"
-                style="background-image: url('./assets/image_knives_champs_01.jpg');"
+                style="background-image: url('/assets/image_knives_champs_01.jpg');"
               ></div>
               <div class="gallery-copy">
                 <h3>Repeat throwers</h3>
@@ -1204,8 +1255,7 @@
             <div>
               <h2>Waivers and arrival flow</h2>
               <p>
-                This should reduce friction before guests arrive and make the check-in
-                process faster and cleaner.
+                Make pre-arrival steps obvious so check-in stays quick and clean.
               </p>
             </div>
           </div>
@@ -1221,10 +1271,10 @@
             </article>
 
             <article class="waiver-card">
-              <h3>Questions before you come?</h3>
+              <h3>Before you arrive</h3>
               <p>
-                Use this area for age rules, arrival timing, party instructions, or
-                what guests should expect when they show up.
+                Bring your crew, complete waivers early, and add BYOB or WKTL knife
+                rental during booking when available.
               </p>
               <a class="btn btn-secondary" href="#faqs">Read FAQs</a>
             </article>
@@ -1238,26 +1288,38 @@
             <div>
               <h2>Frequently asked questions</h2>
               <p>
-                These should be replaced with the exact Tex Axes operating policies
-                once you’re ready to lock them in.
+                The core guest questions should be answered clearly before they book.
               </p>
             </div>
           </div>
 
           <div class="faq-grid">
             <article class="faq-item">
-              <strong>Is Tex Axes good for first-time throwers?</strong>
+              <strong>How much does axe throwing cost?</strong>
               <p>
-                Yes. The experience is designed to feel accessible, exciting, and
-                welcoming even if someone has never thrown before.
+                Axe throwing is $29 per hour per thrower, plus 8.25% tax.
               </p>
             </article>
 
             <article class="faq-item">
-              <strong>Can we book for parties or work events?</strong>
+              <strong>Is BYOB available?</strong>
               <p>
-                Yes. The site structure supports both casual bookings and larger group
-                event positioning.
+                Yes. BYOB is optional and costs $5.
+              </p>
+            </article>
+
+            <article class="faq-item">
+              <strong>Do you offer knife throwing?</strong>
+              <p>
+                Yes. WKTL knife rental is available for $20 per set.
+              </p>
+            </article>
+
+            <article class="faq-item">
+              <strong>Is Tex Axes a WATL facility?</strong>
+              <p>
+                Yes. Tex Axes is a WATL facility and supports guests who want both a
+                fun first experience and a more serious throwing environment.
               </p>
             </article>
 
@@ -1270,10 +1332,10 @@
             </article>
 
             <article class="faq-item">
-              <strong>Will live booking connect to real capacity?</strong>
+              <strong>Can we book for parties or work events?</strong>
               <p>
-                Yes. The front-end is being positioned to connect into the separate Tex
-                Axes ops backend for deterministic booking and payment handling.
+                Yes. The site structure supports casual bookings, birthday parties,
+                work outings, and larger group event positioning.
               </p>
             </article>
           </div>
@@ -1284,11 +1346,11 @@
         <div class="container">
           <div class="cta-band">
             <div>
-              <h3>Ready to move TexAxes.com to the new experience?</h3>
+              <h3>Ready to book Tex Axes?</h3>
               <p>
-                This is now grounded in actual Tex Axes visuals instead of placeholders.
-                The next step is wiring the real booking link, waiver link, pricing,
-                and any must-have venue details before cutting the domain over.
+                Simple pricing, optional add-ons, strong group energy, and a real WATL
+                facility environment make Tex Axes easy to book and easy to come back
+                to.
               </p>
             </div>
             <a class="btn btn-primary" href="#book">Launch booking flow</a>
