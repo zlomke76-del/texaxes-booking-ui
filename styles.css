@@ -635,6 +635,42 @@ section {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
+/* === LEAGUE IMAGE LAYER (ADD THIS) === */
+
+.league-season-card {
+  overflow: hidden; /* important */
+}
+
+.league-season-media {
+  position: absolute;
+  inset: 0;
+  background-image: url("/assets/image_bcc_tournament_02.jpeg");
+  background-size: cover;
+  background-position: center right;
+  opacity: 0.65;
+  z-index: 0;
+}
+
+/* overlay for readability */
+.league-season-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 13, 19, 0.15) 0%,
+    rgba(10, 13, 19, 0.45) 45%,
+    rgba(10, 13, 19, 0.85) 100%
+  );
+}
+
+/* bring content above image */
+.league-season-card > * {
+  position: relative;
+  z-index: 2;
+}
+
 .league-season-head {
   display: grid;
   gap: 14px;
