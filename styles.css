@@ -547,6 +547,199 @@ section {
   width: auto;
   object-fit: contain;
 }
+/* === ADD THIS DIRECTLY BELOW YOUR .authority-strip STYLES === */
+
+.league-section {
+  padding-top: 10px;
+}
+
+.league-shell {
+  padding: 28px;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at top left, rgba(93, 125, 255, 0.14), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(197, 83, 69, 0.12), transparent 28%),
+    rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow);
+}
+
+/* HEADER */
+
+.league-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.league-heading h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  letter-spacing: -0.03em;
+}
+
+.section-copy {
+  margin-top: 10px;
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+.league-header-note {
+  display: grid;
+  gap: 6px;
+  min-width: 220px;
+}
+
+.league-note-pill {
+  display: inline-flex;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(93, 125, 255, 0.18);
+  border: 1px solid rgba(93, 125, 255, 0.3);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #dbe4ff;
+}
+
+.league-note-copy {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* OVERVIEW CARDS */
+
+.league-overview {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 18px 0 26px;
+}
+
+.league-summary-card {
+  padding: 18px;
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.league-summary-card strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1.05rem;
+}
+
+.league-summary-card span {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* TYPES HEADER */
+
+.league-types-head {
+  margin-bottom: 14px;
+}
+
+.league-types-eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #dbe4ff;
+  margin-bottom: 6px;
+}
+
+.league-types-copy {
+  color: var(--muted);
+  font-size: 0.92rem;
+  max-width: 56ch;
+}
+
+/* LEAGUE CARDS */
+
+.league-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.league-card {
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.league-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.league-card strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.98rem;
+}
+
+.league-card span {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+/* MARATHON CALLOUT */
+
+.marathon-callout {
+  margin-top: 22px;
+  padding: 18px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  background:
+    radial-gradient(circle at left, rgba(93, 125, 255, 0.14), transparent 30%),
+    rgba(255, 255, 255, 0.05);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.marathon-copy p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.marathon-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(240, 195, 107, 0.16);
+  border: 1px solid rgba(240, 195, 107, 0.28);
+  color: #ffe8b3;
+  white-space: nowrap;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .league-header {
+    flex-direction: column;
+  }
+
+  .league-overview,
+  .league-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .marathon-callout {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
 
 .feature-grid {
   display: grid;
