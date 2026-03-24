@@ -70,7 +70,7 @@
         top: 0;
         z-index: 30;
         backdrop-filter: blur(16px);
-        background: rgba(10, 13, 19, 0.78);
+        background: rgba(10, 13, 19, 0.8);
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       }
 
@@ -90,9 +90,10 @@
       }
 
       .brand-mark {
-        width: 46px;
-        height: 46px;
+        width: 50px;
+        height: 50px;
         border-radius: 14px;
+        overflow: hidden;
         display: grid;
         place-items: center;
         background:
@@ -100,7 +101,12 @@
           rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.12);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        font-size: 1.15rem;
+      }
+
+      .brand-mark img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
 
       .brand-copy {
@@ -197,9 +203,8 @@
         border-radius: 28px;
         border: 1px solid rgba(255, 255, 255, 0.12);
         background:
-          linear-gradient(140deg, rgba(15, 19, 28, 0.92), rgba(18, 24, 35, 0.78)),
-          url("https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1600&q=80")
-            center/cover no-repeat;
+          linear-gradient(140deg, rgba(15, 19, 28, 0.78), rgba(18, 24, 35, 0.74)),
+          url("./public/assets/image_tex_axes_outside_01.jpg") center/cover no-repeat;
         box-shadow: var(--shadow);
       }
 
@@ -207,9 +212,9 @@
         position: absolute;
         inset: 0;
         background:
-          radial-gradient(circle at 18% 18%, rgba(93, 125, 255, 0.24), transparent 28%),
-          radial-gradient(circle at 82% 28%, rgba(197, 83, 69, 0.24), transparent 26%),
-          linear-gradient(90deg, rgba(8, 10, 15, 0.9) 0%, rgba(8, 10, 15, 0.68) 48%, rgba(8, 10, 15, 0.34) 100%);
+          radial-gradient(circle at 18% 18%, rgba(93, 125, 255, 0.2), transparent 28%),
+          radial-gradient(circle at 82% 28%, rgba(197, 83, 69, 0.18), transparent 26%),
+          linear-gradient(90deg, rgba(8, 10, 15, 0.9) 0%, rgba(8, 10, 15, 0.72) 48%, rgba(8, 10, 15, 0.44) 100%);
         pointer-events: none;
       }
 
@@ -241,7 +246,7 @@
         font-size: clamp(2.6rem, 5vw, 5rem);
         line-height: 0.96;
         letter-spacing: -0.04em;
-        max-width: 10ch;
+        max-width: 11ch;
       }
 
       .hero h1 .accent {
@@ -300,7 +305,8 @@
       .faq-item,
       .gallery-card,
       .cta-band,
-      .waiver-card {
+      .waiver-card,
+      .story-card {
         background: var(--card);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: var(--radius);
@@ -446,6 +452,37 @@
       }
 
       .feature-card p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .story-grid {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 18px;
+      }
+
+      .story-card {
+        overflow: hidden;
+      }
+
+      .story-media {
+        min-height: 320px;
+        background:
+          linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.34)),
+          center/cover no-repeat;
+      }
+
+      .story-copy {
+        padding: 24px;
+      }
+
+      .story-copy h3 {
+        margin: 0 0 10px;
+        font-size: 1.35rem;
+      }
+
+      .story-copy p {
         margin: 0;
         color: var(--muted);
       }
@@ -701,7 +738,8 @@
       @media (max-width: 1100px) {
         .hero-grid,
         .experience-grid,
-        .waiver-shell {
+        .waiver-shell,
+        .story-grid {
           grid-template-columns: 1fr;
         }
 
@@ -777,7 +815,8 @@
         .gallery-copy,
         .experience-block,
         .waiver-card,
-        .cta-band {
+        .cta-band,
+        .story-copy {
           padding-left: 18px;
           padding-right: 18px;
         }
@@ -802,7 +841,9 @@
     <header class="site-header">
       <div class="container nav">
         <a class="brand" href="#top" aria-label="Tex Axes home">
-          <div class="brand-mark">🪓</div>
+          <div class="brand-mark">
+            <img src="./public/assets/image_camo_logo.png" alt="Tex Axes logo" />
+          </div>
           <div class="brand-copy">
             <div class="brand-title">Tex Axes</div>
             <div class="brand-subtitle">Houston axe throwing experiences</div>
@@ -839,9 +880,9 @@
                   <span class="accent">Celebrate better.</span>
                 </h1>
                 <p class="hero-copy">
-                  Tex Axes is built for first-timers, birthday crews, date nights,
-                  team events, and league throwers who want a great atmosphere,
-                  real coaching, and a night people actually remember.
+                  First-timers, birthday crews, date nights, work teams, and league
+                  throwers all come to Tex Axes for the same reason: a real venue,
+                  real energy, and a night people actually remember.
                 </p>
 
                 <div class="hero-actions">
@@ -852,15 +893,15 @@
                 <div class="hero-points">
                   <div class="point">
                     <strong>First-timer friendly</strong>
-                    <span>Coaching that makes new throwers comfortable fast.</span>
+                    <span>Coaching that helps new throwers feel confident fast.</span>
                   </div>
                   <div class="point">
                     <strong>Groups & parties</strong>
-                    <span>Birthdays, team outings, and celebrations that feel alive.</span>
+                    <span>Built for birthdays, celebrations, and memorable nights out.</span>
                   </div>
                   <div class="point">
-                    <strong>Competitive play</strong>
-                    <span>Perfect for leagues, repeat throwers, and skills progression.</span>
+                    <strong>League ready</strong>
+                    <span>Strong atmosphere for repeat throwers and competitive play.</span>
                   </div>
                 </div>
               </div>
@@ -869,14 +910,14 @@
                 <div class="panel-card" id="book">
                   <div class="panel-top">
                     <div class="panel-title">Live booking</div>
-                    <div class="pill">Coming online</div>
+                    <div class="pill">New site rollout</div>
                   </div>
 
                   <div class="booking-grid">
                     <div class="booking-row">
                       <div>
                         <strong>General Sessions</strong>
-                        <span>Easy booking for casual visits and first-time groups.</span>
+                        <span>Simple booking for casual visits and first-time groups.</span>
                       </div>
                       <em>Book now</em>
                     </div>
@@ -884,7 +925,7 @@
                     <div class="booking-row">
                       <div>
                         <strong>Parties & Events</strong>
-                        <span>Birthday parties, team events, and large group coordination.</span>
+                        <span>Birthdays, work outings, and larger group coordination.</span>
                       </div>
                       <em>Plan event</em>
                     </div>
@@ -892,7 +933,7 @@
                     <div class="booking-row">
                       <div>
                         <strong>Waivers</strong>
-                        <span>Quick access before arrival to keep check-in moving.</span>
+                        <span>Fast pre-arrival access to keep check-in moving.</span>
                       </div>
                       <em>Sign online</em>
                     </div>
@@ -913,10 +954,10 @@
                     </p>
                   </div>
                   <div class="info-card">
-                    <strong>Real experience</strong>
+                    <strong>Real venue feel</strong>
                     <p>
-                      Strong atmosphere, lane excitement, and a venue people want to
-                      come back to.
+                      Strong visuals, great lane energy, and the kind of experience
+                      people talk about after.
                     </p>
                   </div>
                 </div>
@@ -932,9 +973,9 @@
             <div>
               <h2>Play your way at Tex Axes</h2>
               <p>
-                The new site should make it immediately clear what Tex Axes does
-                best: host memorable experiences, reduce first-timer hesitation,
-                and make booking the next step feel obvious.
+                The homepage should make it instantly obvious what Tex Axes does
+                best: memorable group energy, easy first-timer entry, and a clear path
+                into booking.
               </p>
             </div>
           </div>
@@ -944,8 +985,8 @@
               <div class="feature-icon">🎯</div>
               <h3>Casual throwing</h3>
               <p>
-                Great for drop-in fun, date nights, and people trying axe throwing
-                for the first time.
+                Great for date nights, drop-ins, and people trying axe throwing for
+                the first time.
               </p>
             </article>
 
@@ -953,8 +994,8 @@
               <div class="feature-icon">🎉</div>
               <h3>Birthday parties</h3>
               <p>
-                A better celebration format for groups that want something more
-                memorable than dinner.
+                A stronger celebration format for groups who want more than a dinner
+                table.
               </p>
             </article>
 
@@ -962,8 +1003,8 @@
               <div class="feature-icon">🏢</div>
               <h3>Corporate events</h3>
               <p>
-                Team outings with real interaction, competition, and a venue that
-                breaks routine fast.
+                Team outings with real interaction, competition, and way better
+                energy than the usual routine.
               </p>
             </article>
 
@@ -981,13 +1022,49 @@
 
       <section>
         <div class="container">
+          <div class="story-grid">
+            <article class="story-card">
+              <div
+                class="story-media"
+                style="background-image: url('./public/assets/image_group_party_01.jpg');"
+              ></div>
+              <div class="story-copy">
+                <h3>Built for nights that actually feel alive</h3>
+                <p>
+                  Tex Axes works because it is active, social, competitive, and easy
+                  for groups to step into. This should be one of the strongest visual
+                  selling points on the site.
+                </p>
+              </div>
+            </article>
+
+            <article class="story-card">
+              <div
+                class="story-media"
+                style="background-image: url('./public/assets/image_bcc_tournament_01.jpeg');"
+              ></div>
+              <div class="story-copy">
+                <h3>Not just for first-timers</h3>
+                <p>
+                  The venue should reassure newcomers while still signaling to league
+                  throwers and competitive guests that this is the real thing.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
           <div class="experience-grid">
             <div class="experience-main">
               <div class="experience-block">
                 <h3>Built for first-timers without feeling beginner-only</h3>
                 <p>
-                  The site should reassure new customers immediately while still
-                  signaling to experienced throwers that Tex Axes is the real thing.
+                  The site should make new customers comfortable immediately while
+                  still giving experienced throwers a reason to take Tex Axes
+                  seriously.
                 </p>
                 <ul class="experience-list">
                   <li>Simple booking path with low friction</li>
@@ -1002,15 +1079,15 @@
               <div class="experience-block">
                 <h3>Why people book</h3>
                 <p>
-                  Because it is active, social, and different from the usual night
-                  out.
+                  Because it is active, social, different, and easy to turn into a
+                  memorable night out.
                 </p>
               </div>
 
               <div class="experience-block">
                 <h3>Why they come back</h3>
                 <p>
-                  Because the venue feels alive, the throwing feels real, and the
+                  Because the venue feels real, the throwing feels real, and the
                   experience stays fun after the first visit.
                 </p>
               </div>
@@ -1025,8 +1102,8 @@
             <div>
               <h2>Pricing that is easy to understand</h2>
               <p>
-                These are placeholder presentation blocks for now. We can replace
-                them with your actual pricing model once you give me the live rules.
+                These are still placeholder blocks. Once you give me the actual Tex
+                Axes pricing model, I’ll convert this into the real live structure.
               </p>
             </div>
           </div>
@@ -1076,11 +1153,10 @@
         <div class="container">
           <div class="section-head">
             <div>
-              <h2>Show the energy, not just the lanes</h2>
+              <h2>See the energy before you walk in</h2>
               <p>
-                This gallery structure is designed to sell the feeling of Tex Axes.
-                We can replace these placeholders with your real venue photography and
-                media next.
+                The gallery should sell the venue, the people, and the atmosphere —
+                not just the concept of axe throwing.
               </p>
             </div>
           </div>
@@ -1089,33 +1165,33 @@
             <article class="gallery-card">
               <div
                 class="gallery-media"
-                style="background-image: url('https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=1200&q=80');"
+                style="background-image: url('./public/assets/image_group_party_01.jpeg');"
               ></div>
               <div class="gallery-copy">
-                <h3>Friends night out</h3>
-                <p>Competitive, loud, fun, and easy to share with a group.</p>
+                <h3>Group energy</h3>
+                <p>Friends night out, parties, and the kind of crowd energy people remember.</p>
               </div>
             </article>
 
             <article class="gallery-card">
               <div
                 class="gallery-media"
-                style="background-image: url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80');"
+                style="background-image: url('./public/assets/image_duals_don_brandy_01.jpg');"
               ></div>
               <div class="gallery-copy">
-                <h3>Team events</h3>
-                <p>Better energy than a conference room and far more memorable.</p>
+                <h3>Real competition</h3>
+                <p>Head-to-head moments that make the venue feel active and alive.</p>
               </div>
             </article>
 
             <article class="gallery-card">
               <div
                 class="gallery-media"
-                style="background-image: url('https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80');"
+                style="background-image: url('./public/assets/image_knives_champs_01.jpg');"
               ></div>
               <div class="gallery-copy">
-                <h3>Celebrations</h3>
-                <p>Birthdays, parties, and group events with a real venue feel.</p>
+                <h3>Repeat throwers</h3>
+                <p>Competitive atmosphere for guests who want more than a one-time novelty visit.</p>
               </div>
             </article>
           </div>
@@ -1128,8 +1204,8 @@
             <div>
               <h2>Waivers and arrival flow</h2>
               <p>
-                This section should make pre-arrival steps obvious and reduce friction
-                at check-in.
+                This should reduce friction before guests arrive and make the check-in
+                process faster and cleaner.
               </p>
             </div>
           </div>
@@ -1138,7 +1214,8 @@
             <article class="waiver-card">
               <h3>Sign your waiver online</h3>
               <p>
-                Give guests a fast, clear path to complete waivers before they arrive.
+                Give every guest a fast, obvious path to complete waivers before they
+                walk in.
               </p>
               <a class="btn btn-primary" href="#">Open waiver</a>
             </article>
@@ -1146,8 +1223,8 @@
             <article class="waiver-card">
               <h3>Questions before you come?</h3>
               <p>
-                Use this area for age rules, arrival timing, group instructions, or
-                what guests should expect when they walk in.
+                Use this area for age rules, arrival timing, party instructions, or
+                what guests should expect when they show up.
               </p>
               <a class="btn btn-secondary" href="#faqs">Read FAQs</a>
             </article>
@@ -1161,8 +1238,8 @@
             <div>
               <h2>Frequently asked questions</h2>
               <p>
-                We can replace these with your exact policies and operating rules once
-                you want to lock them in.
+                These should be replaced with the exact Tex Axes operating policies
+                once you’re ready to lock them in.
               </p>
             </div>
           </div>
@@ -1171,23 +1248,23 @@
             <article class="faq-item">
               <strong>Is Tex Axes good for first-time throwers?</strong>
               <p>
-                Yes. The experience should feel accessible and exciting even if someone
-                has never thrown before.
+                Yes. The experience is designed to feel accessible, exciting, and
+                welcoming even if someone has never thrown before.
               </p>
             </article>
 
             <article class="faq-item">
               <strong>Can we book for parties or work events?</strong>
               <p>
-                Yes. The new site is structured to support both casual bookings and
-                larger group experiences.
+                Yes. The site structure supports both casual bookings and larger group
+                event positioning.
               </p>
             </article>
 
             <article class="faq-item">
               <strong>Do guests need to sign a waiver?</strong>
               <p>
-                Yes. The waiver flow should be visible and easy to complete before
+                Yes. The waiver flow should stay visible and easy to complete before
                 arrival.
               </p>
             </article>
@@ -1195,7 +1272,7 @@
             <article class="faq-item">
               <strong>Will live booking connect to real capacity?</strong>
               <p>
-                Yes. This front-end is positioned to connect into your separate Tex
+                Yes. The front-end is being positioned to connect into the separate Tex
                 Axes ops backend for deterministic booking and payment handling.
               </p>
             </article>
@@ -1209,9 +1286,9 @@
             <div>
               <h3>Ready to move TexAxes.com to the new experience?</h3>
               <p>
-                This homepage is the right starting shell. Next we should wire in your
-                actual booking links, real pricing, venue photos, waiver URL, and
-                event flow—then cut the domain over once it is fully ready.
+                This is now grounded in actual Tex Axes visuals instead of placeholders.
+                The next step is wiring the real booking link, waiver link, pricing,
+                and any must-have venue details before cutting the domain over.
               </p>
             </div>
             <a class="btn btn-primary" href="#book">Launch booking flow</a>
