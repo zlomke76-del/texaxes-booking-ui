@@ -1,155 +1,1339 @@
-<section class="league-section" id="leagues">
-  <div class="container">
-    <div class="league-shell">
-      <div class="league-top">
-        <div class="league-intro">
-          <div class="eyebrow">League Play at Tex Axes</div>
+:root {
+  --bg: #0d1015;
+  --bg-elevated: #141922;
+  --bg-soft: #1a2130;
+  --card: rgba(255, 255, 255, 0.06);
+  --card-strong: rgba(255, 255, 255, 0.1);
+  --text: #f5f7fb;
+  --muted: #b8c2d1;
+  --line: rgba(255, 255, 255, 0.12);
+  --blue: #5d7dff;
+  --blue-2: #89a0ff;
+  --red: #c55345;
+  --red-2: #df6d5d;
+  --gold: #f0c36b;
+  --green: #8ce3a5;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  --radius: 22px;
+  --radius-sm: 16px;
+  --max: 1200px;
+}
 
-          <h2>Where casual throwers become competitive</h2>
+* {
+  box-sizing: border-box;
+}
 
-          <div class="league-logos">
-            <a
-              class="hero-logo-chip watl"
-              href="https://axethrowing.org/watl"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Open WATL world leaderboard"
-              title="Open WATL world leaderboard"
-            >
-              <img src="/assets/image_logo_watl_01.png" alt="WATL logo" />
-            </a>
+html {
+  scroll-behavior: smooth;
+}
 
-            <a
-              class="hero-logo-chip wktl"
-              href="https://axethrowing.org/watl"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Open WKTL world leaderboard"
-              title="Open WKTL world leaderboard"
-            >
-              <img src="/assets/image_logo_wktl_01.png" alt="WKTL logo" />
-            </a>
-          </div>
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(93, 125, 255, 0.16), transparent 32%),
+    radial-gradient(circle at 85% 15%, rgba(197, 83, 69, 0.16), transparent 24%),
+    linear-gradient(180deg, #0b0f15 0%, #10151d 50%, #0c1118 100%);
+  color: var(--text);
+  line-height: 1.5;
+}
 
-          <p class="section-copy">
-            Tex Axes hosts official WATL and WKTL leagues in structured 8-week
-            seasons for throwers who want more than a one-time session. Start
-            casual, build consistency, and step into real sanctioned competition
-            without leaving Houston.
-          </p>
+a {
+  color: inherit;
+  text-decoration: none;
+}
 
-          <div class="league-cta-row">
-            <a class="btn btn-primary" href="#cta">Ask About Leagues</a>
-            <a class="btn btn-secondary" href="#pricing">See Pricing</a>
-          </div>
-        </div>
+img {
+  max-width: 100%;
+  display: block;
+}
 
-        <div class="league-season-card">
-          <div class="league-season-head">
-            <div class="league-note-pill">Official WATL + WKTL League Format</div>
-            <div class="league-season-price">$120 <span>per league</span></div>
-          </div>
+.container {
+  width: min(var(--max), calc(100% - 32px));
+  margin: 0 auto;
+}
 
-          <div class="league-season-copy">
-            Includes 1 hour of warmup and practice each week alongside league play.
-          </div>
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(16px);
+  background: rgba(10, 13, 19, 0.82);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
 
-          <div class="league-timeline">
-            <div class="league-timeline-track"></div>
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 78px;
+}
 
-            <div class="league-timeline-step">
-              <strong>Weeks 1–7</strong>
-              <span>Sanctioned play</span>
-            </div>
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
 
-            <div class="league-timeline-step league-timeline-step-final">
-              <strong>Week 8</strong>
-              <span>League tournament</span>
-            </div>
-          </div>
+.brand-mark {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(135deg, rgba(93, 125, 255, 0.22), rgba(197, 83, 69, 0.18)),
+    rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
 
-          <div class="league-season-meta">
-            <span>Structured progression</span>
-            <span>Repeat competition</span>
-            <span>Real rules & scoring</span>
-          </div>
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-          <div class="league-outcome">
-            <strong>Why throw league?</strong>
+.brand-copy {
+  min-width: 0;
+}
 
-            <div class="league-outcome-list">
-              <div>✔ Consistent weekly reps</div>
-              <div>✔ Real match pressure</div>
-              <div>✔ Tournament experience</div>
-              <div>✔ Progress you can measure</div>
-            </div>
-          </div>
-        </div>
-      </div>
+.brand-title {
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  font-size: 1rem;
+}
 
-      <div class="league-overview">
-        <div class="league-summary-card">
-          <strong>8-week season</strong>
-          <span>
-            A clear competitive format that moves from sanctioned weekly play into a
-            final tournament.
-          </span>
-        </div>
+.brand-subtitle {
+  color: var(--muted);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
 
-        <div class="league-summary-card">
-          <strong>Built for progression</strong>
-          <span>
-            A real path from first visit to repeat throwing, consistency, and league
-            competition.
-          </span>
-        </div>
-      </div>
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
 
-      <div class="league-types-head">
-        <div class="league-types-eyebrow">League formats offered</div>
-        <p class="league-types-copy">
-          Multiple disciplines run through Tex Axes each season so throwers can
-          grow into the format that fits them best.
-        </p>
-      </div>
+.nav-links a {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.96rem;
+  transition: color 0.2s ease;
+}
 
-      <div class="league-grid">
-        <div class="league-card league-card-featured">
-          <strong>Standard Hatchet League</strong>
-          <span>Classic sanctioned hatchet play for all skill levels.</span>
-        </div>
+.nav-links a:hover {
+  color: var(--text);
+}
 
-        <div class="league-card">
-          <strong>Duals Hatchet League</strong>
-          <span>Partner-based hatchet competition with team coordination.</span>
-        </div>
+.nav-cta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
 
-        <div class="league-card">
-          <strong>Big Axe League</strong>
-          <span>Heavier throws, bigger commitment, higher skill ceiling.</span>
-        </div>
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 18px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+}
 
-        <div class="league-card">
-          <strong>Knife Throwing League</strong>
-          <span>Official WKTL competition built around precision and control.</span>
-        </div>
+.btn:hover {
+  transform: translateY(-1px);
+}
 
-        <div class="league-card">
-          <strong>Knife Duals League</strong>
-          <span>Team-based knife competition for throwers who want more depth.</span>
-        </div>
-      </div>
+.btn-primary {
+  color: #fff;
+  background: linear-gradient(135deg, var(--red), var(--red-2));
+  box-shadow: 0 14px 32px rgba(197, 83, 69, 0.3);
+}
 
-      <div class="marathon-callout">
-        <div class="marathon-copy">
-          <strong>Marathon league formats also available</strong>
-          <p>
-            Each season, Tex Axes also hosts these same league formats in marathon
-            style for throwers who want an alternate competitive path.
-          </p>
-        </div>
-        <div class="marathon-badge">Seasonal format</div>
-      </div>
-    </div>
-  </div>
-</section>
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: var(--text);
+}
+
+.menu-toggle {
+  display: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  font-size: 1.2rem;
+}
+
+.hero {
+  padding: 52px 0 32px;
+}
+
+.hero-shell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    linear-gradient(140deg, rgba(15, 19, 28, 0.78), rgba(18, 24, 35, 0.74)),
+    url("/assets/image_tex_axes_outside_01.jpg") center/cover no-repeat;
+  box-shadow: var(--shadow);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(93, 125, 255, 0.2), transparent 28%),
+    radial-gradient(circle at 82% 28%, rgba(197, 83, 69, 0.18), transparent 26%),
+    linear-gradient(90deg, rgba(8, 10, 15, 0.92) 0%, rgba(8, 10, 15, 0.75) 48%, rgba(8, 10, 15, 0.45) 100%);
+  pointer-events: none;
+}
+
+.hero-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.06fr 0.94fr;
+  gap: 36px;
+  padding: 64px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #dbe4ff;
+  font-size: 0.84rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 18px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #eef3ff;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.hero-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 22px;
+}
+
+.hero-logo-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+/* WATL — white authority card */
+.hero-logo-chip.watl {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* WKTL — darker supporting card */
+.hero-logo-chip.wktl {
+  background: #2a2f3a;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Logo sizing */
+.hero-logo-chip img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+/* Hover polish */
+.hero-logo-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.hero-logo-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.hero-logo-chip img {
+  max-height: 34px;
+  width: auto;
+  object-fit: contain;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.6rem, 5vw, 5rem);
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  max-width: 11ch;
+}
+
+.hero h1 .accent {
+  display: block;
+  color: #fff2dc;
+}
+
+.hero-copy {
+  font-size: 1.1rem;
+  color: #d7dfec;
+  max-width: 58ch;
+  margin: 22px 0 28px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.hero-points {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.point {
+  padding: 14px 14px 15px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.point strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 3px;
+}
+
+.point span {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.hero-panel {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.panel-card,
+.info-card,
+.feature-card,
+.pricing-card,
+.faq-item,
+.gallery-card,
+.cta-band,
+.waiver-card,
+.story-card,
+.authority-strip,
+.league-callout {
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.panel-card {
+  padding: 22px;
+  backdrop-filter: blur(10px);
+}
+
+.panel-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.panel-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 7px 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #dce4f5;
+  background: rgba(93, 125, 255, 0.14);
+  border: 1px solid rgba(93, 125, 255, 0.28);
+}
+
+.booking-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.booking-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.booking-row:last-child {
+  border-bottom: 0;
+}
+
+.booking-row strong {
+  display: block;
+  font-size: 0.98rem;
+}
+
+.booking-row span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.booking-row em {
+  font-style: normal;
+  color: #fff1d2;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.mini-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.info-card {
+  padding: 18px;
+}
+
+.info-card strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.info-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.93rem;
+}
+
+section {
+  padding: 28px 0;
+}
+
+.section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 22px;
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  letter-spacing: -0.03em;
+}
+
+.section-head p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  max-width: 62ch;
+}
+
+.authority-strip {
+  padding: 28px;
+  background:
+    radial-gradient(circle at top left, rgba(93, 125, 255, 0.18), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(197, 83, 69, 0.12), transparent 28%),
+    rgba(255, 255, 255, 0.05);
+}
+
+.authority-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+
+.authority-copy h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  letter-spacing: -0.03em;
+}
+
+.authority-copy p {
+  margin: 10px 0 0;
+  max-width: 64ch;
+  color: var(--muted);
+}
+
+.authority-logos {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.authority-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 132px;
+  height: 72px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.authority-logo:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.authority-logo img {
+  max-height: 42px;
+  width: auto;
+  object-fit: contain;
+}
+/* === ADD THIS DIRECTLY BELOW YOUR .authority-strip STYLES === */
+
+.league-section {
+  padding-top: 10px;
+}
+
+.league-shell {
+  position: relative;
+  overflow: hidden;
+  padding: 30px;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at top left, rgba(93, 125, 255, 0.18), transparent 30%),
+    radial-gradient(circle at 86% 18%, rgba(197, 83, 69, 0.14), transparent 24%),
+    linear-gradient(135deg, rgba(17, 22, 31, 0.94), rgba(20, 26, 37, 0.88));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow);
+}
+
+.league-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(8, 10, 15, 0.16) 0%, rgba(8, 10, 15, 0) 42%, rgba(8, 10, 15, 0.08) 100%);
+  pointer-events: none;
+}
+
+.league-top {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.08fr 0.92fr;
+  gap: 22px;
+  align-items: stretch;
+  margin-bottom: 22px;
+}
+
+.league-intro h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3.6vw, 3.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  max-width: 11ch;
+}
+
+.league-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin: 16px 0 14px;
+}
+
+.league-logos .hero-logo-chip {
+  padding: 12px 18px;
+  border-radius: 12px;
+}
+
+.league-logos .hero-logo-chip img {
+  max-height: 36px;
+}
+
+.section-copy {
+  margin-top: 0;
+  color: var(--muted);
+  max-width: 58ch;
+}
+
+.league-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.league-season-card {
+  position: relative;
+  z-index: 1;
+  padding: 22px;
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at top right, rgba(93, 125, 255, 0.16), transparent 32%),
+    rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.league-season-head {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.league-note-pill {
+  display: inline-flex;
+  width: fit-content;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: rgba(93, 125, 255, 0.18);
+  border: 1px solid rgba(93, 125, 255, 0.3);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #dbe4ff;
+}
+
+.league-season-price {
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 0.95;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.league-season-price span {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0;
+}
+
+.league-season-copy {
+  color: var(--muted);
+  max-width: 34ch;
+}
+
+.league-timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 20px;
+  padding-top: 18px;
+}
+
+.league-timeline-track {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(93, 125, 255, 0.6), rgba(240, 195, 107, 0.6));
+}
+
+.league-timeline-step {
+  position: relative;
+  padding: 16px 16px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.league-timeline-step::before {
+  content: "";
+  position: absolute;
+  top: -9px;
+  left: 18px;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: var(--blue-2);
+  box-shadow: 0 0 0 4px rgba(93, 125, 255, 0.16);
+}
+
+.league-timeline-step-final::before {
+  background: var(--gold);
+  box-shadow: 0 0 0 4px rgba(240, 195, 107, 0.14);
+}
+
+.league-timeline-step strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.98rem;
+}
+
+.league-timeline-step span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.league-season-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.league-season-meta span {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e8eef8;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.league-overview {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 24px;
+}
+
+.league-summary-card {
+  padding: 18px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.league-summary-card strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1.05rem;
+}
+
+.league-summary-card span {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.league-types-head {
+  margin-bottom: 14px;
+}
+
+.league-types-eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #dbe4ff;
+  margin-bottom: 6px;
+}
+
+.league-types-copy {
+  color: var(--muted);
+  font-size: 0.92rem;
+  max-width: 56ch;
+}
+
+.league-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.league-card {
+  padding: 18px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.league-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.18);
+}
+
+.league-card-featured {
+  background:
+    radial-gradient(circle at top left, rgba(93, 125, 255, 0.12), transparent 34%),
+    rgba(255, 255, 255, 0.06);
+}
+
+.league-card strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.98rem;
+}
+
+.league-card span {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.marathon-callout {
+  margin-top: 22px;
+  padding: 18px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background:
+    radial-gradient(circle at left, rgba(93, 125, 255, 0.14), transparent 30%),
+    rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.marathon-copy p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.marathon-badge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(240, 195, 107, 0.16);
+  border: 1px solid rgba(240, 195, 107, 0.28);
+  color: #ffe8b3;
+  white-space: nowrap;
+}
+
+@media (max-width: 980px) {
+  .league-top {
+    grid-template-columns: 1fr;
+  }
+
+  .league-overview,
+  .league-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .marathon-callout {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.feature-card {
+  padding: 22px;
+}
+
+.feature-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(93, 125, 255, 0.2), rgba(197, 83, 69, 0.18));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+}
+
+.feature-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+}
+
+.feature-card p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 18px;
+}
+
+.story-card {
+  overflow: hidden;
+}
+
+.story-media {
+  min-height: 300px;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.34)),
+    center/cover no-repeat;
+}
+
+.story-copy {
+  padding: 24px;
+}
+
+.story-copy h3 {
+  margin: 0 0 10px;
+  font-size: 1.35rem;
+}
+
+.story-copy p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.experience-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 18px;
+}
+
+.experience-main,
+.experience-side {
+  display: grid;
+  gap: 18px;
+}
+
+.experience-block {
+  padding: 24px;
+  border-radius: var(--radius);
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow);
+}
+
+.experience-block h3 {
+  margin: 0 0 10px;
+  font-size: 1.22rem;
+}
+
+.experience-block p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.experience-list {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 12px;
+}
+
+.experience-list li {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+  color: #dbe3f0;
+}
+
+.experience-list li::before {
+  content: "•";
+  color: var(--gold);
+  font-weight: 900;
+}
+
+.league-callout {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  background:
+    radial-gradient(circle at top left, rgba(93, 125, 255, 0.14), transparent 28%),
+    rgba(255, 255, 255, 0.05);
+}
+
+.league-callout h3 {
+  margin: 0 0 8px;
+  font-size: 1.3rem;
+}
+
+.league-callout p {
+  margin: 0;
+  color: var(--muted);
+  max-width: 58ch;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.pricing-card {
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pricing-card.featured {
+  background:
+    linear-gradient(180deg, rgba(93, 125, 255, 0.13), rgba(255, 255, 255, 0.05));
+}
+
+.pricing-label {
+  display: inline-flex;
+  margin-bottom: 14px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(240, 195, 107, 0.14);
+  border: 1px solid rgba(240, 195, 107, 0.24);
+  color: #ffe8b3;
+  font-weight: 800;
+  font-size: 0.78rem;
+}
+
+.pricing-card h3 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.price {
+  margin: 14px 0 6px;
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.price small {
+  color: var(--muted);
+  font-size: 0.98rem;
+  font-weight: 700;
+}
+
+.pricing-card p {
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 22px;
+  display: grid;
+  gap: 10px;
+}
+
+.pricing-card li {
+  color: #dde5f3;
+}
+
+.pricing-card li::before {
+  content: "✓ ";
+  color: #9bffcb;
+  font-weight: 800;
+}
+
+.pricing-callout {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e7eefb;
+}
+
+.pricing-callout strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.gallery-card {
+  overflow: hidden;
+}
+
+.gallery-media {
+  aspect-ratio: 4 / 3;
+  background-size: cover;
+  background-position: center;
+}
+
+.gallery-copy {
+  padding: 18px;
+}
+
+.gallery-copy h3 {
+  margin: 0 0 6px;
+  font-size: 1.06rem;
+}
+
+.gallery-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.waiver-shell {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.waiver-card {
+  padding: 24px;
+}
+
+.waiver-card h3 {
+  margin: 0 0 10px;
+  font-size: 1.22rem;
+}
+
+.waiver-card p {
+  margin: 0 0 18px;
+  color: var(--muted);
+}
+
+.faq-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.faq-item {
+  padding: 20px 22px;
+}
+
+.faq-item strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.faq-item p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.cta-band {
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(93, 125, 255, 0.18), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(197, 83, 69, 0.16), transparent 28%),
+    rgba(255, 255, 255, 0.05);
+}
+
+.cta-band h3 {
+  margin: 0 0 8px;
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+}
+
+.cta-band p {
+  margin: 0;
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+.site-footer {
+  padding: 28px 0 48px;
+}
+
+.footer-shell {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-copy {
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-links a {
+  color: var(--muted);
+  font-size: 0.94rem;
+}
+
+.footer-links a:hover {
+  color: var(--text);
+}
+
+@media (max-width: 1100px) {
+  .hero-grid,
+  .experience-grid,
+  .waiver-shell,
+  .story-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-grid,
+  .pricing-grid,
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero-grid {
+    padding: 42px;
+  }
+
+  .authority-top,
+  .league-callout {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+
+@media (max-width: 840px) {
+  .nav-links,
+  .nav-cta .btn-secondary {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: inline-grid;
+    place-items: center;
+  }
+
+  .nav {
+    min-height: 72px;
+  }
+
+  .hero {
+    padding-top: 24px;
+  }
+
+  .hero-grid {
+    padding: 26px;
+    gap: 22px;
+  }
+
+  .hero-points,
+  .mini-grid,
+  .feature-grid,
+  .pricing-grid,
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-band,
+  .footer-shell,
+  .section-head {
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .brand-subtitle {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .container {
+    width: min(var(--max), calc(100% - 20px));
+  }
+
+  .hero-grid {
+    padding: 20px;
+  }
+
+  .panel-card,
+  .info-card,
+  .feature-card,
+  .pricing-card,
+  .faq-item,
+  .gallery-copy,
+  .experience-block,
+  .waiver-card,
+  .cta-band,
+  .story-copy,
+  .authority-strip,
+  .league-callout {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .booking-row {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .hero-logo-chip,
+  .authority-logo {
+    min-width: 100px;
+  }
+}
