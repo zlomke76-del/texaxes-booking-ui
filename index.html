@@ -5,7 +5,7 @@
     <title>Tex Axes | Houston Axe Throwing</title>
     <meta
       name="description"
-      content="Tex Axes is a Houston WATL axe throwing facility for first-timers, parties, date nights, team events, and league throwers."
+      content="Tex Axes is Houston’s only certified WATL axe throwing venue with WKTL knife throwing, league play, parties, date nights, and team events."
     />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#101318" />
@@ -15,16 +15,19 @@
         --bg-elevated: #141922;
         --bg-soft: #1a2130;
         --card: rgba(255, 255, 255, 0.06);
+        --card-strong: rgba(255, 255, 255, 0.1);
         --text: #f5f7fb;
         --muted: #b8c2d1;
         --line: rgba(255, 255, 255, 0.12);
         --blue: #5d7dff;
+        --blue-2: #89a0ff;
         --red: #c55345;
         --red-2: #df6d5d;
         --gold: #f0c36b;
         --green: #8ce3a5;
         --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
         --radius: 22px;
+        --radius-sm: 16px;
         --max: 1200px;
       }
 
@@ -259,6 +262,33 @@
         font-weight: 700;
       }
 
+      .hero-logos {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 14px;
+        margin: 0 0 22px;
+      }
+
+      .hero-logo-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 112px;
+        height: 56px;
+        padding: 10px 16px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      }
+
+      .hero-logo-chip img {
+        max-height: 34px;
+        width: auto;
+        object-fit: contain;
+      }
+
       h1 {
         margin: 0;
         font-size: clamp(2.6rem, 5vw, 5rem);
@@ -324,7 +354,9 @@
       .gallery-card,
       .cta-band,
       .waiver-card,
-      .story-card {
+      .story-card,
+      .authority-strip,
+      .league-callout {
         background: var(--card);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: var(--radius);
@@ -442,6 +474,59 @@
         max-width: 62ch;
       }
 
+      .authority-strip {
+        padding: 28px;
+        background:
+          radial-gradient(circle at top left, rgba(93, 125, 255, 0.18), transparent 30%),
+          radial-gradient(circle at bottom right, rgba(197, 83, 69, 0.12), transparent 28%),
+          rgba(255, 255, 255, 0.05);
+      }
+
+      .authority-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        margin-bottom: 18px;
+      }
+
+      .authority-copy h2 {
+        margin: 0;
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        letter-spacing: -0.03em;
+      }
+
+      .authority-copy p {
+        margin: 10px 0 0;
+        max-width: 64ch;
+        color: var(--muted);
+      }
+
+      .authority-logos {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .authority-logo {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 132px;
+        height: 72px;
+        padding: 12px 18px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .authority-logo img {
+        max-height: 42px;
+        width: auto;
+        object-fit: contain;
+      }
+
       .feature-grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -556,6 +641,28 @@
         font-weight: 900;
       }
 
+      .league-callout {
+        padding: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 22px;
+        background:
+          radial-gradient(circle at top left, rgba(93, 125, 255, 0.14), transparent 28%),
+          rgba(255, 255, 255, 0.05);
+      }
+
+      .league-callout h3 {
+        margin: 0 0 8px;
+        font-size: 1.3rem;
+      }
+
+      .league-callout p {
+        margin: 0;
+        color: var(--muted);
+        max-width: 58ch;
+      }
+
       .pricing-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -624,13 +731,6 @@
         content: "✓ ";
         color: #9bffcb;
         font-weight: 800;
-      }
-
-      .pricing-note {
-        display: block;
-        margin-top: 8px;
-        color: var(--muted);
-        font-size: 0.88rem;
       }
 
       .pricing-callout {
@@ -778,7 +878,8 @@
         .hero-grid,
         .experience-grid,
         .waiver-shell,
-        .story-grid {
+        .story-grid,
+        .authority-top {
           grid-template-columns: 1fr;
         }
 
@@ -790,6 +891,12 @@
 
         .hero-grid {
           padding: 42px;
+        }
+
+        .authority-top,
+        .league-callout {
+          flex-direction: column;
+          align-items: start;
         }
       }
 
@@ -855,7 +962,9 @@
         .experience-block,
         .waiver-card,
         .cta-band,
-        .story-copy {
+        .story-copy,
+        .authority-strip,
+        .league-callout {
           padding-left: 18px;
           padding-right: 18px;
         }
@@ -872,6 +981,11 @@
         .booking-row {
           flex-direction: column;
           gap: 6px;
+        }
+
+        .hero-logo-chip,
+        .authority-logo {
+          min-width: 100px;
         }
       }
     </style>
@@ -913,12 +1027,21 @@
 
             <div class="hero-grid">
               <div>
-                <div class="eyebrow">Houston’s axe throwing destination</div>
+                <div class="eyebrow">Houston’s only certified throwing venue</div>
 
                 <div class="hero-badges">
-                  <div class="hero-badge">WATL Facility</div>
-                  <div class="hero-badge">League Play</div>
-                  <div class="hero-badge">BYOB Available</div>
+                  <div class="hero-badge">Official WATL Facility</div>
+                  <div class="hero-badge">Official WKTL Knife Throwing</div>
+                  <div class="hero-badge">Only certified venue in Houston</div>
+                </div>
+
+                <div class="hero-logos">
+                  <div class="hero-logo-chip">
+                    <img src="/assets/image_logo_watl_01.png" alt="WATL logo" />
+                  </div>
+                  <div class="hero-logo-chip">
+                    <img src="/assets/image_logo_wktl_01.png" alt="WKTL logo" />
+                  </div>
                 </div>
 
                 <h1>
@@ -927,8 +1050,9 @@
                 </h1>
                 <p class="hero-copy">
                   First-timers, birthday crews, date nights, work teams, and league
-                  throwers come to Tex Axes for the same reason: a real venue, real
-                  energy, and a night people actually remember.
+                  throwers come to Tex Axes for the same reason: real venue energy,
+                  real competitive credibility, and Houston’s only certified WATL and
+                  WKTL throwing experience.
                 </p>
 
                 <div class="hero-actions">
@@ -993,21 +1117,89 @@
 
                 <div class="mini-grid">
                   <div class="info-card">
-                    <strong>WATL Facility</strong>
+                    <strong>Certified competition standards</strong>
                     <p>
-                      Tex Axes is a World Axe Throwing League facility with competitive
-                      credibility built into the venue.
+                      WATL and WKTL operate with standardized rules and competitive
+                      formats, so the venue signals much more than casual novelty. 
                     </p>
                   </div>
                   <div class="info-card">
-                    <strong>Good for groups</strong>
+                    <strong>Good for groups and return throwers</strong>
                     <p>
-                      Date nights, families, birthdays, work outings, and repeat
-                      throwers all fit naturally here.
+                      Date nights, families, birthdays, work outings, and serious
+                      repeat throwers all fit naturally here.
                     </p>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="authority-strip">
+            <div class="authority-top">
+              <div class="authority-copy">
+                <h2>Not just axe throwing. A certified throwing venue.</h2>
+                <p>
+                  Tex Axes is the only certified WATL and WKTL venue in the Houston
+                  area. That means guests can enjoy a first-time night out, join league
+                  play, or grow into a more serious throwing environment without
+                  leaving the city.
+                </p>
+              </div>
+
+              <div class="authority-logos">
+                <div class="authority-logo">
+                  <img src="/assets/image_logo_watl_01.png" alt="WATL logo" />
+                </div>
+                <div class="authority-logo">
+                  <img src="/assets/image_logo_wktl_01.png" alt="WKTL logo" />
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-grid">
+              <article class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <h3>Official WATL Facility</h3>
+                <p>
+                  WATL publishes standardized rules, scoring, lane standards, and
+                  league formats used worldwide, so the experience carries real
+                  competitive legitimacy.
+                </p>
+              </article>
+
+              <article class="feature-card">
+                <div class="feature-icon">🔪</div>
+                <h3>WKTL Knife Throwing</h3>
+                <p>
+                  WKTL gives Tex Axes a second competitive lane beyond axes, creating
+                  a stronger upgrade path for guests who want more than one activity.
+                </p>
+              </article>
+
+              <article class="feature-card">
+                <div class="feature-icon">📍</div>
+                <h3>Only in Houston</h3>
+                <p>
+                  Tex Axes is the only certified venue in Houston. The next option is
+                  roughly three hours away, which gives this venue real scarcity and
+                  local authority.
+                </p>
+              </article>
+
+              <article class="feature-card">
+                <div class="feature-icon">📈</div>
+                <h3>Grow Into League Play</h3>
+                <p>
+                  First-time guests can start casually, then step into league and
+                  repeat throwing with a clear path instead of aging out after one
+                  visit.
+                </p>
+              </article>
             </div>
           </div>
         </div>
@@ -1072,7 +1264,7 @@
             <article class="story-card">
               <div
                 class="story-media"
-                style="background-image: url('/assets/image_group_party_01.jpg');"
+                style="background-image: url('/assets/image_group_party_01.jpg'); background-position: center center;"
               ></div>
               <div class="story-copy">
                 <h3>Built for nights that actually feel alive</h3>
@@ -1087,7 +1279,7 @@
             <article class="story-card">
               <div
                 class="story-media"
-                style="background-image: url('/assets/image_bcc_tournament_01.jpeg');"
+                style="background-image: url('/assets/image_bcc_tournament_01.jpeg'); background-position: center top;"
               ></div>
               <div class="story-copy">
                 <h3>Not just for first-timers</h3>
@@ -1115,7 +1307,7 @@
                   <li>Simple booking path with low friction</li>
                   <li>Clear group, party, and event positioning</li>
                   <li>Visible waiver access before arrival</li>
-                  <li>WATL facility credibility for return throwers</li>
+                  <li>WATL and WKTL authority for return throwers</li>
                 </ul>
               </div>
             </div>
@@ -1141,6 +1333,22 @@
         </div>
       </section>
 
+      <section>
+        <div class="container">
+          <div class="league-callout">
+            <div>
+              <h3>Houston’s path from first throw to league play</h3>
+              <p>
+                Most venues sell a one-time experience. Tex Axes can sell a first
+                visit, a second visit, a league path, and a WKTL upgrade path because
+                the venue is anchored in recognized throwing organizations.
+              </p>
+            </div>
+            <a class="btn btn-secondary" href="#faqs">See why certification matters</a>
+          </div>
+        </div>
+      </section>
+
       <section id="pricing">
         <div class="container">
           <div class="section-head">
@@ -1158,7 +1366,7 @@
               <div class="pricing-label">Core Experience</div>
               <h3>Axe Throwing</h3>
               <div class="price">$29 <small>/ thrower / hour</small></div>
-              <p>Main booking rate for the Tex Axes experience.</p>
+              <p>Main booking rate for Houston’s certified WATL throwing experience.</p>
               <ul>
                 <li>Per thrower, per hour</li>
                 <li>8.25% tax added at checkout</li>
@@ -1186,7 +1394,7 @@
               <ul>
                 <li>Rental priced per set</li>
                 <li>Strong add-on for repeat throwers</li>
-                <li>Pairs well with WATL facility positioning</li>
+                <li>Pairs naturally with certified venue positioning</li>
               </ul>
               <a class="btn btn-secondary" href="#book">Add knife rental</a>
             </article>
@@ -1216,7 +1424,7 @@
             <article class="gallery-card">
               <div
                 class="gallery-media"
-                style="background-image: url('/assets/image_group_party_01.jpeg');"
+                style="background-image: url('/assets/image_group_party_01.jpeg'); background-position: center center;"
               ></div>
               <div class="gallery-copy">
                 <h3>Group energy</h3>
@@ -1227,7 +1435,7 @@
             <article class="gallery-card">
               <div
                 class="gallery-media"
-                style="background-image: url('/assets/image_duals_don_brandy_01.jpg');"
+                style="background-image: url('/assets/image_duals_don_brandy_01.jpg'); background-position: center center;"
               ></div>
               <div class="gallery-copy">
                 <h3>Real competition</h3>
@@ -1238,7 +1446,7 @@
             <article class="gallery-card">
               <div
                 class="gallery-media"
-                style="background-image: url('/assets/image_knives_champs_01.jpg');"
+                style="background-image: url('/assets/image_knives_champs_01.jpg'); background-position: center center;"
               ></div>
               <div class="gallery-copy">
                 <h3>Repeat throwers</h3>
@@ -1316,10 +1524,29 @@
             </article>
 
             <article class="faq-item">
-              <strong>Is Tex Axes a WATL facility?</strong>
+              <strong>What does WATL certification mean?</strong>
               <p>
-                Yes. Tex Axes is a WATL facility and supports guests who want both a
-                fun first experience and a more serious throwing environment.
+                WATL publishes standardized rules, target design, scoring, distances,
+                and competition formats, so Tex Axes is not just selling a casual
+                activity — it is offering a venue aligned with recognized competitive
+                standards.
+              </p>
+            </article>
+
+            <article class="faq-item">
+              <strong>What does WKTL add to the experience?</strong>
+              <p>
+                WKTL creates a second competitive lane through knife throwing, which
+                gives repeat guests and more advanced throwers another reason to come
+                back.
+              </p>
+            </article>
+
+            <article class="faq-item">
+              <strong>Is Tex Axes the only certified venue in Houston?</strong>
+              <p>
+                Yes. Tex Axes is the only certified WATL and WKTL venue in the Houston
+                area, with the next comparable option roughly three hours away.
               </p>
             </article>
 
@@ -1346,10 +1573,10 @@
         <div class="container">
           <div class="cta-band">
             <div>
-              <h3>Ready to book Tex Axes?</h3>
+              <h3>Ready to book Houston’s certified throwing venue?</h3>
               <p>
-                Simple pricing, optional add-ons, strong group energy, and a real WATL
-                facility environment make Tex Axes easy to book and easy to come back
+                Simple pricing, optional add-ons, strong group energy, and real WATL
+                and WKTL credibility make Tex Axes easy to book and easy to come back
                 to.
               </p>
             </div>
