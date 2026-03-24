@@ -631,15 +631,7 @@ section {
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   overflow: hidden;
-
-  /* REMOVE background here completely */
   background: transparent;
-}
-
-/* === LEAGUE IMAGE LAYER (ADD THIS) === */
-
-.league-season-card {
-  overflow: hidden; /* important */
 }
 
 .league-season-media {
@@ -652,7 +644,6 @@ section {
   z-index: 0;
 }
 
-/* overlay for readability */
 .league-season-card::after {
   content: "";
   position: absolute;
@@ -666,8 +657,7 @@ section {
   );
 }
 
-/* bring content above image */
-.league-season-card > * {
+.league-season-card > :not(.league-season-media) {
   position: relative;
   z-index: 2;
 }
