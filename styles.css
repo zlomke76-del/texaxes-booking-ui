@@ -262,16 +262,35 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 112px;
-  height: 56px;
   padding: 10px 16px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  border-radius: 10px;
+  transition: all 0.2s ease;
 }
 
+/* WATL — white authority card */
+.hero-logo-chip.watl {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+/* WKTL — darker supporting card */
+.hero-logo-chip.wktl {
+  background: #2a2f3a;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Logo sizing */
+.hero-logo-chip img {
+  height: 28px;
+  width: auto;
+  display: block;
+}
+
+/* Hover polish */
+.hero-logo-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
 .hero-logo-chip:hover {
   transform: translateY(-1px);
   border-color: rgba(255, 255, 255, 0.22);
