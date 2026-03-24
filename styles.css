@@ -628,11 +628,12 @@ section {
   z-index: 1;
   padding: 22px;
   border-radius: 20px;
-  background:
-    radial-gradient(circle at top right, rgba(93, 125, 255, 0.16), transparent 32%),
-    rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+
+  /* REMOVE background here completely */
+  background: transparent;
 }
 
 /* === LEAGUE IMAGE LAYER (ADD THIS) === */
@@ -647,7 +648,7 @@ section {
   background-image: url("/assets/image_bcc_tournament_02.jpeg");
   background-size: cover;
   background-position: center right;
-  opacity: 0.65;
+  opacity: 0.7;
   z-index: 0;
 }
 
@@ -660,7 +661,7 @@ section {
   background: linear-gradient(
     180deg,
     rgba(10, 13, 19, 0.15) 0%,
-    rgba(10, 13, 19, 0.45) 45%,
+    rgba(10, 13, 19, 0.45) 50%,
     rgba(10, 13, 19, 0.85) 100%
   );
 }
