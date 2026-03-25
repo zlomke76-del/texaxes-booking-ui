@@ -1071,6 +1071,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  isolation: isolate;
 }
 
 .feature-card::before {
@@ -1128,6 +1129,7 @@ h1 {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     180deg,
     rgba(10, 13, 19, 0.08) 0%,
@@ -1141,7 +1143,7 @@ h1 {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: 2;
   background: linear-gradient(
     180deg,
     rgba(10, 13, 19, 0.08) 0%,
@@ -1152,9 +1154,13 @@ h1 {
   pointer-events: none;
 }
 
-.feature-overlay {
+/* elevate ALL content above media + overlays */
+.feature-card > *:not(.feature-media) {
   position: relative;
   z-index: 3;
+}
+
+.feature-overlay {
   margin-bottom: 10px;
 }
 
@@ -1175,8 +1181,6 @@ h1 {
 }
 
 .feature-card h3 {
-  position: relative;
-  z-index: 3;
   margin: 0 0 10px;
   font-size: 1.22rem;
   line-height: 1.15;
@@ -1184,9 +1188,7 @@ h1 {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
 }
 
-.feature-card > p {
-  position: relative;
-  z-index: 3;
+.feature-card p {
   display: block;
   margin: 0;
   font-size: 0.95rem;
@@ -1200,7 +1202,6 @@ h1 {
 .feature-icon {
   display: none;
 }
-
 /* =========================
    STORY / EXPERIENCE
 ========================= */
