@@ -1244,14 +1244,53 @@ section {
 .addon-item {
   padding: 16px 18px;
   border-radius: 16px;
+  position: relative;
+  overflow: hidden;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
     rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: var(--shadow);
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.addon-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top left,
+    var(--addon-accent, rgba(255, 255, 255, 0.18)),
+    transparent 55%
+  );
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.addon-item::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  bottom: 12px;
+  left: 0;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--addon-accent, transparent);
+  opacity: 0.75;
+}
+
+.addon-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
 }
 
 .addon-title {
+  position: relative;
+  z-index: 1;
   font-weight: 800;
   margin-bottom: 6px;
   color: var(--text);
@@ -1259,6 +1298,8 @@ section {
 }
 
 .addon-price {
+  position: relative;
+  z-index: 1;
   font-size: 1.2rem;
   font-weight: 900;
   color: #e7eefb;
@@ -1269,6 +1310,7 @@ section {
   font-size: 0.82rem;
   font-weight: 700;
 }
+
 /* assign a color per addon */
 .addon-item.byob {
   --addon-accent: rgba(240, 195, 107, 1);
@@ -1290,6 +1332,25 @@ section {
   --addon-accent: rgba(180, 140, 255, 1);
 }
 
+.addon-item.byob .addon-price {
+  color: #ffe8b3;
+}
+
+.addon-item.knife .addon-price {
+  color: #cfe0ff;
+}
+
+.addon-item.pro .addon-price {
+  color: #baffd6;
+}
+
+.addon-item.big .addon-price {
+  color: #ffb3b3;
+}
+
+.addon-item.shovel .addon-price {
+  color: #d8c7ff;
+}
 
 .pricing-league {
   margin-top: 46px;
