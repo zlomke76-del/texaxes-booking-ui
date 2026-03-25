@@ -917,18 +917,15 @@ section {
 .feature-card {
   position: relative;
   overflow: hidden;
-  min-height: 240px;
-  padding: 24px;
+  min-height: 320px;
+  padding: 0;
   border-radius: 22px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03)),
-    rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: var(--shadow);
   transition:
     transform 0.22s ease,
     border-color 0.22s ease,
-    background 0.22s ease,
     box-shadow 0.22s ease;
 }
 
@@ -937,7 +934,8 @@ section {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.9;
+  z-index: 1;
+  opacity: 1;
 }
 
 .feature-card:hover {
@@ -946,59 +944,21 @@ section {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24);
 }
 
-.feature-card-casual::before {
-  background: radial-gradient(circle at top left, rgba(93, 125, 255, 0.16), transparent 34%);
+.feature-card-date::before {
+  background: radial-gradient(circle at top left, rgba(93, 125, 255, 0.14), transparent 34%);
 }
 
 .feature-card-party::before {
-  background: radial-gradient(circle at top left, rgba(240, 195, 107, 0.18), transparent 34%);
+  background: radial-gradient(circle at top left, rgba(240, 195, 107, 0.14), transparent 34%);
 }
 
 .feature-card-corporate::before {
-  background: radial-gradient(circle at top left, rgba(140, 227, 165, 0.14), transparent 34%);
+  background: radial-gradient(circle at top left, rgba(140, 227, 165, 0.12), transparent 34%);
 }
 
-.feature-card-league::before {
-  background: radial-gradient(circle at top left, rgba(197, 83, 69, 0.16), transparent 34%);
+.feature-card-night::before {
+  background: radial-gradient(circle at top left, rgba(197, 83, 69, 0.14), transparent 34%);
 }
-
-.feature-card > * {
-  position: relative;
-  z-index: 1;
-}
-
-.feature-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  margin-bottom: 16px;
-  font-size: 1.2rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.feature-kicker {
-  margin-bottom: 8px;
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #dbe4ff;
-}
-
-.feature-card h3 {
-  margin: 0 0 10px;
-  font-size: 1.18rem;
-}
-
-.feature-card p {
-  margin: 0;
-  color: var(--muted);
-  line-height: 1.65;
-}
-/* === IMAGE CARD SYSTEM === */
 
 .feature-media {
   position: absolute;
@@ -1010,51 +970,48 @@ section {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
-/* dark gradient for readability */
 .feature-media::after {
   content: "";
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(10, 13, 19, 0.05) 0%,
-    rgba(10, 13, 19, 0.4) 50%,
+    rgba(10, 13, 19, 0.06) 0%,
+    rgba(10, 13, 19, 0.32) 48%,
     rgba(10, 13, 19, 0.92) 100%
   );
 }
 
-/* overlay text container */
 .feature-overlay {
   position: absolute;
-  bottom: 18px;
-  left: 18px;
-  right: 18px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
   z-index: 2;
 }
 
-/* tighten overlay text */
-.feature-overlay .feature-kicker {
-  margin-bottom: 6px;
-  font-size: 0.7rem;
+.feature-kicker {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
   letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #dbe4ff;
 }
 
 .feature-overlay h3 {
   margin: 0;
-  font-size: 1.2rem;
-  line-height: 1.2;
+  font-size: 1.22rem;
+  line-height: 1.15;
 }
 
-/* push paragraph BELOW image */
-.feature-card p {
-  position: relative;
-  z-index: 2;
-  margin-top: 12px;
+.feature-icon,
+.feature-card > p {
+  display: none;
 }
-
 .story-grid {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
