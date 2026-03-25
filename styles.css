@@ -1709,24 +1709,74 @@ h1 {
   color: var(--muted);
 }
 
+/* =========================
+   FAQ (ACCORDION)
+========================= */
+
 .faq-grid {
   display: grid;
   gap: 14px;
 }
 
+/* container */
 .faq-item {
-  padding: 20px 22px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  transition: all 0.2s ease;
 }
 
-.faq-item strong {
-  display: block;
-  margin-bottom: 6px;
+/* clickable header */
+.faq-item summary {
+  cursor: pointer;
+  padding: 18px 22px;
   font-size: 1rem;
+  font-weight: 600;
+  list-style: none;
+  position: relative;
 }
 
+/* remove default arrow */
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+/* custom + / – icon */
+.faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.faq-item[open] summary::after {
+  content: "–";
+  opacity: 1;
+}
+
+/* answer */
 .faq-item p {
+  padding: 0 22px 18px;
   margin: 0;
   color: var(--muted);
+  line-height: 1.5;
+}
+
+/* hover state */
+.faq-item:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* open state (THIS is what you were missing) */
+.faq-item[open] {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
 }
 
 .cta-band {
