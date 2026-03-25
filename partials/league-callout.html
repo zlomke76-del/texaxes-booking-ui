@@ -31,24 +31,25 @@
 
           <p class="section-copy">
             Tex Axes hosts official WATL and WKTL leagues in structured 8-week
-            seasons for throwers who want more than a one-time session.
+            seasons for throwers who want more than a one-time session. Start
+            casual, build consistency, and step into real sanctioned competition
+            without leaving Houston.
           </p>
 
-          <!-- NEW: LIVE SEASON STATUS -->
           <div id="league-status" class="league-season-status"></div>
           <div id="league-next" class="league-season-substatus"></div>
 
-          <div class="league-progress-strip">
+          <div class="league-progress-strip" aria-label="League progression">
             <div class="league-progress-item">
               <strong>Practice Weekly</strong>
               <span>Build repeat reps and confidence</span>
             </div>
-            <div class="league-progress-arrow">→</div>
+            <div class="league-progress-arrow" aria-hidden="true">→</div>
             <div class="league-progress-item">
               <strong>Compete Officially</strong>
               <span>Throw under real rules and scoring</span>
             </div>
-            <div class="league-progress-arrow">→</div>
+            <div class="league-progress-arrow" aria-hidden="true">→</div>
             <div class="league-progress-item">
               <strong>Tournament Finish</strong>
               <span>Close the season in live competition</span>
@@ -61,17 +62,14 @@
           </div>
         </div>
 
-        <!-- RIGHT CARD -->
         <div class="league-season-card">
-          <div class="league-season-media"></div>
-
+          <div class="league-season-media" aria-hidden="true"></div>
           <div class="league-live-badge">Live League Night</div>
 
           <div class="league-season-head">
             <div class="league-note-pill">
               Official WATL + WKTL League Format
             </div>
-
             <div class="league-season-price">
               $120 <span>per league</span>
             </div>
@@ -81,12 +79,12 @@
             Includes 1 hour of warmup and practice each week alongside league play.
           </div>
 
-          <!-- 🔥 UPGRADED TIMELINE -->
           <div class="league-timeline">
-
             <div class="league-timeline-track"></div>
+            <div class="league-timeline-progress" id="league-timeline-progress"></div>
+            <div class="league-timeline-glow" id="league-timeline-glow"></div>
 
-            <div class="league-timeline-step" id="timeline-regular">
+            <div class="league-timeline-step league-timeline-step-active" id="timeline-regular">
               <div class="league-step-dot"></div>
               <strong id="timeline-weeks-label">Weeks 1–7</strong>
               <span id="timeline-weeks-sub">Sanctioned weekly play</span>
@@ -97,13 +95,12 @@
               <strong>Week 8</strong>
               <span>Tournament finish</span>
             </div>
-
           </div>
 
           <div class="league-season-meta">
             <span>Structured progression</span>
             <span>Repeat competition</span>
-            <span>Real rules & scoring</span>
+            <span>Real rules &amp; scoring</span>
           </div>
 
           <div class="league-outcome">
@@ -119,92 +116,195 @@
         </div>
       </div>
 
-      <!-- DISCIPLINES -->
-      <div class="league-grid">
+      <div class="league-overview">
+        <div class="league-summary-card">
+          <strong>8-week season</strong>
+          <span>
+            A clear competitive format that moves from sanctioned weekly play into a
+            final tournament.
+          </span>
+        </div>
 
+        <div class="league-summary-card">
+          <strong>Built for progression</strong>
+          <span>
+            A real path from first visit to repeat throwing, consistency, and league
+            competition.
+          </span>
+        </div>
+      </div>
+
+      <div class="league-types-head">
+        <div class="league-types-eyebrow">League formats offered</div>
+        <p class="league-types-copy">
+          Multiple disciplines run through Tex Axes each season so throwers can
+          grow into the format that fits them best.
+        </p>
+      </div>
+
+      <div class="league-grid">
         <div class="league-card league-card-featured">
+          <div class="league-card-kicker">
+            Best for first-time competitors
+          </div>
           <strong>Standard Hatchet League</strong>
-          <span>Classic sanctioned hatchet play.</span>
+          <span>
+            Classic sanctioned hatchet play for all skill levels.
+          </span>
           <div class="league-inline-note" id="hatchet-next"></div>
         </div>
 
         <div class="league-card">
+          <div class="league-card-kicker">Team coordination</div>
           <strong>Duals Hatchet League</strong>
-          <span>Partner-based hatchet competition.</span>
+          <span>
+            Partner-based hatchet competition built around teamwork and rhythm.
+          </span>
           <div class="league-inline-note" id="hatchet-duals-next"></div>
         </div>
 
         <div class="league-card">
+          <div class="league-card-kicker">Higher skill ceiling</div>
           <strong>Big Axe League</strong>
-          <span>Advanced competitive throws.</span>
+          <span>
+            Heavier throws, bigger commitment, and advanced competitive reps.
+          </span>
           <div class="league-inline-note" id="bigaxe-next"></div>
         </div>
 
         <div class="league-card">
+          <div class="league-card-kicker">WKTL precision format</div>
           <strong>Knife Throwing League</strong>
-          <span>WKTL precision competition.</span>
+          <span>
+            Official WKTL competition built around precision and control.
+          </span>
           <div class="league-inline-note" id="knife-next"></div>
         </div>
 
         <div class="league-card">
+          <div class="league-card-kicker">Team-based knife play</div>
           <strong>Knife Duals League</strong>
-          <span>Partner knife competition.</span>
+          <span>
+            Partner competition for knife throwers who want more structure and depth.
+          </span>
           <div class="league-inline-note" id="knife-duals-next"></div>
         </div>
-
       </div>
 
       <div class="marathon-callout">
         <div class="marathon-copy">
-          <strong>Marathon leagues also available</strong>
-          <p>Saturday marathon dates are posted once finalized each season.</p>
+          <strong>Marathon league formats also available</strong>
+          <p>
+            Saturday marathon dates are posted once finalized each season. See full
+            league dates for schedule updates.
+          </p>
         </div>
         <div class="marathon-badge">Seasonal format</div>
       </div>
-
     </div>
   </div>
 
-  <!-- 🔥 DATA ENGINE -->
   <script src="/assets/data/league-dates.js"></script>
   <script>
-    const data = window.TEX_AXES_LEAGUE_DATES;
+    (function () {
+      const data = window.TEX_AXES_LEAGUE_DATES;
+      if (!data || !Array.isArray(data.days) || !data.days.length) return;
 
-    const start = new Date(data.days[0].startDate + "T12:00:00");
-    const today = new Date();
+      const start = new Date(data.days[0].startDate + "T12:00:00");
+      const today = new Date();
 
-    const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-    const week = Math.max(1, Math.min(8, Math.floor(diffDays / 7) + 1));
+      const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+      const rawWeek = Math.floor(diffDays / 7) + 1;
+      const week = Math.max(1, Math.min(8, rawWeek));
 
-    document.getElementById("league-status").textContent =
-      "Currently in Week " + week + " of 8";
+      const statusEl = document.getElementById("league-status");
+      const nextEl = document.getElementById("league-next");
+      const timelineWeeksSub = document.getElementById("timeline-weeks-sub");
+      const timelineWeeksLabel = document.getElementById("timeline-weeks-label");
+      const timelineRegular = document.getElementById("timeline-regular");
+      const timelineFinal = document.getElementById("timeline-final");
+      const progressEl = document.getElementById("league-timeline-progress");
+      const glowEl = document.getElementById("league-timeline-glow");
 
-    function nextDate(baseDate, weekdayOffset) {
-      const d = new Date(baseDate);
-      d.setDate(d.getDate() + weekdayOffset);
-      return d.toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric"
-      });
-    }
+      function formatShortDate(date) {
+        return date.toLocaleDateString("en-US", {
+          weekday: "short",
+          month: "short",
+          day: "numeric"
+        });
+      }
 
-    document.getElementById("hatchet-next").textContent =
-      "Next: " + nextDate(start, (week - 1) * 7) + " · 2:00 PM";
+      function addDays(date, days) {
+        const d = new Date(date);
+        d.setDate(d.getDate() + days);
+        return d;
+      }
 
-    document.getElementById("hatchet-duals-next").textContent =
-      "Next: " + nextDate(start, (week - 1) * 7) + " · 3:00 PM";
+      function nextDateFrom(startDate, weekdayOffsetDays, timeLabel) {
+        const d = addDays(startDate, weekdayOffsetDays + (week - 1) * 7);
+        return "Next: " + formatShortDate(d) + " · " + timeLabel;
+      }
 
-    document.getElementById("knife-next").textContent =
-      "Next: Tue · 6:30 PM";
+      function getTimelinePercent(currentWeek) {
+        if (currentWeek <= 1) return 6;
+        if (currentWeek === 2) return 18;
+        if (currentWeek === 3) return 30;
+        if (currentWeek === 4) return 42;
+        if (currentWeek === 5) return 54;
+        if (currentWeek === 6) return 66;
+        if (currentWeek === 7) return 78;
+        return 100;
+      }
 
-    document.getElementById("knife-duals-next").textContent =
-      "Next: Tue · 7:30 PM";
+      const currentSunday = addDays(start, (week - 1) * 7);
+      const progressPercent = getTimelinePercent(week);
 
-    document.getElementById("bigaxe-next").textContent =
-      "Next: Thu · 6:30 PM";
+      if (statusEl) {
+        statusEl.textContent = "Currently in Week " + week + " of 8";
+      }
 
-    document.getElementById("timeline-weeks-sub").textContent =
-      "Week " + week + " active";
+      if (nextEl) {
+        nextEl.textContent = "Current league week began " + formatShortDate(currentSunday);
+      }
+
+      if (week < 8) {
+        if (timelineWeeksLabel) timelineWeeksLabel.textContent = "Weeks 1–7";
+        if (timelineWeeksSub) timelineWeeksSub.textContent = "Week " + week + " active";
+        if (timelineRegular) timelineRegular.classList.add("league-timeline-step-active");
+      } else {
+        if (timelineWeeksLabel) timelineWeeksLabel.textContent = "Weeks 1–7";
+        if (timelineWeeksSub) timelineWeeksSub.textContent = "Regular season complete";
+        if (timelineRegular) timelineRegular.classList.add("league-timeline-step-complete");
+        if (timelineFinal) {
+          timelineFinal.classList.add(
+            "league-timeline-step-active",
+            "league-timeline-step-tournament"
+          );
+        }
+      }
+
+      if (progressEl) {
+        progressEl.style.width = progressPercent + "%";
+      }
+
+      if (glowEl) {
+        requestAnimationFrame(() => {
+          glowEl.classList.add("is-visible");
+          glowEl.style.transform = "translateX(calc(" + progressPercent + "% - 18px))";
+        });
+      }
+
+      const hatchet = document.getElementById("hatchet-next");
+      const hatchetDuals = document.getElementById("hatchet-duals-next");
+      const bigAxe = document.getElementById("bigaxe-next");
+      const knife = document.getElementById("knife-next");
+      const knifeDuals = document.getElementById("knife-duals-next");
+
+      if (hatchet) hatchet.textContent = nextDateFrom(start, 0, "2:00 PM");
+      if (hatchetDuals) hatchetDuals.textContent = nextDateFrom(start, 0, "3:00 PM");
+      if (knife) knife.textContent = nextDateFrom(start, 2, "6:30 PM");
+      if (knifeDuals) knifeDuals.textContent = nextDateFrom(start, 2, "7:30 PM");
+      if (bigAxe) bigAxe.textContent = nextDateFrom(start, 4, "6:30 PM");
+    })();
   </script>
 </section>
