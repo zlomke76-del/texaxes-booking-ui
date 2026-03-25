@@ -1147,53 +1147,22 @@ section {
   max-width: 58ch;
 }
 
-.pricing-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  align-items: stretch;
+.pricing-primary {
+  margin-top: 20px;
 }
 
-.pricing-card {
-  padding: 24px;
+.pricing-main-card {
+  max-width: 560px;
+  padding: 28px;
   position: relative;
   overflow: hidden;
   border-radius: var(--radius);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
-    rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: var(--shadow);
-}
-
-.pricing-card.core {
-  background:
-    radial-gradient(circle at top left, rgba(93, 125, 255, 0.18), transparent 34%),
+    radial-gradient(circle at top left, rgba(93, 125, 255, 0.18), transparent 38%),
     linear-gradient(180deg, rgba(93, 125, 255, 0.12), rgba(255, 255, 255, 0.04)),
     rgba(255, 255, 255, 0.04);
-  border-color: rgba(122, 162, 255, 0.26);
-}
-
-.pricing-card.mid {
-  background:
-    radial-gradient(circle at top left, rgba(240, 195, 107, 0.14), transparent 34%),
-    linear-gradient(180deg, rgba(240, 195, 107, 0.08), rgba(255, 255, 255, 0.03)),
-    rgba(255, 255, 255, 0.03);
-  border-color: rgba(240, 195, 107, 0.22);
-}
-
-.pricing-card.addon {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
-    rgba(255, 255, 255, 0.025);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-.pricing-card.featured {
-  transform: scale(1.03);
-  border-color: rgba(122, 162, 255, 0.34);
+  border: 1px solid rgba(122, 162, 255, 0.26);
   box-shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
-  z-index: 2;
 }
 
 .pricing-label {
@@ -1208,7 +1177,8 @@ section {
   font-size: 0.78rem;
 }
 
-.pricing-card h3 {
+.pricing-main-card h3,
+.league-card h3 {
   margin: 0;
   font-size: 1.35rem;
 }
@@ -1226,12 +1196,14 @@ section {
   font-weight: 700;
 }
 
-.pricing-card p {
+.pricing-main-card p,
+.league-card p {
   margin: 0 0 14px;
   color: var(--muted);
 }
 
-.pricing-card ul {
+.pricing-main-card ul,
+.league-card ul {
   list-style: none;
   padding: 0;
   margin: 0 0 22px;
@@ -1239,18 +1211,82 @@ section {
   gap: 10px;
 }
 
-.pricing-card li {
+.pricing-main-card li,
+.league-card li {
   color: #dde5f3;
 }
 
-.pricing-card li::before {
+.pricing-main-card li::before,
+.league-card li::before {
   content: "✓ ";
   color: #9bffcb;
   font-weight: 800;
 }
 
+.pricing-addons-section {
+  margin-top: 40px;
+}
+
+.pricing-subhead {
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.pricing-addons-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.addon-item {
+  padding: 16px 18px;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow);
+}
+
+.addon-title {
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.addon-price {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #e7eefb;
+}
+
+.addon-price span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.pricing-league {
+  margin-top: 46px;
+}
+
+.league-card {
+  padding: 26px 28px;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at top left, rgba(240, 195, 107, 0.16), transparent 38%),
+    linear-gradient(180deg, rgba(240, 195, 107, 0.08), rgba(255, 255, 255, 0.03)),
+    rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(240, 195, 107, 0.22);
+  box-shadow: var(--shadow);
+  max-width: 760px;
+}
+
 .pricing-callout {
-  margin-top: 20px;
+  margin-top: 24px;
   padding: 16px 18px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.05);
@@ -1261,6 +1297,23 @@ section {
 .pricing-callout strong {
   display: block;
   margin-bottom: 6px;
+}
+
+@media (max-width: 1100px) {
+  .pricing-addons-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 840px) {
+  .pricing-addons-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-main-card,
+  .league-card {
+    max-width: none;
+  }
 }
 .gallery-grid {
   display: grid;
