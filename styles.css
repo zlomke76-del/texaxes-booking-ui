@@ -979,10 +979,25 @@ section {
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(10, 13, 19, 0.06) 0%,
-    rgba(10, 13, 19, 0.32) 48%,
-    rgba(10, 13, 19, 0.92) 100%
+    rgba(10, 13, 19, 0.15) 0%,
+    rgba(10, 13, 19, 0.45) 40%,
+    rgba(10, 13, 19, 0.88) 72%,
+    rgba(10, 13, 19, 0.98) 100%
   );
+}
+.feature-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(10, 13, 19, 0.85) 0%,
+    rgba(10, 13, 19, 0.6) 35%,
+    rgba(10, 13, 19, 0.2) 70%,
+    rgba(10, 13, 19, 0) 100%
+  );
+  pointer-events: none;
 }
 
 .feature-overlay {
@@ -990,7 +1005,7 @@ section {
   left: 20px;
   right: 20px;
   bottom: 20px;
-  z-index: 2;
+  z-index: 3;
 }
 
 .feature-kicker {
@@ -1043,7 +1058,7 @@ section {
 }
 
 .story-card:hover .story-media {
-  transform: scale(1.03);
+  transform: scale(1.01);
 }
 
 .story-copy {
