@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tex Axes League Dates | Season 2</title>
+  <meta
+    name="description"
+    content="Official Tex Axes league dates, weekly discipline schedule, and marathon league updates for the current season."
+  />
+  <style>
+    :root {
+      --bg: #09111f;
+      --bg-2: #0f1727;
+      --panel: rgba(255, 255, 255, 0.05);
+      --panel-strong: rgba(255, 255, 255, 0.08);
+      --line: rgba(255, 255, 255, 0.12);
+      --line-strong: rgba(255, 255, 255, 0.2);
+      --text: #f5f7fb;
+      --muted: rgba(235, 240, 250, 0.78);
+      --blue: #7f9dff;
+      --gold: #f0c36b;
+      --coral: #e67b63;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --max: 1240px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(93, 125, 255, 0.18), transparent 24%),
+        radial-gradient(circle at top right, rgba(230, 123, 99, 0.12), transparent 22%),
+        linear-gradient(135deg, #07101c 0%, #0b1220 45%, #121326 100%);
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(calc(100% - 32px), var(--max));
+      margin: 0 auto;
+    }
+
+    .page {
+      padding: 38px 0 72px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at top left, rgba(93, 125, 255, 0.18), transparent 28%),
+        radial-gradient(circle at 82% 18%, rgba(240, 195, 107, 0.1), transparent 22%),
+        linear-gradient(135deg, rgba(17, 22, 31, 0.96), rgba(20, 26, 37, 0.92));
+      box-shadow: var(--shadow);
+      padding: 34px;
+      margin-bottom: 28px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(8, 10, 15, 0.18) 0%, rgba(8, 10, 15, 0) 42%, rgba(8, 10, 15, 0.1) 100%);
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 26px;
+      align-items: stretch;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(127, 157, 255, 0.28);
+      background: rgba(127, 157, 255, 0.14);
+      color: #dfe7ff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(2.25rem, 5vw, 4.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      max-width: 10ch;
+    }
+
+    .hero-lead {
+      margin: 0;
+      max-width: 62ch;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.65;
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .hero-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #edf2ff;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      padding: 22px;
+      min-height: 100%;
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 18px 44px rgba(0, 0, 0, 0.24);
+    }
+
+    .hero-card-kicker {
+      display: inline-flex;
+      margin-bottom: 10px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(240, 195, 107, 0.16);
+      border: 1px solid rgba(240, 195, 107, 0.28);
+      color: #ffe9b7;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .hero-card h2 {
+      margin: 0 0 10px;
+      font-size: 1.8rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .hero-card-note {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      color: #e8eef8;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .season-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .season-card {
+      padding: 18px;
+      border-radius: var(--radius-md);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    }
+
+    .season-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    .season-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .section-head {
+      margin: 30px 0 14px;
+    }
+
+    .section-head h2 {
+      margin: 0 0 6px;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      letter-spacing: -0.04em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 68ch;
+      line-height: 1.6;
+    }
+
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .day-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at top left, rgba(93, 125, 255, 0.12), transparent 30%),
+        rgba(255, 255, 255, 0.045);
+      box-shadow: var(--shadow);
+    }
+
+    .day-card-header {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .day-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(93, 125, 255, 0.18);
+      border: 1px solid rgba(93, 125, 255, 0.28);
+      color: #dbe4ff;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .day-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.55rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .day-date {
+      margin: 0 0 8px;
+      color: #ffffff;
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+
+    .day-sub {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .timeline {
+      padding: 18px 20px 20px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .timeline-time {
+      color: #f2f6ff;
+      font-size: 0.88rem;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .timeline-copy strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.94rem;
+    }
+
+    .timeline-copy span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .note-block {
+      margin-top: 28px;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(240, 195, 107, 0.24);
+      background:
+        radial-gradient(circle at top left, rgba(240, 195, 107, 0.12), transparent 32%),
+        rgba(255, 255, 255, 0.045);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .note-block-inner {
+      padding: 24px;
+    }
+
+    .note-block h2 {
+      margin: 0 0 8px;
+      font-size: 1.8rem;
+      letter-spacing: -0.04em;
+    }
+
+    .note-block p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .marathon-grid {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .marathon-card {
+      padding: 18px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.045);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .marathon-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+
+    .marathon-card span {
+      display: block;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.92rem;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      color: rgba(235, 240, 250, 0.62);
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .schedule-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .season-strip,
+      .marathon-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding: 22px 0 54px;
+      }
+
+      .hero {
+        padding: 22px;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-time {
+        margin-bottom: 2px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="container">
+      <section class="hero">
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow" id="season-eyebrow">Official League Dates</div>
+            <h1 id="season-title">League Dates</h1>
+            <p class="hero-lead" id="season-description">
+              Current season schedule, participation dates, and marathon league updates.
+            </p>
+
+            <div class="hero-meta" id="hero-meta"></div>
+          </div>
+
+          <div class="hero-card">
+            <div class="hero-card-kicker">Season Format</div>
+            <h2 id="format-title">8-Week Season</h2>
+            <p id="format-copy">
+              Weekly league play runs for eight weeks, with the final week serving as the tournament finish for each discipline.
+            </p>
+            <div class="hero-card-note" id="format-note">Current season information for Tex Axes league play.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="season-strip" id="season-strip"></section>
+
+      <section>
+        <div class="section-head">
+          <h2>Weekly League Schedule</h2>
+          <p id="weekly-intro">
+            Choose the day that fits your discipline and schedule. Each block shows warmup time, league start windows, and the weekly discipline order.
+          </p>
+        </div>
+
+        <div class="schedule-grid" id="schedule-grid"></div>
+      </section>
+
+      <section class="note-block">
+        <div class="note-block-inner">
+          <h2>Marathon League Dates</h2>
+          <p id="marathon-intro">
+            Marathon leagues typically run on Saturdays during the season. Dates and participating disciplines can be posted here as they are finalized.
+          </p>
+
+          <div class="marathon-grid" id="marathon-grid"></div>
+
+          <div class="footer-note" id="footer-note">
+            Schedule details are subject to operational updates. Contact Tex Axes directly with registration questions.
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="/assets/data/league-dates.js"></script>
+  <script>
+    const data = window.TEX_AXES_LEAGUE_DATES;
+
+    function formatDate(dateString) {
+      const date = new Date(dateString + "T12:00:00");
+      return date.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric"
+      });
+    }
+
+    function renderMeta(items) {
+      return items.map((item) => `<div class="hero-chip">${item}</div>`).join("");
+    }
+
+    function renderSeasonCards(items) {
+      return items.map((item) => `
+        <article class="season-card">
+          <strong>${item.title}</strong>
+          <span>${item.copy}</span>
+        </article>
+      `).join("");
+    }
+
+    function renderTimelineItems(items) {
+      return items.map((item) => `
+        <div class="timeline-item">
+          <div class="timeline-time">${item.time}</div>
+          <div class="timeline-copy">
+            <strong>${item.title}</strong>
+            <span>${item.copy || ""}</span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderDayCards(days) {
+      return days.map((day) => `
+        <article class="day-card">
+          <div class="day-card-header">
+            <div class="day-badge">${day.dayLabel}</div>
+            <h3>${day.title}</h3>
+            <p class="day-date">Starts ${formatDate(day.startDate)}</p>
+            <p class="day-sub">${day.summary}</p>
+          </div>
+          <div class="timeline">
+            ${renderTimelineItems(day.schedule)}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderMarathonCards(items) {
+      return items.map((item) => `
+        <article class="marathon-card">
+          <strong>${item.title}</strong>
+          <span>${item.copy}</span>
+        </article>
+      `).join("");
+    }
+
+    document.title = `${data.pageTitle} | Tex Axes`;
+
+    document.getElementById("season-eyebrow").textContent = data.eyebrow;
+    document.getElementById("season-title").textContent = data.title;
+    document.getElementById("season-description").textContent = data.description;
+    document.getElementById("format-title").textContent = data.format.title;
+    document.getElementById("format-copy").textContent = data.format.copy;
+    document.getElementById("format-note").textContent = data.format.note;
+    document.getElementById("weekly-intro").textContent = data.weeklyIntro;
+    document.getElementById("marathon-intro").textContent = data.marathonIntro;
+    document.getElementById("footer-note").textContent = data.footerNote;
+
+    document.getElementById("hero-meta").innerHTML = renderMeta(data.meta);
+    document.getElementById("season-strip").innerHTML = renderSeasonCards(data.seasonCards);
+    document.getElementById("schedule-grid").innerHTML = renderDayCards(data.days);
+    document.getElementById("marathon-grid").innerHTML = renderMarathonCards(data.marathon);
+  </script>
+</body>
+</html>
