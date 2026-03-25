@@ -1151,17 +1151,49 @@ section {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
+  align-items: stretch;
 }
 
 .pricing-card {
   padding: 24px;
   position: relative;
   overflow: hidden;
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow);
+}
+
+.pricing-card.core {
+  background:
+    radial-gradient(circle at top left, rgba(93, 125, 255, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(93, 125, 255, 0.12), rgba(255, 255, 255, 0.04)),
+    rgba(255, 255, 255, 0.04);
+  border-color: rgba(122, 162, 255, 0.26);
+}
+
+.pricing-card.mid {
+  background:
+    radial-gradient(circle at top left, rgba(240, 195, 107, 0.14), transparent 34%),
+    linear-gradient(180deg, rgba(240, 195, 107, 0.08), rgba(255, 255, 255, 0.03)),
+    rgba(255, 255, 255, 0.03);
+  border-color: rgba(240, 195, 107, 0.22);
+}
+
+.pricing-card.addon {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.025);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .pricing-card.featured {
-  background:
-    linear-gradient(180deg, rgba(93, 125, 255, 0.13), rgba(255, 255, 255, 0.05));
+  transform: scale(1.03);
+  border-color: rgba(122, 162, 255, 0.34);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
+  z-index: 2;
 }
 
 .pricing-label {
@@ -1230,7 +1262,6 @@ section {
   display: block;
   margin-bottom: 6px;
 }
-
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
