@@ -25,7 +25,11 @@ function loadScript(src) {
         return;
       }
       existing.addEventListener("load", () => resolve(), { once: true });
-      existing.addEventListener("error", () => reject(new Error(`Failed to load script: ${src}`)), { once: true });
+      existing.addEventListener(
+        "error",
+        () => reject(new Error(`Failed to load script: ${src}`)),
+        { once: true }
+      );
       return;
     }
 
@@ -37,7 +41,8 @@ function loadScript(src) {
       script.dataset.loaded = "true";
       resolve();
     };
-    script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+    script.onerror = () =>
+      reject(new Error(`Failed to load script: ${src}`));
     document.head.appendChild(script);
   });
 }
@@ -121,8 +126,14 @@ function initLeagueCallout() {
     return Math.max(0, Math.ceil((target - now) / DAY_MS));
   }
 
-  function nextDateText(date, timeLabel) {
-    return "Next: " + formatShortDate(date) + " · " + timeLabel;
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value;
+  }
+
+  function setHTML(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = value;
   }
 
   const seasons = data.seasons.map((season) => {
@@ -141,23 +152,30 @@ function initLeagueCallout() {
   function getContext() {
     for (let i = 0; i < seasons.length; i += 1) {
       const season = seasons[i];
+
       if (now < season.start) {
         return { state: "preseason", season };
       }
+
       if (now >= season.start && now <= season.end) {
         return { state: "active", season };
       }
+
       const nextSeason = seasons[i + 1];
       if (nextSeason && now > season.end && now < nextSeason.start) {
         return { state: "between", season: nextSeason, previous: season };
       }
     }
+
     return { state: "postseason", season: seasons[seasons.length - 1] };
   }
 
   function getWeekNumber(start) {
     const diffDays = Math.floor((now - start) / DAY_MS);
-    return Math.max(1, Math.min(SEASON_LENGTH_WEEKS, Math.floor(diffDays / 7) + 1));
+    return Math.max(
+      1,
+      Math.min(SEASON_LENGTH_WEEKS, Math.floor(diffDays / 7) + 1)
+    );
   }
 
   function buildSegments(activeWeek, state) {
@@ -185,13 +203,34 @@ function initLeagueCallout() {
     return ((activeWeek - 1) / (SEASON_LENGTH_WEEKS - 1)) * 100;
   }
 
-  function setText(id, value) {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value;
+  function renderLaneList(lanes, seasonStart) {
+    if (!Array.isArray(lanes) || !lanes.length) return "";
+
+    const items = lanes.map((lane) => {
+      const laneDate = addDays(seasonStart, lane.dayOffset);
+      return `<div>${lane.label} · ${formatShortDate(laneDate)} · ${lane.time}</div>`;
+    });
+
+    return `
+      <div class="league-inline-note">
+        <strong>Season starts:</strong>
+        ${items.join("")}
+      </div>
+    `;
+  }
+
+  function renderDisciplineCards(seasonStart) {
+    const lanes = data.disciplineLanes || {};
+
+    setHTML("hatchet-next", renderLaneList(lanes.hatchet, seasonStart));
+    setHTML("hatchet-duals-next", renderLaneList(lanes.hatchetDuals, seasonStart));
+    setHTML("knife-next", renderLaneList(lanes.knife, seasonStart));
+    setHTML("knife-duals-next", renderLaneList(lanes.knifeDuals, seasonStart));
+    setHTML("bigaxe-next", renderLaneList(lanes.bigaxe, seasonStart));
   }
 
   const context = getContext();
-  const currentSeason = context.state === "between" ? context.season : context.season;
+  const currentSeason = context.season;
   const activeWeek = currentSeason ? getWeekNumber(currentSeason.start) : 1;
 
   setText("league-now", "Current Houston time: " + formatNow(now));
@@ -224,7 +263,10 @@ function initLeagueCallout() {
     const season = context.season;
     const countdown = daysUntil(season.start);
 
-    setText("league-status", `${season.label} starts in ${countdown} day${countdown === 1 ? "" : "s"}`);
+    setText(
+      "league-status",
+      `${season.label} starts in ${countdown} day${countdown === 1 ? "" : "s"}`
+    );
     setText(
       "league-next",
       `Opening Sunday: ${formatLongDate(season.start)} · Tuesday follows ${formatShortDate(season.firstTuesday)} · Thursday follows ${formatShortDate(season.firstThursday)}`
@@ -233,21 +275,26 @@ function initLeagueCallout() {
     setText("timeline-phase-label", `${season.label} incoming`);
     setText("timeline-phase-sub", "League is about to start");
     setText("league-note-pill", `${season.label} registration window`);
-    setText("league-season-copy", "Season play has not started yet. Opening Sunday anchors the full 8-week schedule.");
+    setText(
+      "league-season-copy",
+      "Season play has not started yet. Opening Sunday anchors the full 8-week schedule."
+    );
     setText("league-meta-season", season.label);
     setText("league-meta-week", "Starts " + formatShortDate(season.start));
     setText("league-meta-state", "Pre-season");
     setText("league-summary-title-1", `${season.label} opening`);
-    setText("league-summary-copy-1", `Opening Sunday is ${formatLongDate(season.start)}.`);
+    setText(
+      "league-summary-copy-1",
+      `Opening Sunday is ${formatLongDate(season.start)}.`
+    );
     setText("league-summary-title-2", "Full weekly rhythm");
-    setText("league-summary-copy-2", "Tuesday and Thursday automatically follow the Sunday opener.");
+    setText(
+      "league-summary-copy-2",
+      "Tuesday and Thursday automatically follow the Sunday opener."
+    );
     if (liveBadgeEl) liveBadgeEl.textContent = "League About To Start";
 
-    setText("hatchet-next", nextDateText(season.start, "2:00 PM"));
-    setText("hatchet-duals-next", nextDateText(season.start, "3:00 PM"));
-    setText("knife-next", nextDateText(season.firstTuesday, "6:30 PM"));
-    setText("knife-duals-next", nextDateText(season.firstTuesday, "7:30 PM"));
-    setText("bigaxe-next", nextDateText(season.firstThursday, "6:30 PM"));
+    renderDisciplineCards(season.start);
   }
 
   if (context.state === "active") {
@@ -256,37 +303,59 @@ function initLeagueCallout() {
     const weekTuesday = addDays(weekStartSunday, 2);
     const weekThursday = addDays(weekStartSunday, 4);
 
-    setText("league-status", `${season.label} · Currently in Week ${activeWeek} of ${SEASON_LENGTH_WEEKS}`);
+    setText(
+      "league-status",
+      `${season.label} · Currently in Week ${activeWeek} of ${SEASON_LENGTH_WEEKS}`
+    );
     setText(
       "league-next",
       `This week: Sunday ${formatShortDate(weekStartSunday)} · Tuesday ${formatShortDate(weekTuesday)} · Thursday ${formatShortDate(weekThursday)}`
     );
 
     setText("timeline-phase-label", `Week ${activeWeek} active`);
-    setText("timeline-phase-sub", activeWeek === SEASON_LENGTH_WEEKS ? "Tournament week is live" : "Regular season in progress");
+    setText(
+      "timeline-phase-sub",
+      activeWeek === SEASON_LENGTH_WEEKS
+        ? "Tournament week is live"
+        : "Regular season in progress"
+    );
     setText("league-note-pill", `${season.label} active`);
-    setText("league-season-copy", "Includes 1 hour of warmup and practice each week alongside league play.");
+    setText(
+      "league-season-copy",
+      "Includes 1 hour of warmup and practice each week alongside league play."
+    );
     setText("league-meta-season", season.label);
     setText("league-meta-week", `Week ${activeWeek} of ${SEASON_LENGTH_WEEKS}`);
-    setText("league-meta-state", activeWeek === SEASON_LENGTH_WEEKS ? "Tournament week" : "In season");
+    setText(
+      "league-meta-state",
+      activeWeek === SEASON_LENGTH_WEEKS ? "Tournament week" : "In season"
+    );
     setText("league-summary-title-1", "Current season");
-    setText("league-summary-copy-1", `${season.label} is currently in progress.`);
+    setText(
+      "league-summary-copy-1",
+      `${season.label} is currently in progress.`
+    );
     setText("league-summary-title-2", "Tournament target");
-    setText("league-summary-copy-2", `Week 8 tournament Sunday lands on ${formatLongDate(season.tournamentSunday)}.`);
-    if (liveBadgeEl) liveBadgeEl.textContent = activeWeek === SEASON_LENGTH_WEEKS ? "Tournament Week" : "Live League Season";
+    setText(
+      "league-summary-copy-2",
+      `Week 8 tournament Sunday lands on ${formatLongDate(season.tournamentSunday)}.`
+    );
+    if (liveBadgeEl) {
+      liveBadgeEl.textContent =
+        activeWeek === SEASON_LENGTH_WEEKS ? "Tournament Week" : "Live League Season";
+    }
 
-    setText("hatchet-next", nextDateText(weekStartSunday, "2:00 PM"));
-    setText("hatchet-duals-next", nextDateText(weekStartSunday, "3:00 PM"));
-    setText("knife-next", nextDateText(weekTuesday, "6:30 PM"));
-    setText("knife-duals-next", nextDateText(weekTuesday, "7:30 PM"));
-    setText("bigaxe-next", nextDateText(weekThursday, "6:30 PM"));
+    renderDisciplineCards(season.start);
   }
 
   if (context.state === "between") {
     const season = context.season;
     const countdown = daysUntil(season.start);
 
-    setText("league-status", `${context.previous.label} complete · ${season.label} starts in ${countdown} day${countdown === 1 ? "" : "s"}`);
+    setText(
+      "league-status",
+      `${context.previous.label} complete · ${season.label} starts in ${countdown} day${countdown === 1 ? "" : "s"}`
+    );
     setText(
       "league-next",
       `${season.label} opens Sunday ${formatLongDate(season.start)} · Tuesday follows ${formatShortDate(season.firstTuesday)} · Thursday follows ${formatShortDate(season.firstThursday)}`
@@ -295,50 +364,64 @@ function initLeagueCallout() {
     setText("timeline-phase-label", `${context.previous.label} complete`);
     setText("timeline-phase-sub", `${season.label} is the next season`);
     setText("league-note-pill", `${season.label} coming next`);
-    setText("league-season-copy", "The last season has wrapped. The next Sunday opener is already set.");
+    setText(
+      "league-season-copy",
+      "The last season has wrapped. The next Sunday opener is already set."
+    );
     setText("league-meta-season", season.label);
     setText("league-meta-week", "Starts " + formatShortDate(season.start));
     setText("league-meta-state", "Between seasons");
     setText("league-summary-title-1", "Last season complete");
     setText("league-summary-copy-1", `${context.previous.label} has finished.`);
     setText("league-summary-title-2", "Next season queued");
-    setText("league-summary-copy-2", `${season.label} opens on ${formatLongDate(season.start)}.`);
+    setText(
+      "league-summary-copy-2",
+      `${season.label} opens on ${formatLongDate(season.start)}.`
+    );
     if (liveBadgeEl) liveBadgeEl.textContent = "Next Season Scheduled";
 
-    setText("hatchet-next", nextDateText(season.start, "2:00 PM"));
-    setText("hatchet-duals-next", nextDateText(season.start, "3:00 PM"));
-    setText("knife-next", nextDateText(season.firstTuesday, "6:30 PM"));
-    setText("knife-duals-next", nextDateText(season.firstTuesday, "7:30 PM"));
-    setText("bigaxe-next", nextDateText(season.firstThursday, "6:30 PM"));
+    renderDisciplineCards(season.start);
   }
 
   if (context.state === "postseason") {
     const season = context.season;
 
     setText("league-status", `${season.label} complete`);
-    setText("league-next", "This season finished on tournament week. New season dates can be posted as soon as they are set.");
+    setText(
+      "league-next",
+      "This season finished on tournament week. New season dates can be posted as soon as they are set."
+    );
 
     setText("timeline-phase-label", `${season.label} complete`);
     setText("timeline-phase-sub", "Tournament finished");
     setText("league-note-pill", "Season complete");
-    setText("league-season-copy", "The latest posted season has finished. Add the next Sunday anchor date to publish the next season.");
+    setText(
+      "league-season-copy",
+      "The latest posted season has finished. Add the next Sunday anchor date to publish the next season."
+    );
     setText("league-meta-season", season.label);
     setText("league-meta-week", "Finalized");
     setText("league-meta-state", "Awaiting next season");
     setText("league-summary-title-1", "Season complete");
     setText("league-summary-copy-1", `${season.label} has finished.`);
     setText("league-summary-title-2", "Ready for update");
-    setText("league-summary-copy-2", "Post the next Sunday opener to activate the next season.");
+    setText(
+      "league-summary-copy-2",
+      "Post the next Sunday opener to activate the next season."
+    );
     if (liveBadgeEl) liveBadgeEl.textContent = "Season Complete";
 
-    setText("hatchet-next", "Next season date pending");
-    setText("hatchet-duals-next", "Next season date pending");
-    setText("knife-next", "Next season date pending");
-    setText("knife-duals-next", "Next season date pending");
-    setText("bigaxe-next", "Next season date pending");
+    setHTML("hatchet-next", `<div class="league-inline-note">Next season date pending</div>`);
+    setHTML("hatchet-duals-next", `<div class="league-inline-note">Next season date pending</div>`);
+    setHTML("knife-next", `<div class="league-inline-note">Next season date pending</div>`);
+    setHTML("knife-duals-next", `<div class="league-inline-note">Next season date pending</div>`);
+    setHTML("bigaxe-next", `<div class="league-inline-note">Next season date pending</div>`);
   }
 
-  setText("marathon-callout-copy", "Saturday marathon dates are posted once finalized for each season and discipline.");
+  setText(
+    "marathon-callout-copy",
+    "Saturday marathon dates are posted once finalized for each season and discipline."
+  );
   setText("marathon-callout-badge", "Seasonal format");
 }
 
