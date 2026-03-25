@@ -203,6 +203,80 @@
       font-weight: 600;
     }
 
+    .founder-block {
+      margin: 0 0 22px;
+    }
+
+    .founder-card {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 22px;
+      align-items: center;
+      padding: 18px;
+      border-radius: var(--radius-lg);
+      background:
+        radial-gradient(circle at top left, rgba(240, 195, 107, 0.12), transparent 28%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid rgba(240, 195, 107, 0.2);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 18px 44px rgba(0, 0, 0, 0.24);
+    }
+
+    .founder-image {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 4 / 5;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .founder-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .founder-content {
+      min-width: 0;
+    }
+
+    .founder-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(240, 195, 107, 0.14);
+      border: 1px solid rgba(240, 195, 107, 0.24);
+      color: #ffe8b3;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .founder-content h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .founder-content p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      font-size: 0.98rem;
+      max-width: 68ch;
+    }
+
+    .founder-content p + p {
+      margin-top: 12px;
+    }
+
     .season-strip {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -414,6 +488,14 @@
       .marathon-grid {
         grid-template-columns: 1fr;
       }
+
+      .founder-card {
+        grid-template-columns: 1fr;
+      }
+
+      .founder-image {
+        max-width: 320px;
+      }
     }
 
     @media (max-width: 720px) {
@@ -431,6 +513,10 @@
 
       .timeline-time {
         margin-bottom: 2px;
+      }
+
+      .founder-card {
+        padding: 16px;
       }
     }
   </style>
@@ -458,6 +544,31 @@
               Weekly league play runs for eight weeks, with the final week serving as the tournament finish for each discipline.
             </p>
             <div class="hero-card-note" id="format-note">Current season information for Tex Axes league play.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="founder-block">
+        <div class="founder-card">
+          <div class="founder-image">
+            <img
+              src="/assets/big_dave_big_axe_01.jpg"
+              alt="Big Dave holding an axe at Tex Axes"
+            />
+          </div>
+
+          <div class="founder-content">
+            <div class="founder-kicker">Built for Big Dave</div>
+            <h2>Why this place exists</h2>
+            <p>
+              Tex Axes was built for my brother Dave. He loved throwing, competition,
+              and bringing people together.
+            </p>
+            <p>
+              After we lost him in 2023, this became more than a venue. It became
+              something we carry forward every week — in every league night,
+              every throw, and every person who steps up to the line.
+            </p>
           </div>
         </div>
       </section>
