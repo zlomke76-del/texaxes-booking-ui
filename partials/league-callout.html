@@ -1,7 +1,9 @@
 <section class="league-section" id="leagues">
   <div class="container">
     <div class="league-shell">
+
       <div class="league-top">
+
         <div class="league-intro">
           <div class="eyebrow">League Play at Tex Axes</div>
 
@@ -29,22 +31,24 @@
 
           <p class="section-copy">
             Tex Axes hosts official WATL and WKTL leagues in structured 8-week
-            seasons for throwers who want more than a one-time session. Start
-            casual, build consistency, and step into real sanctioned competition
-            without leaving Houston.
+            seasons for throwers who want more than a one-time session.
           </p>
 
-          <div class="league-progress-strip" aria-label="League progression">
+          <!-- NEW: LIVE SEASON STATUS -->
+          <div id="league-status" class="league-season-status"></div>
+          <div id="league-next" class="league-season-substatus"></div>
+
+          <div class="league-progress-strip">
             <div class="league-progress-item">
               <strong>Practice Weekly</strong>
               <span>Build repeat reps and confidence</span>
             </div>
-            <div class="league-progress-arrow" aria-hidden="true">→</div>
+            <div class="league-progress-arrow">→</div>
             <div class="league-progress-item">
               <strong>Compete Officially</strong>
               <span>Throw under real rules and scoring</span>
             </div>
-            <div class="league-progress-arrow" aria-hidden="true">→</div>
+            <div class="league-progress-arrow">→</div>
             <div class="league-progress-item">
               <strong>Tournament Finish</strong>
               <span>Close the season in live competition</span>
@@ -53,18 +57,21 @@
 
           <div class="league-cta-row">
             <a class="btn btn-primary" href="#cta">Join a League</a>
-            <a class="btn btn-secondary" href="#pricing">See Season Pricing</a>
+            <a class="btn btn-secondary" href="/league-dates.html">View Full League Dates</a>
           </div>
         </div>
 
+        <!-- RIGHT CARD -->
         <div class="league-season-card">
-          <div class="league-season-media" aria-hidden="true"></div>
+          <div class="league-season-media"></div>
+
           <div class="league-live-badge">Live League Night</div>
 
           <div class="league-season-head">
             <div class="league-note-pill">
               Official WATL + WKTL League Format
             </div>
+
             <div class="league-season-price">
               $120 <span>per league</span>
             </div>
@@ -74,26 +81,29 @@
             Includes 1 hour of warmup and practice each week alongside league play.
           </div>
 
+          <!-- 🔥 UPGRADED TIMELINE -->
           <div class="league-timeline">
+
             <div class="league-timeline-track"></div>
 
-            <div class="league-timeline-step">
+            <div class="league-timeline-step" id="timeline-regular">
               <div class="league-step-dot"></div>
-              <strong>Weeks 1–7</strong>
-              <span>Sanctioned weekly play</span>
+              <strong id="timeline-weeks-label">Weeks 1–7</strong>
+              <span id="timeline-weeks-sub">Sanctioned weekly play</span>
             </div>
 
-            <div class="league-timeline-step league-timeline-step-final">
+            <div class="league-timeline-step league-timeline-step-final" id="timeline-final">
               <div class="league-step-dot"></div>
               <strong>Week 8</strong>
-              <span>League tournament finish</span>
+              <span>Tournament finish</span>
             </div>
+
           </div>
 
           <div class="league-season-meta">
             <span>Structured progression</span>
             <span>Repeat competition</span>
-            <span>Real rules &amp; scoring</span>
+            <span>Real rules & scoring</span>
           </div>
 
           <div class="league-outcome">
@@ -109,87 +119,92 @@
         </div>
       </div>
 
-      <div class="league-overview">
-        <div class="league-summary-card">
-          <strong>8-week season</strong>
-          <span>
-            A clear competitive format that moves from sanctioned weekly play into a
-            final tournament.
-          </span>
-        </div>
-
-        <div class="league-summary-card">
-          <strong>Built for progression</strong>
-          <span>
-            A real path from first visit to repeat throwing, consistency, and league
-            competition.
-          </span>
-        </div>
-      </div>
-
-      <div class="league-types-head">
-        <div class="league-types-eyebrow">League formats offered</div>
-        <p class="league-types-copy">
-          Multiple disciplines run through Tex Axes each season so throwers can
-          grow into the format that fits them best.
-        </p>
-      </div>
-
+      <!-- DISCIPLINES -->
       <div class="league-grid">
+
         <div class="league-card league-card-featured">
-          <div class="league-card-kicker">
-            Best for first-time competitors
-          </div>
           <strong>Standard Hatchet League</strong>
-          <span>
-            Classic sanctioned hatchet play for all skill levels.
-          </span>
+          <span>Classic sanctioned hatchet play.</span>
+          <div class="league-inline-note" id="hatchet-next"></div>
         </div>
 
         <div class="league-card">
-          <div class="league-card-kicker">Team coordination</div>
           <strong>Duals Hatchet League</strong>
-          <span>
-            Partner-based hatchet competition built around teamwork and rhythm.
-          </span>
+          <span>Partner-based hatchet competition.</span>
+          <div class="league-inline-note" id="hatchet-duals-next"></div>
         </div>
 
         <div class="league-card">
-          <div class="league-card-kicker">Higher skill ceiling</div>
           <strong>Big Axe League</strong>
-          <span>
-            Heavier throws, bigger commitment, and advanced competitive reps.
-          </span>
+          <span>Advanced competitive throws.</span>
+          <div class="league-inline-note" id="bigaxe-next"></div>
         </div>
 
         <div class="league-card">
-          <div class="league-card-kicker">WKTL precision format</div>
           <strong>Knife Throwing League</strong>
-          <span>
-            Official WKTL competition built around precision and control.
-          </span>
+          <span>WKTL precision competition.</span>
+          <div class="league-inline-note" id="knife-next"></div>
         </div>
 
         <div class="league-card">
-          <div class="league-card-kicker">Team-based knife play</div>
           <strong>Knife Duals League</strong>
-          <span>
-            Partner competition for knife throwers who want more structure and depth.
-          </span>
+          <span>Partner knife competition.</span>
+          <div class="league-inline-note" id="knife-duals-next"></div>
         </div>
+
       </div>
 
       <div class="marathon-callout">
         <div class="marathon-copy">
-          <strong>Marathon league formats also available</strong>
-          <p>
-            Each season, Tex Axes also hosts these same league formats in marathon
-            style for throwers who want an alternate competitive path with heavier
-            same-day volume.
-          </p>
+          <strong>Marathon leagues also available</strong>
+          <p>Saturday marathon dates are posted once finalized each season.</p>
         </div>
         <div class="marathon-badge">Seasonal format</div>
       </div>
+
     </div>
   </div>
+
+  <!-- 🔥 DATA ENGINE -->
+  <script src="/assets/data/league-dates.js"></script>
+  <script>
+    const data = window.TEX_AXES_LEAGUE_DATES;
+
+    const start = new Date(data.days[0].startDate + "T12:00:00");
+    const today = new Date();
+
+    const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+    const week = Math.max(1, Math.min(8, Math.floor(diffDays / 7) + 1));
+
+    document.getElementById("league-status").textContent =
+      "Currently in Week " + week + " of 8";
+
+    function nextDate(baseDate, weekdayOffset) {
+      const d = new Date(baseDate);
+      d.setDate(d.getDate() + weekdayOffset);
+      return d.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric"
+      });
+    }
+
+    document.getElementById("hatchet-next").textContent =
+      "Next: " + nextDate(start, (week - 1) * 7) + " · 2:00 PM";
+
+    document.getElementById("hatchet-duals-next").textContent =
+      "Next: " + nextDate(start, (week - 1) * 7) + " · 3:00 PM";
+
+    document.getElementById("knife-next").textContent =
+      "Next: Tue · 6:30 PM";
+
+    document.getElementById("knife-duals-next").textContent =
+      "Next: Tue · 7:30 PM";
+
+    document.getElementById("bigaxe-next").textContent =
+      "Next: Thu · 6:30 PM";
+
+    document.getElementById("timeline-weeks-sub").textContent =
+      "Week " + week + " active";
+  </script>
 </section>
