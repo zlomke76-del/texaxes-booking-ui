@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tex Axes League Dates | Season 2</title>
+  <title>Tex Axes League Dates</title>
   <meta
     name="description"
-    content="Official Tex Axes league dates, weekly discipline schedule, and marathon league updates for the current season."
+    content="Official Tex Axes league dates, weekly discipline schedule, and marathon league updates."
   />
   <style>
     :root {
@@ -143,6 +143,13 @@
       color: #edf2ff;
       font-size: 0.82rem;
       font-weight: 700;
+    }
+
+    .hero-now {
+      margin-top: 12px;
+      color: rgba(235, 240, 250, 0.72);
+      font-size: 0.86rem;
+      line-height: 1.5;
     }
 
     .hero-card {
@@ -441,10 +448,11 @@
             </p>
 
             <div class="hero-meta" id="hero-meta"></div>
+            <div class="hero-now" id="hero-now"></div>
           </div>
 
           <div class="hero-card">
-            <div class="hero-card-kicker">Season Format</div>
+            <div class="hero-card-kicker" id="format-kicker">Season Format</div>
             <h2 id="format-title">8-Week Season</h2>
             <p id="format-copy">
               Weekly league play runs for eight weeks, with the final week serving as the tournament finish for each discipline.
@@ -458,7 +466,7 @@
 
       <section>
         <div class="section-head">
-          <h2>Weekly League Schedule</h2>
+          <h2 id="weekly-title">Weekly League Schedule</h2>
           <p id="weekly-intro">
             Choose the day that fits your discipline and schedule. Each block shows warmup time, league start windows, and the weekly discipline order.
           </p>
@@ -486,84 +494,222 @@
 
   <script src="/assets/data/league-dates.js"></script>
   <script>
-    const data = window.TEX_AXES_LEAGUE_DATES;
+    (function () {
+      const data = window.TEX_AXES_LEAGUE_DATES;
+      if (!data || !Array.isArray(data.seasons) || !data.seasons.length) return;
 
-    function formatDate(dateString) {
-      const date = new Date(dateString + "T12:00:00");
-      return date.toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-        year: "numeric"
-      });
-    }
+      const TIMEZONE = data.timezone || "America/Chicago";
+      const SEASON_LENGTH_WEEKS = data.seasonLengthWeeks || 8;
+      const DAY_MS = 24 * 60 * 60 * 1000;
+      const now = new Date();
 
-    function renderMeta(items) {
-      return items.map((item) => `<div class="hero-chip">${item}</div>`).join("");
-    }
+      function parseDate(dateString) {
+        const [year, month, day] = dateString.split("-").map(Number);
+        return new Date(year, month - 1, day, 12, 0, 0, 0);
+      }
 
-    function renderSeasonCards(items) {
-      return items.map((item) => `
-        <article class="season-card">
-          <strong>${item.title}</strong>
-          <span>${item.copy}</span>
-        </article>
-      `).join("");
-    }
+      function addDays(date, days) {
+        const d = new Date(date);
+        d.setDate(d.getDate() + days);
+        return d;
+      }
 
-    function renderTimelineItems(items) {
-      return items.map((item) => `
-        <div class="timeline-item">
-          <div class="timeline-time">${item.time}</div>
-          <div class="timeline-copy">
+      function formatLongDate(date) {
+        return new Intl.DateTimeFormat("en-US", {
+          timeZone: TIMEZONE,
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+          year: "numeric"
+        }).format(date);
+      }
+
+      function formatNow(date) {
+        return new Intl.DateTimeFormat("en-US", {
+          timeZone: TIMEZONE,
+          weekday: "long",
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          timeZoneName: "short"
+        }).format(date);
+      }
+
+      function renderMeta(items) {
+        return items.map((item) => '<div class="hero-chip">' + item + '</div>').join("");
+      }
+
+      function renderSeasonCards(items) {
+        return items.map((item) => `
+          <article class="season-card">
             <strong>${item.title}</strong>
-            <span>${item.copy || ""}</span>
+            <span>${item.copy}</span>
+          </article>
+        `).join("");
+      }
+
+      function renderTimelineItems(items) {
+        return items.map((item) => `
+          <div class="timeline-item">
+            <div class="timeline-time">${item.time}</div>
+            <div class="timeline-copy">
+              <strong>${item.title}</strong>
+              <span>${item.copy || ""}</span>
+            </div>
           </div>
-        </div>
-      `).join("");
-    }
+        `).join("");
+      }
 
-    function renderDayCards(days) {
-      return days.map((day) => `
-        <article class="day-card">
-          <div class="day-card-header">
-            <div class="day-badge">${day.dayLabel}</div>
-            <h3>${day.title}</h3>
-            <p class="day-date">Starts ${formatDate(day.startDate)}</p>
-            <p class="day-sub">${day.summary}</p>
-          </div>
-          <div class="timeline">
-            ${renderTimelineItems(day.schedule)}
-          </div>
-        </article>
-      `).join("");
-    }
+      function renderDayCards(days) {
+        return days.map((day) => `
+          <article class="day-card">
+            <div class="day-card-header">
+              <div class="day-badge">${day.dayLabel}</div>
+              <h3>${day.title}</h3>
+              <p class="day-date">Starts ${formatLongDate(day.startDate)}</p>
+              <p class="day-sub">${day.summary}</p>
+            </div>
+            <div class="timeline">
+              ${renderTimelineItems(day.schedule)}
+            </div>
+          </article>
+        `).join("");
+      }
 
-    function renderMarathonCards(items) {
-      return items.map((item) => `
-        <article class="marathon-card">
-          <strong>${item.title}</strong>
-          <span>${item.copy}</span>
-        </article>
-      `).join("");
-    }
+      function renderMarathonCards(items) {
+        return items.map((item) => `
+          <article class="marathon-card">
+            <strong>${item.title}</strong>
+            <span>${item.copy}</span>
+          </article>
+        `).join("");
+      }
 
-    document.title = `${data.pageTitle} | Tex Axes`;
+      const seasons = data.seasons.map((season) => {
+        const start = parseDate(season.startSunday);
+        const end = addDays(start, (SEASON_LENGTH_WEEKS - 1) * 7 + 4);
+        return {
+          ...season,
+          start,
+          end,
+          firstTuesday: addDays(start, 2),
+          firstThursday: addDays(start, 4),
+          tournamentSunday: addDays(start, (SEASON_LENGTH_WEEKS - 1) * 7)
+        };
+      });
 
-    document.getElementById("season-eyebrow").textContent = data.eyebrow;
-    document.getElementById("season-title").textContent = data.title;
-    document.getElementById("season-description").textContent = data.description;
-    document.getElementById("format-title").textContent = data.format.title;
-    document.getElementById("format-copy").textContent = data.format.copy;
-    document.getElementById("format-note").textContent = data.format.note;
-    document.getElementById("weekly-intro").textContent = data.weeklyIntro;
-    document.getElementById("marathon-intro").textContent = data.marathonIntro;
-    document.getElementById("footer-note").textContent = data.footerNote;
+      function getContext() {
+        for (let i = 0; i < seasons.length; i += 1) {
+          const season = seasons[i];
+          if (now < season.start) {
+            return { state: "preseason", season };
+          }
+          if (now >= season.start && now <= season.end) {
+            return { state: "active", season };
+          }
+          const nextSeason = seasons[i + 1];
+          if (nextSeason && now > season.end && now < nextSeason.start) {
+            return { state: "between", season: nextSeason, previous: season };
+          }
+        }
+        return { state: "postseason", season: seasons[seasons.length - 1] };
+      }
 
-    document.getElementById("hero-meta").innerHTML = renderMeta(data.meta);
-    document.getElementById("season-strip").innerHTML = renderSeasonCards(data.seasonCards);
-    document.getElementById("schedule-grid").innerHTML = renderDayCards(data.days);
-    document.getElementById("marathon-grid").innerHTML = renderMarathonCards(data.marathon);
+      const context = getContext();
+      const season = context.season;
+
+      const sunday = season.start;
+      const tuesday = season.firstTuesday;
+      const thursday = season.firstThursday;
+
+      const seasonCards = [
+        {
+          title: season.label + " Sunday Start",
+          copy: "Begins " + formatLongDate(sunday) + " with warmups at 1:00 PM."
+        },
+        {
+          title: season.label + " Tuesday Start",
+          copy: "Begins " + formatLongDate(tuesday) + " with warmups at 5:30 PM."
+        },
+        {
+          title: season.label + " Thursday Start",
+          copy: "Begins " + formatLongDate(thursday) + " with warmups at 5:30 PM."
+        }
+      ];
+
+      const days = [
+        {
+          ...data.scheduleTemplates.sunday,
+          startDate: sunday
+        },
+        {
+          ...data.scheduleTemplates.tuesday,
+          startDate: tuesday
+        },
+        {
+          ...data.scheduleTemplates.thursday,
+          startDate: thursday
+        }
+      ];
+
+      let title = season.label + " League Schedule";
+      let description = data.description;
+      let formatTitle = data.format.title;
+      let formatCopy = data.format.copy;
+      let formatNote = data.format.note;
+      let weeklyIntro = "Each day below shows the season start date, warmup window, and discipline order for that league night. These weekly time blocks persist across the 8-week season, with the final week serving as tournament finish.";
+      let pageMeta = [...data.meta, season.label];
+      let weeklyTitle = "Weekly League Schedule";
+
+      if (context.state === "preseason") {
+        title = season.label + " League Schedule";
+        formatTitle = season.label + " Starts Soon";
+        formatCopy = "The next season has not started yet. Sunday is the anchor date, and Tuesday plus Thursday follow automatically from that opener.";
+        formatNote = "Opening Sunday is " + formatLongDate(sunday) + ".";
+      }
+
+      if (context.state === "active") {
+        const diffDays = Math.floor((now - sunday) / DAY_MS);
+        const week = Math.max(1, Math.min(SEASON_LENGTH_WEEKS, Math.floor(diffDays / 7) + 1));
+        formatTitle = season.label + " · Week " + week;
+        formatCopy = "This season is currently active. Sunday anchors the week, Tuesday follows two days later, and Thursday follows four days after Sunday.";
+        formatNote = "Tournament Sunday lands on " + formatLongDate(season.tournamentSunday) + ".";
+      }
+
+      if (context.state === "between") {
+        title = season.label + " League Schedule";
+        formatTitle = season.label + " Is Next";
+        formatCopy = "The prior season has wrapped. The next season is already queued from its Sunday anchor date.";
+        formatNote = "Next opening Sunday is " + formatLongDate(sunday) + ".";
+      }
+
+      if (context.state === "postseason") {
+        formatTitle = season.label + " Complete";
+        formatCopy = "The latest posted season has finished. Add the next Sunday anchor date to activate the next schedule automatically.";
+        formatNote = "Tournament Sunday finished on " + formatLongDate(season.tournamentSunday) + ".";
+      }
+
+      document.title = title + " | Tex Axes";
+
+      document.getElementById("season-eyebrow").textContent = data.eyebrow;
+      document.getElementById("season-title").textContent = title;
+      document.getElementById("season-description").textContent = description;
+      document.getElementById("format-title").textContent = formatTitle;
+      document.getElementById("format-copy").textContent = formatCopy;
+      document.getElementById("format-note").textContent = formatNote;
+      document.getElementById("weekly-intro").textContent = weeklyIntro;
+      document.getElementById("weekly-title").textContent = weeklyTitle;
+      document.getElementById("marathon-intro").textContent = data.marathonIntro;
+      document.getElementById("footer-note").textContent = data.footerNote;
+      document.getElementById("hero-now").textContent = "Current Houston time: " + formatNow(now);
+
+      document.getElementById("hero-meta").innerHTML = renderMeta(pageMeta);
+      document.getElementById("season-strip").innerHTML = renderSeasonCards(seasonCards);
+      document.getElementById("schedule-grid").innerHTML = renderDayCards(days);
+      document.getElementById("marathon-grid").innerHTML = renderMarathonCards(data.marathon);
+    })();
   </script>
 </body>
 </html>
