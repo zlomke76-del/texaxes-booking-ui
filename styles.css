@@ -1255,10 +1255,11 @@ section {
   font-weight: 800;
   margin-bottom: 6px;
   color: var(--text);
+  letter-spacing: -0.01em;
 }
 
 .addon-price {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   font-weight: 900;
   color: #e7eefb;
 }
@@ -1268,6 +1269,27 @@ section {
   font-size: 0.82rem;
   font-weight: 700;
 }
+/* assign a color per addon */
+.addon-item.byob {
+  --addon-accent: rgba(240, 195, 107, 1);
+}
+
+.addon-item.knife {
+  --addon-accent: rgba(122, 162, 255, 1);
+}
+
+.addon-item.pro {
+  --addon-accent: rgba(155, 255, 203, 1);
+}
+
+.addon-item.big {
+  --addon-accent: rgba(255, 120, 120, 1);
+}
+
+.addon-item.shovel {
+  --addon-accent: rgba(180, 140, 255, 1);
+}
+
 
 .pricing-league {
   margin-top: 46px;
