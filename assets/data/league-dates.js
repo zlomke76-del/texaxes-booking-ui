@@ -149,5 +149,28 @@ window.TEX_AXES_LEAGUE_DATES = {
         }
       ]
     }
+  },
+
+  disciplineLanes: {
+    hatchet: [
+      { dayOffset: 0, label: "Sun", dateRole: "sunday", time: "2:00 PM" },
+      { dayOffset: 4, label: "Thu", dateRole: "thursday", time: "7:00 PM" }
+    ],
+    hatchetDuals: [
+      { dayOffset: 0, label: "Sun", dateRole: "sunday", time: "3:00 PM" }
+    ],
+    knife: [
+      { dayOffset: 0, label: "Sun", dateRole: "sunday", time: "4:00 PM" },
+      { dayOffset: 2, label: "Tue", dateRole: "tuesday", time: "6:30 PM" }
+    ],
+    knifeDuals: [
+      { dayOffset: 0, label: "Sun", dateRole: "sunday", time: "5:00 PM" },
+      { dayOffset: 2, label: "Tue", dateRole: "tuesday", time: "7:30 PM" }
+    ],
+    bigaxe: [
+      { dayOffset: 0, label: "Sun", dateRole: "sunday", time: "6:00 PM" },
+      { dayOffset: 2, label: "Tue", dateRole: "tuesday", time: "8:00 PM" },
+      { dayOffset: 4, label: "Thu", dateRole: "thursday", time: "6:30 PM" }
+    ]
   }
 };
