@@ -1061,22 +1061,37 @@ section {
 }
 .experience-grid {
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 18px;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 20px;
+  align-items: stretch;
 }
 
-.experience-main,
-.experience-side {
+.experience-main {
   display: grid;
-  gap: 18px;
+}
+
+.experience-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.experience-side .experience-block {
+  flex: 1;
 }
 
 .experience-block {
-  padding: 24px;
-  border-radius: var(--radius);
-  background: var(--card);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 22px 24px;
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02)),
+    rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: var(--shadow);
+}
+
+.experience-main .experience-block {
+  border-color: rgba(122, 162, 255, 0.22);
 }
 
 .experience-block h3 {
@@ -1090,11 +1105,11 @@ section {
 }
 
 .experience-list {
-  margin: 16px 0 0;
+  margin: 14px 0 0;
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .experience-list li {
