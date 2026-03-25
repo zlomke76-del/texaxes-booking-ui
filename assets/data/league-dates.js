@@ -1,50 +1,68 @@
 window.TEX_AXES_LEAGUE_DATES = {
+  timezone: "America/Chicago",
+  seasonLengthWeeks: 8,
+
+  seasons: [
+    {
+      label: "Season 2",
+      startSunday: "2026-04-19"
+    },
+    {
+      label: "Season 3",
+      startSunday: "2026-07-19"
+    },
+    {
+      label: "Season 4",
+      startSunday: "2026-10-11"
+    }
+  ],
+
   pageTitle: "League Dates",
   eyebrow: "Official Tex Axes League Dates",
-  title: "Season 2 League Schedule",
+  title: "Tex Axes League Schedule",
   description:
-    "Season 2 includes Sunday, Tuesday, and Thursday league play across hatchet, duals, knife, and big axe disciplines, with weekly play continuing for eight weeks and the final week serving as tournament finish for each discipline.",
+    "Tex Axes league play runs from a single Sunday anchor date each season. Tuesday and Thursday schedules automatically follow from that opener, with each season running for eight weeks and finishing in tournament week.",
 
   meta: [
-    "Season 2",
     "8-week season",
-    "Final week = tournament finish",
+    "Sunday anchor schedule",
+    "Tuesday + Thursday auto-derived",
     "Official WATL + WKTL play"
   ],
 
   format: {
     title: "8-Week Season Format",
     copy:
-      "Each weekly league track continues for eight consecutive weeks. The final week functions as the tournament finish for each discipline in that day’s schedule.",
+      "Each season begins on a Sunday opener. Tuesday and Thursday league nights follow automatically from that anchor, and the full season runs for eight weeks with tournament finish in week eight.",
     note:
-      "Saturday marathon leagues typically run during the season and can be added here as soon as dates are finalized."
+      "Saturday marathon leagues are added separately as dates are finalized by discipline."
   },
 
-  seasonCards: [
+  marathonIntro:
+    "Marathon leagues usually run on Saturdays during the season. Dates are more fluid, so they are posted here as each discipline’s marathon date is confirmed.",
+
+  marathon: [
     {
-      title: "Sunday League Start",
-      copy: "Begins Sunday, April 19, 2026 with warmups at 1:00 PM."
+      title: "Current Marathon Status",
+      copy:
+        "Saturday marathon league dates are posted once finalized for each season and discipline."
     },
     {
-      title: "Tuesday League Start",
-      copy: "Begins Tuesday, April 21, 2026 with warmups at 5:30 PM."
-    },
-    {
-      title: "Thursday League Start",
-      copy: "Begins Thursday, April 23, 2026 with warmups at 5:30 PM."
+      title: "How To Update This Section",
+      copy:
+        "Add marathon dates by discipline after the season is set. The weekly Sunday, Tuesday, and Thursday schedule remains anchored to the season Sunday opener."
     }
   ],
 
-  weeklyIntro:
-    "Each day below shows the season start date, warmup window, and discipline order for that league night. These weekly time blocks persist across the eight-week season, with the final week serving as the tournament finish.",
+  footerNote:
+    "League schedules and marathon dates may shift based on registration volume, operational timing, or season planning updates.",
 
-  days: [
-    {
+  scheduleTemplates: {
+    sunday: {
       dayLabel: "Sunday League",
       title: "Sunday",
-      startDate: "2026-04-19",
       summary:
-        "Sunday league is the deepest weekly slate, covering hatchet, hatchet duals, knife throwing, knife duals, and big axe in one progression block.",
+        "Sunday is the anchor night for the season and carries the fullest progression slate across hatchet, duals, knife, knife duals, and big axe.",
       schedule: [
         {
           time: "1:00 PM",
@@ -78,12 +96,12 @@ window.TEX_AXES_LEAGUE_DATES = {
         }
       ]
     },
-    {
+
+    tuesday: {
       dayLabel: "Tuesday League",
       title: "Tuesday",
-      startDate: "2026-04-21",
       summary:
-        "Tuesday league focuses on knife formats and big axe, making it a strong midweek competitive progression night.",
+        "Tuesday focuses on knife formats and big axe, creating a strong midweek competitive progression night.",
       schedule: [
         {
           time: "5:30 PM",
@@ -107,12 +125,12 @@ window.TEX_AXES_LEAGUE_DATES = {
         }
       ]
     },
-    {
+
+    thursday: {
       dayLabel: "Thursday League",
       title: "Thursday",
-      startDate: "2026-04-23",
       summary:
-        "Thursday league combines big axe and hatchet for a clean late-week competitive track.",
+        "Thursday combines big axe and hatchet for a clean late-week competitive track.",
       schedule: [
         {
           time: "5:30 PM",
@@ -131,24 +149,5 @@ window.TEX_AXES_LEAGUE_DATES = {
         }
       ]
     }
-  ],
-
-  marathonIntro:
-    "Marathon leagues usually run on Saturdays during the season. Dates are more fluid, so this section is designed to be updated as each discipline’s marathon date is confirmed.",
-
-  marathon: [
-    {
-      title: "Current Marathon Status",
-      copy:
-        "Saturday marathon league dates for Season 2 have not been finalized yet. Once confirmed, they can be added here by discipline."
-    },
-    {
-      title: "How To Update This Section",
-      copy:
-        "When dates are set, add each Saturday event here with the discipline name, date, and any special notes such as start time or registration limits."
-    }
-  ],
-
-  footerNote:
-    "League schedules and marathon dates may shift based on registration volume, operational timing, or season planning updates."
+  }
 };
