@@ -1108,7 +1108,7 @@ h1 {
 .feature-media {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 2;
 }
 
 .feature-media img {
@@ -1154,51 +1154,33 @@ h1 {
   pointer-events: none;
 }
 
-/* elevate ALL content above media + overlays */
-.feature-card > *:not(.feature-media) {
-  position: relative;
+.feature-overlay {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 22px;
   z-index: 3;
 }
 
-.feature-overlay {
-  margin-bottom: 10px;
-}
-
-.feature-overlay span {
-  display: inline-flex;
-  align-items: center;
-  padding: 7px 12px;
-  border-radius: 999px;
+.feature-kicker {
+  display: block;
+  margin: 0 0 8px;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #f4f7ff;
-  background: rgba(12, 18, 30, 0.52);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 .feature-card h3 {
-  margin: 0 0 10px;
+  margin: 0;
   font-size: 1.22rem;
   line-height: 1.15;
   color: #ffffff;
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.28);
 }
 
-.feature-card p {
-  display: block;
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: rgba(244, 247, 255, 0.9);
-  max-width: 30ch;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.24);
-}
-
-.feature-kicker,
+.feature-card p,
 .feature-icon {
   display: none;
 }
