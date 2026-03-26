@@ -2,6 +2,7 @@ let leagueDataPromise = null;
 
 const STANDARD_LEAGUE_PRICE = 120;
 const DUALS_PLAYER_PRICE = 60;
+const LEAGUE_TAX_RATE = 0.0825;
 
 const leagueBookingState = {
   modal: null,
@@ -198,13 +199,17 @@ function computeLeagueSessionPricing(players) {
 
   const baseTotal = pricedRows.reduce((sum, row) => sum + row.base, 0);
   const savingsTotal = pricedRows.reduce((sum, row) => sum + row.discountAmount, 0);
-  const finalTotal = pricedRows.reduce((sum, row) => sum + row.finalPrice, 0);
+  const subtotal = pricedRows.reduce((sum, row) => sum + row.finalPrice, 0);
+  const tax = subtotal * LEAGUE_TAX_RATE;
+  const finalTotal = subtotal + tax;
 
   return {
     rows: pricedRows,
     registrationCount: pricedRows.length,
     baseTotal,
     savingsTotal,
+    subtotal,
+    tax,
     finalTotal
   };
 }
@@ -1469,7 +1474,7 @@ function renderLeagueStepThree() {
                           <div class="tx-league-slot-copy">
                             <div>${option.laneDateDisplay}</div>
                             <div>${option.laneTime}</div>
-                            <div>${formatMoney(option.price)} ${option.price === DUALS_PLAYER_PRICE ? "per player" : "per player"}</div>
+                            <div>${formatMoney(option.price)} per player</div>
                           </div>
                         </button>
                       `;
@@ -1557,11 +1562,13 @@ function renderLeagueStepFour() {
             .join("")}
           <div class="tx-league-pricing-row"><span>Base total</span><strong>${formatMoney(pricing.baseTotal)}</strong></div>
           <div class="tx-league-pricing-row"><span>Total savings</span><strong>${formatMoney(pricing.savingsTotal)}</strong></div>
+          <div class="tx-league-pricing-row"><span>Subtotal</span><strong>${formatMoney(pricing.subtotal)}</strong></div>
+          <div class="tx-league-pricing-row"><span>Tax</span><strong>${formatMoney(pricing.tax)}</strong></div>
           <div class="tx-league-pricing-row"><span>Final total</span><strong>${formatMoney(pricing.finalTotal)}</strong></div>
         </div>
 
         <div class="tx-league-inline-note">
-          Discount ladder: 2nd registration gets 5% off, 3rd gets 10% off, 4th gets 15% off, and 5th+ gets 20% off. Duals entries are priced at ${formatMoney(DUALS_PLAYER_PRICE)} per player.
+          Discount ladder: 2nd registration gets 5% off, 3rd gets 10% off, 4th gets 15% off, and 5th+ gets 20% off. Duals entries are priced at ${formatMoney(DUALS_PLAYER_PRICE)} per player. Tax is applied at ${(LEAGUE_TAX_RATE * 100).toFixed(2)}%.
         </div>
       </div>
     </div>
@@ -1604,6 +1611,8 @@ function renderLeagueSidePanel() {
       <h4 class="tx-league-side-title">Pricing</h4>
       <div class="tx-league-kv"><span>Base total</span><strong>${formatMoney(pricing.baseTotal)}</strong></div>
       <div class="tx-league-kv"><span>Savings</span><strong>${formatMoney(pricing.savingsTotal)}</strong></div>
+      <div class="tx-league-kv"><span>Subtotal</span><strong>${formatMoney(pricing.subtotal)}</strong></div>
+      <div class="tx-league-kv"><span>Tax</span><strong>${formatMoney(pricing.tax)}</strong></div>
       <div class="tx-league-kv"><span>Final total</span><strong>${formatMoney(pricing.finalTotal)}</strong></div>
     </div>
 
