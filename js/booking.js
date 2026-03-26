@@ -55,6 +55,20 @@ function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
 }
 
+function formatDisplayDate(value) {
+  if (!value) return "Not selected";
+
+  const [year, month, day] = String(value).split("-").map(Number);
+  if (!year || !month || !day) return value;
+
+  const date = new Date(year, month - 1, day);
+  return date.toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric"
+  });
+}
+
 function computeLocalPricingSnapshot() {
   const throwers = Number(bookingState.values.throwers || 0);
   const addons = bookingState.values.addons;
@@ -83,10 +97,10 @@ function computeLocalPricingSnapshot() {
 function getStepTitles() {
   return [
     "Experience",
-    "Party & Date",
+    "Group",
     "Time",
     "Details",
-    "Extras",
+    "Upgrades",
     "Review"
   ];
 }
@@ -216,8 +230,8 @@ function ensureBookingStyles() {
     .tx-step-pill {
       border-radius: 14px;
       padding: 10px 12px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
       min-height: 64px;
     }
 
@@ -253,7 +267,8 @@ function ensureBookingStyles() {
     }
 
     .tx-card-choice,
-    .tx-slot-card {
+    .tx-slot-card,
+    .tx-count-chip {
       appearance: none;
       width: 100%;
       border: 1px solid rgba(255,255,255,0.12);
@@ -271,7 +286,8 @@ function ensureBookingStyles() {
     }
 
     .tx-card-choice:hover,
-    .tx-slot-card:hover {
+    .tx-slot-card:hover,
+    .tx-count-chip:hover {
       transform: translateY(-2px) scale(1.01);
       border-color: rgba(255,122,89,0.34);
       background: rgba(255,255,255,0.07);
@@ -279,7 +295,8 @@ function ensureBookingStyles() {
     }
 
     .tx-card-choice.is-selected,
-    .tx-slot-card.is-selected {
+    .tx-slot-card.is-selected,
+    .tx-count-chip.is-selected {
       border-color: rgba(255,122,89,0.56);
       background: linear-gradient(
         135deg,
@@ -334,7 +351,7 @@ function ensureBookingStyles() {
 
     .tx-card-meta {
       margin-top: 10px;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: #ffd1bd;
     }
@@ -586,6 +603,139 @@ function ensureBookingStyles() {
       color: rgba(255,255,255,0.72);
     }
 
+    .tx-party-shell {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    .tx-party-card {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .tx-party-title {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .tx-party-copy {
+      margin: 0 0 14px;
+      color: rgba(255,255,255,0.72);
+      line-height: 1.5;
+      font-size: 0.92rem;
+    }
+
+    .tx-count-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .tx-count-chip {
+      padding: 14px 10px;
+      text-align: center;
+      border-radius: 16px;
+    }
+
+    .tx-count-value {
+      font-size: 1.02rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .tx-count-meta {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.66);
+    }
+
+    .tx-date-hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
+      border-radius: 18px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+
+    .tx-date-hero-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.56);
+      margin-bottom: 4px;
+    }
+
+    .tx-date-hero-value {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .tx-date-hero-note {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.68);
+      text-align: right;
+      line-height: 1.45;
+    }
+
+    .tx-step-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 16px;
+      border-radius: 18px;
+      padding: 14px 16px;
+      background: linear-gradient(
+        135deg,
+        rgba(255,122,89,0.12),
+        rgba(255,255,255,0.04)
+      );
+      border: 1px solid rgba(255,122,89,0.2);
+    }
+
+    .tx-step-banner strong {
+      color: #ffffff;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .tx-step-banner span {
+      color: rgba(255,255,255,0.72);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .tx-step-banner-price {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .tx-step-banner-price .tx-price {
+      display: block;
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+    }
+
+    .tx-step-banner-price .tx-price-meta {
+      color: rgba(255,255,255,0.68);
+      font-size: 0.82rem;
+    }
+
     @media (max-width: 960px) {
       .tx-booking-layout {
         grid-template-columns: 1fr;
@@ -597,7 +747,9 @@ function ensureBookingStyles() {
 
       .tx-slot-grid,
       .tx-grid-3,
-      .tx-grid-2 {
+      .tx-grid-2,
+      .tx-party-shell,
+      .tx-count-grid {
         grid-template-columns: 1fr;
       }
 
@@ -608,6 +760,17 @@ function ensureBookingStyles() {
 
       .tx-btn-row {
         justify-content: flex-end;
+      }
+
+      .tx-date-hero,
+      .tx-step-banner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .tx-date-hero-note,
+      .tx-step-banner-price {
+        text-align: left;
       }
     }
   `;
@@ -628,7 +791,7 @@ function createBookingModal() {
           <div>
             <h2 class="tx-booking-title" id="tx-booking-title">Book Your Experience</h2>
             <p class="tx-booking-subtitle">
-              Choose your throwing experience, pick a live time, personalize the visit, and lock it in with checkout.
+              Book your lane, choose your time, and build your experience in minutes.
             </p>
           </div>
           <button class="tx-booking-close" type="button" aria-label="Close booking flow">✕</button>
@@ -729,6 +892,15 @@ function normalizeIntegerInput(value, fallback = 0) {
   return Math.floor(n);
 }
 
+function getNextStepLabel() {
+  if (bookingState.step === 1) return "Choose Group & Date";
+  if (bookingState.step === 2) return "See Available Times";
+  if (bookingState.step === 3) return "Continue to Details";
+  if (bookingState.step === 4) return "Review Upgrades";
+  if (bookingState.step === 5) return "Review Booking";
+  return "Continue";
+}
+
 function updateCurrentStepButtonState() {
   if (!bookingState.modal) return;
   const nextBtn = bookingState.modal.querySelector("#tx-next-step");
@@ -736,6 +908,7 @@ function updateCurrentStepButtonState() {
 
   if (nextBtn) {
     nextBtn.disabled = !stepIsValid(bookingState.step);
+    nextBtn.textContent = getNextStepLabel();
   }
 
   if (submitBtn) {
@@ -906,9 +1079,9 @@ function renderStepOne() {
   return `
     <div>
       <div class="tx-step-head">
-        <h3 class="tx-step-title">What kind of experience are you booking?</h3>
+        <h3 class="tx-step-title">What are you booking today?</h3>
         <p class="tx-step-copy">
-          Start with the type of visit you want. You can personalize everything else after you choose the experience.
+          Start with your experience. You’ll choose your time and customize everything next.
         </p>
       </div>
 
@@ -916,6 +1089,8 @@ function renderStepOne() {
         ${options
           .map((option) => {
             const selected = bookingState.values.experience === option.key ? "is-selected" : "";
+            const isPrimary = option.key === "axe_throwing";
+
             return `
               <button
                 type="button"
@@ -923,9 +1098,14 @@ function renderStepOne() {
                 data-experience="${option.key}"
               >
                 <div class="tx-card-title">${option.title}</div>
-                <p class="tx-card-copy">${option.copy}</p>
-                <div class="tx-card-meta">${option.meta}</div>
+                <div class="tx-card-meta" style="font-size:1.1rem;">${option.meta}</div>
+                <p class="tx-card-copy" style="margin-top:6px;">${option.copy}</p>
                 <div class="tx-card-sell">${option.sell}</div>
+                ${
+                  isPrimary
+                    ? `<div style="margin-top:10px;font-size:0.85rem;color:#ffd1bd;">Fastest way to book online</div>`
+                    : ""
+                }
               </button>
             `;
           })
@@ -933,60 +1113,105 @@ function renderStepOne() {
       </div>
 
       <div class="tx-inline-note" style="margin-top:16px;">
-        Public online booking supports up to 24 throwers. Group Events is the better path for larger, more coordinated visits.
+        Online booking supports up to 24 throwers. Larger or hosted events are better handled through Group Events.
       </div>
     </div>
   `;
 }
 
 function renderStepTwo() {
+  const throwers = Number(bookingState.values.throwers || 0);
+  const presets = [2, 4, 6, 8, 10, 12];
+  const pricing = computeLocalPricingSnapshot();
+
   return `
     <div>
       <div class="tx-step-head">
-        <h3 class="tx-step-title">How many are throwing, and when do you want to come in?</h3>
+        <h3 class="tx-step-title">Choose your group size and date</h3>
         <p class="tx-step-copy">
-          Pick your group size and choose your date. Friday and Saturday times are the most popular.
+          Set the size of your group, pick your date, and then we’ll show the live times that fit your booking.
         </p>
       </div>
 
-      <div class="tx-grid-2">
-        <div class="tx-field">
-          <label class="tx-label" for="tx-throwers">Number of throwers</label>
-          <input
-            id="tx-throwers"
-            class="tx-input"
-            type="number"
-            min="1"
-            max="${PUBLIC_MAX_PARTY_SIZE}"
-            value="${bookingState.values.throwers}"
-          />
-          <div class="tx-inline-note">Public online booking currently supports up to 24 throwers.</div>
+      <div class="tx-party-shell">
+        <div class="tx-party-card">
+          <h4 class="tx-party-title">How many are throwing?</h4>
+          <p class="tx-party-copy">
+            Most online bookings are small groups, date nights, and celebrations. Start with a quick pick or enter your exact count.
+          </p>
+
+          <div class="tx-count-grid">
+            ${presets
+              .map((count) => {
+                const selected = throwers === count ? "is-selected" : "";
+                return `
+                  <button
+                    type="button"
+                    class="tx-count-chip ${selected}"
+                    data-throwers-preset="${count}"
+                  >
+                    <div class="tx-count-value">${count}</div>
+                    <div class="tx-count-meta">${count === 2 ? "Great for date night" : count <= 6 ? "Popular size" : "Group booking"}</div>
+                  </button>
+                `;
+              })
+              .join("")}
+          </div>
+
+          <div class="tx-field" style="margin-bottom:0;">
+            <label class="tx-label" for="tx-throwers">Exact number of throwers</label>
+            <input
+              id="tx-throwers"
+              class="tx-input"
+              type="number"
+              min="1"
+              max="${PUBLIC_MAX_PARTY_SIZE}"
+              value="${bookingState.values.throwers}"
+            />
+            <div class="tx-inline-note">Public online booking currently supports up to 24 throwers.</div>
+          </div>
         </div>
 
-        <div class="tx-field">
-          <label class="tx-label" for="tx-date">Select date</label>
-          <input
-            id="tx-date"
-            class="tx-input"
-            type="date"
-            min="${getTodayLocalDate()}"
-            value="${bookingState.values.date}"
-          />
-          <div class="tx-inline-note">Use the calendar picker to choose your date. Live times load from that selection.</div>
+        <div class="tx-party-card">
+          <h4 class="tx-party-title">When do you want to come in?</h4>
+          <p class="tx-party-copy">
+            Use the calendar picker to choose your date. Friday and Saturday times usually go first.
+          </p>
+
+          <div class="tx-date-hero">
+            <div>
+              <div class="tx-date-hero-label">Selected date</div>
+              <div class="tx-date-hero-value">${formatDisplayDate(bookingState.values.date)}</div>
+            </div>
+            <div class="tx-date-hero-note">
+              Live times are pulled from the booking system for this date.
+            </div>
+          </div>
+
+          <div class="tx-field" style="margin-bottom:0;">
+            <label class="tx-label" for="tx-date">Select date</label>
+            <input
+              id="tx-date"
+              class="tx-input"
+              type="date"
+              min="${getTodayLocalDate()}"
+              value="${bookingState.values.date}"
+            />
+            <div class="tx-inline-note">Choose a date, then continue to see available times.</div>
+          </div>
         </div>
       </div>
 
-      ${
-        bookingState.values.throwers && bookingState.values.date
-          ? `<div class="tx-inline-note" style="margin: 4px 0 16px; color:#ffffff;">
-              ${bookingState.values.throwers} thrower(s) on ${bookingState.values.date}
-            </div>`
-          : ""
-      }
-
-      <button type="button" class="tx-btn tx-btn-primary" id="tx-load-availability">
-        ${bookingState.availabilityLoading ? "Loading..." : "Show Available Times"}
-      </button>
+      <div class="tx-step-banner">
+        <div>
+          <strong>${throwers} thrower${throwers === 1 ? "" : "s"} selected • ${formatDisplayDate(bookingState.values.date)}</strong>
+          <span>Estimated base before upgrades and tax.</span>
+        </div>
+        <div class="tx-step-banner-price">
+          <span class="tx-price">${formatMoney(pricing.basePrice)}</span>
+          <span class="tx-price-meta">$29 per thrower</span>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -998,7 +1223,7 @@ function renderStepThree() {
   return `
     <div>
       <div class="tx-step-head">
-        <h3 class="tx-step-title">Choose a live time</h3>
+        <h3 class="tx-step-title">Pick your time</h3>
         <p class="tx-step-copy">${hint}</p>
       </div>
 
@@ -1150,7 +1375,7 @@ function renderStepFive() {
   return `
     <div>
       <div class="tx-step-head">
-        <h3 class="tx-step-title">Make it your experience</h3>
+        <h3 class="tx-step-title">Upgrade your experience</h3>
         <p class="tx-step-copy">
           Your time is already selected. Most groups add at least one upgrade to make the visit more memorable.
         </p>
@@ -1233,18 +1458,18 @@ function renderStepSix() {
       <div class="tx-step-head">
         <h3 class="tx-step-title">Review your booking</h3>
         <p class="tx-step-copy">
-          Review the details below, then continue to checkout to finalize your booking.
+          Review everything, then continue to secure your time and complete checkout.
         </p>
       </div>
 
       <div class="tx-summary-row"><span>Experience</span><strong>${getSelectedExperienceTitle()}</strong></div>
-      <div class="tx-summary-row"><span>Date</span><strong>${bookingState.values.date || "Not selected"}</strong></div>
+      <div class="tx-summary-row"><span>Date</span><strong>${formatDisplayDate(bookingState.values.date)}</strong></div>
       <div class="tx-summary-row"><span>Time</span><strong>${slot ? `${slot.start} – ${slot.end}` : "Not selected"}</strong></div>
       <div class="tx-summary-row"><span>Booked by</span><strong>${customer.first_name || ""} ${customer.last_name || ""}</strong></div>
       <div style="margin-top:12px;">${renderSummaryRows()}</div>
 
       <div class="tx-inline-note" style="margin-top:16px;">
-        Final booking admissibility, bay allocation, and payment session creation are decided by the backend when checkout starts.
+        Final pricing and live availability are confirmed when checkout starts.
       </div>
     </div>
   `;
@@ -1266,15 +1491,15 @@ function renderSidePanel() {
 
   side.innerHTML = `
     <div class="tx-side-block">
-      <h4 class="tx-side-title">Current selection</h4>
+      <h4 class="tx-side-title">Your booking</h4>
       <div class="tx-kv"><span>Experience</span><strong>${getSelectedExperienceTitle()}</strong></div>
       <div class="tx-kv"><span>Throwers</span><strong>${bookingState.values.throwers || 0}</strong></div>
-      <div class="tx-kv"><span>Date</span><strong>${bookingState.values.date || "Not selected"}</strong></div>
+      <div class="tx-kv"><span>Date</span><strong>${formatDisplayDate(bookingState.values.date)}</strong></div>
       <div class="tx-kv"><span>Time</span><strong>${slot ? `${slot.start} – ${slot.end}` : "Not selected"}</strong></div>
     </div>
 
     <div class="tx-side-block">
-      <h4 class="tx-side-title">Live booking status</h4>
+      <h4 class="tx-side-title">Status</h4>
       <div class="tx-status-chip">
         ${
           bookingState.availabilityLoading
@@ -1285,7 +1510,7 @@ function renderSidePanel() {
         }
       </div>
       <div class="tx-inline-note" style="margin-top:12px;">
-        Availability and final booking acceptance are enforced by the Tex Axes backend, not by the page itself.
+        Your time is held while you complete booking. Final availability is confirmed at checkout.
       </div>
     </div>
 
@@ -1296,7 +1521,7 @@ function renderSidePanel() {
       <div class="tx-kv"><span>Tax</span><strong>${formatMoney(pricing.tax)}</strong></div>
       <div class="tx-kv"><span>Total</span><strong>${formatMoney(pricing.total)}</strong></div>
       <div class="tx-inline-note" style="margin-top:12px;">
-        Final totals are recomputed by the booking API during checkout creation.
+        Final pricing is confirmed at checkout.
       </div>
     </div>
   `;
@@ -1321,7 +1546,7 @@ function renderMainPanel() {
         ${bookingState.step > 1 ? `<button type="button" class="tx-btn" id="tx-prev-step">Back</button>` : ""}
         ${
           bookingState.step < 6
-            ? `<button type="button" class="tx-btn tx-btn-primary" id="tx-next-step" ${stepIsValid(bookingState.step) ? "" : "disabled"}>Continue</button>`
+            ? `<button type="button" class="tx-btn tx-btn-primary" id="tx-next-step" ${stepIsValid(bookingState.step) ? "" : "disabled"}>${getNextStepLabel()}</button>`
             : `<button type="button" class="tx-btn tx-btn-primary" id="tx-submit-booking" ${stepIsValid(6) && !bookingState.isSubmitting ? "" : "disabled"}>
                 ${bookingState.isSubmitting ? "Starting Checkout..." : "Continue to Checkout"}
                </button>`
@@ -1348,6 +1573,16 @@ function attachMainPanelEvents() {
     });
   });
 
+  main.querySelectorAll("[data-throwers-preset]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const preset = normalizeIntegerInput(button.getAttribute("data-throwers-preset"), 1);
+      bookingState.values.throwers = Math.max(1, Math.min(PUBLIC_MAX_PARTY_SIZE, preset));
+      bookingState.selectedSlot = null;
+      bookingState.availability = [];
+      renderBookingFlow();
+    });
+  });
+
   const throwersInput = main.querySelector("#tx-throwers");
   if (throwersInput) {
     throwersInput.addEventListener("input", (event) => {
@@ -1366,8 +1601,7 @@ function attachMainPanelEvents() {
       bookingState.values.date = event.target.value;
       bookingState.selectedSlot = null;
       bookingState.availability = [];
-      renderSidePanel();
-      updateCurrentStepButtonState();
+      renderBookingFlow();
     });
 
     dateInput.addEventListener("click", (event) => {
