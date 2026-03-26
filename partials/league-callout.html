@@ -54,7 +54,12 @@
           </div>
 
           <div class="league-cta-row">
-            <a class="btn btn-primary" href="#cta">Join a League</a>
+            <a
+              class="btn btn-primary js-league-booking"
+              href="#"
+            >
+              Join a League
+            </a>
             <a class="btn btn-secondary" href="/league-dates.html">View Full League Dates</a>
           </div>
         </div>
@@ -141,35 +146,65 @@
       </div>
 
       <div class="league-grid">
-        <div class="league-card league-card-featured">
+        <div
+          class="league-card league-card-featured js-league-booking"
+          data-league-discipline="hatchet"
+          role="button"
+          tabindex="0"
+          aria-label="Join Standard Hatchet League"
+        >
           <div class="league-card-kicker">Best for first-time competitors</div>
           <strong>Standard Hatchet League</strong>
           <span>Classic sanctioned hatchet play for all skill levels.</span>
           <div class="league-inline-note" id="hatchet-next"></div>
         </div>
 
-        <div class="league-card">
+        <div
+          class="league-card js-league-booking"
+          data-league-discipline="hatchetDuals"
+          role="button"
+          tabindex="0"
+          aria-label="Join Duals Hatchet League"
+        >
           <div class="league-card-kicker">Team coordination</div>
           <strong>Duals Hatchet League</strong>
           <span>Partner-based hatchet competition built around teamwork and rhythm.</span>
           <div class="league-inline-note" id="hatchet-duals-next"></div>
         </div>
 
-        <div class="league-card">
+        <div
+          class="league-card js-league-booking"
+          data-league-discipline="bigaxe"
+          role="button"
+          tabindex="0"
+          aria-label="Join Big Axe League"
+        >
           <div class="league-card-kicker">Higher skill ceiling</div>
           <strong>Big Axe League</strong>
           <span>Heavier throws, bigger commitment, and advanced competitive reps.</span>
           <div class="league-inline-note" id="bigaxe-next"></div>
         </div>
 
-        <div class="league-card">
+        <div
+          class="league-card js-league-booking"
+          data-league-discipline="knife"
+          role="button"
+          tabindex="0"
+          aria-label="Join Knife Throwing League"
+        >
           <div class="league-card-kicker">WKTL precision format</div>
           <strong>Knife Throwing League</strong>
           <span>Official WKTL competition built around precision and control.</span>
           <div class="league-inline-note" id="knife-next"></div>
         </div>
 
-        <div class="league-card">
+        <div
+          class="league-card js-league-booking"
+          data-league-discipline="knifeDuals"
+          role="button"
+          tabindex="0"
+          aria-label="Join Knife Duals League"
+        >
           <div class="league-card-kicker">Team-based knife play</div>
           <strong>Knife Duals League</strong>
           <span>Partner competition for knife throwers who want more structure and depth.</span>
