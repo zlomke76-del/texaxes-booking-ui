@@ -449,7 +449,7 @@ async function startBookingFlow() {
       booking_type: "open"
     };
 
-    const res = await fetch("https://texaxes-ops.vercel.app/api/book", {
+    const response = await fetch("https://texaxes-ops.vercel.app/api/book", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -457,19 +457,30 @@ async function startBookingFlow() {
       body: JSON.stringify(payload)
     });
 
-    const data = await res.json();
+    const data = await response.json();
 
     if (!response.ok) {
-  const data = await response.json();
-  console.error(data);
+      console.error(data);
 
-  if (response.status === 409) {
-    alert("That time slot is no longer available. Please choose another time.");
-    return;
+      if (response.status === 409) {
+        alert("That time slot is no longer available. Please choose another time.");
+        return;
+      }
+
+      alert(data.error || "Something went wrong");
+      return;
+    }
+
+    if (data.checkout_url) {
+      window.location.href = data.checkout_url;
+      return;
+    }
+
+    alert("Booking created, but no checkout link was returned.");
+  } catch (error) {
+    console.error("Booking flow failed", error);
+    alert("Something went wrong");
   }
-
-  alert(data.error || "Something went wrong");
-  return;
 }
 
 function wireBookingButtons() {
@@ -481,7 +492,7 @@ function wireBookingButtons() {
 
   selectors.forEach((selector) => {
     document.querySelectorAll(selector).forEach((el) => {
-      if (el.textContent.toLowerCase().includes("book")) {
+      if ((el.textContent || "").toLowerCase().includes("book")) {
         el.addEventListener("click", (e) => {
           e.preventDefault();
           startBookingFlow();
