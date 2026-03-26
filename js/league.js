@@ -31,6 +31,10 @@ function createEmptyLeaguePlayer() {
   };
 }
 
+function roundMoney(value) {
+  return Math.round(value * 100) / 100;
+}
+
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     const existing = document.querySelector(`script[src="${src}"]`);
@@ -185,8 +189,8 @@ function computeLeagueSessionPricing(players) {
 
   const pricedRows = rows.map((row, index) => {
     const discountRate = getLeagueDiscountRate(index);
-    const discountAmount = row.base * discountRate;
-    const finalPrice = row.base - discountAmount;
+    const discountAmount = roundMoney(row.base * discountRate);
+    const finalPrice = roundMoney(row.base - discountAmount);
 
     return {
       ...row,
@@ -197,11 +201,15 @@ function computeLeagueSessionPricing(players) {
     };
   });
 
-  const baseTotal = pricedRows.reduce((sum, row) => sum + row.base, 0);
-  const savingsTotal = pricedRows.reduce((sum, row) => sum + row.discountAmount, 0);
-  const subtotal = pricedRows.reduce((sum, row) => sum + row.finalPrice, 0);
-  const tax = subtotal * LEAGUE_TAX_RATE;
-  const finalTotal = subtotal + tax;
+  const baseTotal = roundMoney(pricedRows.reduce((sum, row) => sum + row.base, 0));
+  const savingsTotal = roundMoney(
+    pricedRows.reduce((sum, row) => sum + row.discountAmount, 0)
+  );
+  const subtotal = roundMoney(
+    pricedRows.reduce((sum, row) => sum + row.finalPrice, 0)
+  );
+  const tax = roundMoney(subtotal * LEAGUE_TAX_RATE);
+  const finalTotal = roundMoney(subtotal + tax);
 
   return {
     rows: pricedRows,
