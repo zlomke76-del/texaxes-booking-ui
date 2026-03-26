@@ -425,20 +425,8 @@ function initLeagueCallout() {
   setText("marathon-callout-badge", "Seasonal format");
 }
 
-async function boot() {
-  await Promise.all(
-    Object.entries(partialMap).map(([targetId, path]) => loadPartial(targetId, path))
-  );
-
-  await ensureLeagueData();
-  initLeagueCallout();
-
-  const year = document.getElementById("year");
-  if (year) year.textContent = new Date().getFullYear();
-}
 async function startBookingFlow() {
   try {
-    // TEMP: fixed values (we’ll replace with UI later)
     const payload = {
       date: "2026-03-28",
       time: "16:00",
@@ -477,13 +465,44 @@ async function startBookingFlow() {
       return;
     }
 
-    // 🔥 redirect to Stripe
     window.location.href = data.checkout_url;
-
   } catch (err) {
     console.error(err);
     alert("Something went wrong");
   }
 }
-boot();
 
+function wireBookingButtons() {
+  const selectors = [
+    ".btn-primary",
+    ".hero-cta",
+    ".booking-cta"
+  ];
+
+  selectors.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((el) => {
+      if (el.textContent.toLowerCase().includes("book")) {
+        el.addEventListener("click", (e) => {
+          e.preventDefault();
+          startBookingFlow();
+        });
+      }
+    });
+  });
+}
+
+async function boot() {
+  await Promise.all(
+    Object.entries(partialMap).map(([targetId, path]) => loadPartial(targetId, path))
+  );
+
+  await ensureLeagueData();
+  initLeagueCallout();
+
+  const year = document.getElementById("year");
+  if (year) year.textContent = new Date().getFullYear();
+
+  wireBookingButtons();
+}
+
+boot();
