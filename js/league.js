@@ -1,28 +1,34 @@
 let leagueDataPromise = null;
 
+const STANDARD_LEAGUE_PRICE = 120;
+const DUALS_PLAYER_PRICE = 60;
+
 const leagueBookingState = {
   modal: null,
   isOpen: false,
   isSubmitting: false,
   step: 1,
+  activePlayerIndex: 0,
   seasonOptions: [],
-  selectedContext: null,
   values: {
-    discipline: "hatchet",
     seasonLabel: "",
     seasonStartSunday: "",
-    laneLabel: "",
-    laneDate: "",
-    laneTime: "",
+    players: [createEmptyLeaguePlayer()]
+  }
+};
+
+function createEmptyLeaguePlayer() {
+  return {
     first_name: "",
     last_name: "",
     email: "",
     phone: "",
     notes: "",
     experience_level: "new",
-    marketing_opt_in: false
-  }
-};
+    marketing_opt_in: false,
+    entries: []
+  };
+}
 
 function loadScript(src) {
   return new Promise((resolve, reject) => {
@@ -95,6 +101,229 @@ function formatLeagueLongDate(date, timeZone = "America/Chicago") {
   }).format(date);
 }
 
+function formatMoney(value) {
+  return `$${Number(value || 0).toFixed(2)}`;
+}
+
+function getLeagueDisciplineOptions() {
+  return [
+    {
+      key: "hatchet",
+      title: "Hatchet League",
+      meta: "Standard weekly league play",
+      copy: "The core competitive track for throwers building consistency, scores, and season rhythm."
+    },
+    {
+      key: "hatchetDuals",
+      title: "Hatchet Duals",
+      meta: "Partnered league format",
+      copy: "A shared rhythm for paired competition, strategy, and team-based weekly play."
+    },
+    {
+      key: "knife",
+      title: "Knife League",
+      meta: "WKTL throwing format",
+      copy: "For players who want a dedicated knife throwing season with consistent weekly competition."
+    },
+    {
+      key: "knifeDuals",
+      title: "Knife Duals",
+      meta: "Partner knife format",
+      copy: "A paired WKTL track for throwers who want the duals experience from week one."
+    },
+    {
+      key: "bigaxe",
+      title: "Big Axe League",
+      meta: "Heavier competitive format",
+      copy: "A more demanding discipline for throwers looking for the full big axe season environment."
+    }
+  ];
+}
+
+function getLeagueDisciplineTitle(key) {
+  return getLeagueDisciplineOptions().find((item) => item.key === key)?.title || key;
+}
+
+function getLeagueStepTitles() {
+  return ["Season", "Players", "Leagues", "Review"];
+}
+
+function getLeagueBasePrice(discipline) {
+  if (discipline === "hatchetDuals" || discipline === "knifeDuals") {
+    return DUALS_PLAYER_PRICE;
+  }
+  return STANDARD_LEAGUE_PRICE;
+}
+
+function getLeagueDiscountRate(index) {
+  if (index === 0) return 0;
+  if (index === 1) return 0.05;
+  if (index === 2) return 0.10;
+  if (index === 3) return 0.15;
+  return 0.20;
+}
+
+function computeLeagueSessionPricing(players) {
+  const rows = [];
+
+  players.forEach((player, playerIndex) => {
+    player.entries.forEach((entry, entryIndex) => {
+      rows.push({
+        ...entry,
+        playerIndex,
+        entryIndex,
+        playerName:
+          `${player.first_name || ""} ${player.last_name || ""}`.trim() ||
+          `Player ${playerIndex + 1}`,
+        base: getLeagueBasePrice(entry.discipline)
+      });
+    });
+  });
+
+  rows.sort((a, b) => b.base - a.base);
+
+  const pricedRows = rows.map((row, index) => {
+    const discountRate = getLeagueDiscountRate(index);
+    const discountAmount = row.base * discountRate;
+    const finalPrice = row.base - discountAmount;
+
+    return {
+      ...row,
+      discountIndex: index,
+      discountRate,
+      discountAmount,
+      finalPrice
+    };
+  });
+
+  const baseTotal = pricedRows.reduce((sum, row) => sum + row.base, 0);
+  const savingsTotal = pricedRows.reduce((sum, row) => sum + row.discountAmount, 0);
+  const finalTotal = pricedRows.reduce((sum, row) => sum + row.finalPrice, 0);
+
+  return {
+    rows: pricedRows,
+    registrationCount: pricedRows.length,
+    baseTotal,
+    savingsTotal,
+    finalTotal
+  };
+}
+
+function getLeagueNextStepLabel() {
+  if (leagueBookingState.step === 1) return "Continue to Players";
+  if (leagueBookingState.step === 2) return "Choose Leagues";
+  if (leagueBookingState.step === 3) return "Review Registration";
+  return "Continue";
+}
+
+function seasonStepIsValid() {
+  return Boolean(
+    leagueBookingState.values.seasonLabel &&
+    leagueBookingState.values.seasonStartSunday
+  );
+}
+
+function playersStepIsValid() {
+  return leagueBookingState.values.players.length > 0;
+}
+
+function playerIsValid(player) {
+  return (
+    player.first_name.trim().length > 0 &&
+    player.last_name.trim().length > 0 &&
+    isValidEmail(player.email)
+  );
+}
+
+function playersDetailsValid() {
+  return leagueBookingState.values.players.every(playerIsValid);
+}
+
+function leaguesStepIsValid() {
+  return (
+    playersDetailsValid() &&
+    leagueBookingState.values.players.every((player) => Array.isArray(player.entries) && player.entries.length > 0)
+  );
+}
+
+function leagueStepIsValid(step) {
+  if (step === 1) return seasonStepIsValid();
+  if (step === 2) return playersStepIsValid();
+  if (step === 3) return leaguesStepIsValid();
+  if (step === 4) return seasonStepIsValid() && playersStepIsValid() && leaguesStepIsValid();
+  return false;
+}
+
+function buildLeagueSeasonOptions() {
+  const data = window.TEX_AXES_LEAGUE_DATES;
+  if (!data || !Array.isArray(data.seasons)) return [];
+
+  const timeZone = data.timezone || "America/Chicago";
+  return data.seasons.map((season) => {
+    const seasonStart = parseLeagueDate(season.startSunday);
+    return {
+      id: `${season.label}-${season.startSunday}`,
+      seasonLabel: season.label,
+      seasonStartSunday: season.startSunday,
+      seasonStartDisplay: formatLeagueLongDate(seasonStart, timeZone),
+      summary: `${season.label} · Starts ${formatLeagueLongDate(seasonStart, timeZone)}`
+    };
+  });
+}
+
+function getActiveSeasonObject() {
+  return leagueBookingState.seasonOptions.find(
+    (item) =>
+      item.seasonLabel === leagueBookingState.values.seasonLabel &&
+      item.seasonStartSunday === leagueBookingState.values.seasonStartSunday
+  ) || null;
+}
+
+function buildLeagueLaneOptionsForSeason(seasonStartSunday) {
+  const data = window.TEX_AXES_LEAGUE_DATES;
+  if (!data || !seasonStartSunday) return [];
+
+  const disciplineLanes = data.disciplineLanes || {};
+  const timeZone = data.timezone || "America/Chicago";
+  const seasonStart = parseLeagueDate(seasonStartSunday);
+
+  return getLeagueDisciplineOptions().flatMap((discipline) => {
+    const lanes = Array.isArray(disciplineLanes[discipline.key])
+      ? disciplineLanes[discipline.key]
+      : [];
+
+    return lanes.map((lane, index) => {
+      const laneDate = addLeagueDays(seasonStart, lane.dayOffset || 0);
+      return {
+        id: `${seasonStartSunday}-${discipline.key}-${index}`,
+        discipline: discipline.key,
+        disciplineTitle: discipline.title,
+        seasonLabel: leagueBookingState.values.seasonLabel,
+        seasonStartSunday,
+        laneLabel: lane.label,
+        laneDate: laneDate.toISOString().slice(0, 10),
+        laneDateDisplay: formatLeagueLongDate(laneDate, timeZone),
+        laneTime: lane.time,
+        price: getLeagueBasePrice(discipline.key),
+        summary: `${discipline.title} · ${lane.label} · ${formatLeagueShortDate(laneDate, timeZone)} · ${lane.time}`
+      };
+    });
+  });
+}
+
+function getLeagueLaneOptionsGrouped() {
+  const options = buildLeagueLaneOptionsForSeason(leagueBookingState.values.seasonStartSunday);
+  const groups = {};
+
+  options.forEach((option) => {
+    const key = option.laneLabel || "Other";
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(option);
+  });
+
+  return groups;
+}
+
 function ensureLeagueBookingStyles() {
   if (document.getElementById("texaxes-league-booking-styles")) return;
 
@@ -118,7 +347,7 @@ function ensureLeagueBookingStyles() {
     }
 
     .tx-league-modal {
-      width: min(1220px, 100%);
+      width: min(1260px, 100%);
       max-height: calc(100vh - 40px);
       overflow: auto;
       border-radius: 32px;
@@ -154,7 +383,7 @@ function ensureLeagueBookingStyles() {
     .tx-league-subtitle {
       margin: 10px 0 0;
       color: rgba(255,255,255,0.78);
-      max-width: 66ch;
+      max-width: 70ch;
       line-height: 1.58;
       font-size: 1rem;
     }
@@ -181,7 +410,7 @@ function ensureLeagueBookingStyles() {
 
     .tx-league-layout {
       display: grid;
-      grid-template-columns: 1.6fr 0.85fr;
+      grid-template-columns: 1.7fr 0.85fr;
       gap: 26px;
     }
 
@@ -260,7 +489,8 @@ function ensureLeagueBookingStyles() {
     }
 
     .tx-league-choice,
-    .tx-league-slot {
+    .tx-league-slot,
+    .tx-league-player-tab {
       appearance: none;
       width: 100%;
       border: 1px solid rgba(255,255,255,0.12);
@@ -274,7 +504,8 @@ function ensureLeagueBookingStyles() {
     }
 
     .tx-league-choice:hover,
-    .tx-league-slot:hover {
+    .tx-league-slot:hover,
+    .tx-league-player-tab:hover {
       transform: translateY(-2px) scale(1.01);
       border-color: rgba(255,122,89,0.34);
       background: rgba(255,255,255,0.07);
@@ -282,14 +513,16 @@ function ensureLeagueBookingStyles() {
     }
 
     .tx-league-choice.is-selected,
-    .tx-league-slot.is-selected {
+    .tx-league-slot.is-selected,
+    .tx-league-player-tab.is-selected {
       border-color: rgba(255,122,89,0.7);
       background: linear-gradient(135deg, rgba(255,122,89,0.18), rgba(255,122,89,0.08));
       box-shadow: inset 0 0 0 1px rgba(255,122,89,0.2), 0 24px 50px rgba(255,122,89,0.18);
-      transform: scale(1.025);
+      transform: scale(1.02);
     }
 
-    .tx-league-choice-title {
+    .tx-league-choice-title,
+    .tx-league-player-tab-title {
       font-size: 1.14rem;
       font-weight: 900;
       margin: 0 0 8px;
@@ -297,14 +530,16 @@ function ensureLeagueBookingStyles() {
       letter-spacing: -0.03em;
     }
 
-    .tx-league-choice-meta {
+    .tx-league-choice-meta,
+    .tx-league-player-tab-meta {
       color: #ffd1bd;
       font-weight: 800;
       font-size: 0.92rem;
       margin-bottom: 8px;
     }
 
-    .tx-league-choice-copy {
+    .tx-league-choice-copy,
+    .tx-league-player-tab-copy {
       color: rgba(255,255,255,0.82);
       font-size: 0.95rem;
       line-height: 1.52;
@@ -484,6 +719,171 @@ function ensureLeagueBookingStyles() {
       font-size: 0.93rem;
     }
 
+    .tx-league-season-list,
+    .tx-league-player-tabs,
+    .tx-league-player-list,
+    .tx-league-lane-groups,
+    .tx-league-selected-list,
+    .tx-league-review-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .tx-league-season-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tx-league-lane-group {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .tx-league-lane-group-title {
+      margin: 0 0 14px;
+      font-size: 1rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .tx-league-lane-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .tx-league-player-list {
+      margin-top: 18px;
+    }
+
+    .tx-league-player-card {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .tx-league-player-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .tx-league-player-card-title {
+      font-size: 1.04rem;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .tx-league-player-tab-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .tx-league-selected-entry {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .tx-league-selected-entry:last-child {
+      border-bottom: 0;
+    }
+
+    .tx-league-selected-entry-title {
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .tx-league-selected-entry-copy {
+      color: rgba(255,255,255,0.72);
+      font-size: 0.9rem;
+      line-height: 1.42;
+    }
+
+    .tx-league-remove-btn {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      color: #fff;
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-weight: 800;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .tx-league-remove-btn:hover {
+      background: rgba(255,122,89,0.14);
+      border-color: rgba(255,122,89,0.32);
+      transform: translateY(-1px);
+    }
+
+    .tx-league-pill-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .tx-league-pricing-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .tx-league-review-card {
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .tx-league-review-card-title {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .tx-league-pricing-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.82);
+    }
+
+    .tx-league-pricing-row:last-child {
+      border-bottom: 0;
+    }
+
+    .tx-league-pricing-row strong {
+      color: #fff;
+      font-weight: 900;
+    }
+
     @media (max-width: 960px) {
       .tx-league-layout {
         grid-template-columns: 1fr;
@@ -494,7 +894,9 @@ function ensureLeagueBookingStyles() {
       }
 
       .tx-league-grid-2,
-      .tx-league-actions {
+      .tx-league-season-list,
+      .tx-league-lane-grid,
+      .tx-league-player-tab-grid {
         grid-template-columns: 1fr;
       }
 
@@ -511,78 +913,6 @@ function ensureLeagueBookingStyles() {
   document.head.appendChild(style);
 }
 
-function getLeagueDisciplineOptions() {
-  return [
-    {
-      key: "hatchet",
-      title: "Hatchet League",
-      meta: "Standard weekly league play",
-      copy: "The core competitive track for throwers building consistency, scores, and season rhythm."
-    },
-    {
-      key: "hatchetDuals",
-      title: "Hatchet Duals",
-      meta: "Partnered league format",
-      copy: "A shared rhythm for paired competition, strategy, and team-based weekly play."
-    },
-    {
-      key: "knife",
-      title: "Knife League",
-      meta: "WKTL throwing format",
-      copy: "For players who want a dedicated knife throwing season with consistent weekly competition."
-    },
-    {
-      key: "knifeDuals",
-      title: "Knife Duals",
-      meta: "Partner knife format",
-      copy: "A paired WKTL track for throwers who want the duals experience from week one."
-    },
-    {
-      key: "bigaxe",
-      title: "Big Axe League",
-      meta: "Heavier competitive format",
-      copy: "A more demanding discipline for throwers looking for the full big axe season environment."
-    }
-  ];
-}
-
-function getLeagueStepTitles() {
-  return ["Discipline", "Season", "Player", "Review"];
-}
-
-function getLeagueNextStepLabel() {
-  if (leagueBookingState.step === 1) return "Choose Season";
-  if (leagueBookingState.step === 2) return "Continue to Player Details";
-  if (leagueBookingState.step === 3) return "Review Registration";
-  return "Continue";
-}
-
-function leagueStepIsValid(step) {
-  const v = leagueBookingState.values;
-
-  if (step === 1) {
-    return Boolean(v.discipline);
-  }
-
-  if (step === 2) {
-    return Boolean(v.seasonLabel && v.laneLabel && v.laneDate && v.laneTime);
-  }
-
-  if (step === 3) {
-    return (
-      v.first_name.trim().length > 0 &&
-      v.last_name.trim().length > 0 &&
-      isValidEmail(v.email)
-    );
-  }
-
-  if (step === 4) {
-    return leagueStepIsValid(1) && leagueStepIsValid(2) && leagueStepIsValid(3);
-  }
-
-  return false;
-}
-
 function createLeagueBookingModal() {
   if (leagueBookingState.modal) return leagueBookingState.modal;
 
@@ -597,7 +927,7 @@ function createLeagueBookingModal() {
           <div>
             <h2 class="tx-league-title" id="tx-league-title">Join League Play</h2>
             <p class="tx-league-subtitle">
-              Choose your discipline, lock in the season lane that fits, and send your registration details in one guided flow.
+              Choose your season, build your player roster, assign every league you want in that season, and review bundle pricing in one guided flow.
             </p>
           </div>
           <button class="tx-league-close" type="button" aria-label="Close league registration flow">✕</button>
@@ -628,6 +958,23 @@ function createLeagueBookingModal() {
   return overlay;
 }
 
+function resetLeagueBookingState() {
+  leagueBookingState.step = 1;
+  leagueBookingState.activePlayerIndex = 0;
+  leagueBookingState.seasonOptions = buildLeagueSeasonOptions();
+  leagueBookingState.values = {
+    seasonLabel: "",
+    seasonStartSunday: "",
+    players: [createEmptyLeaguePlayer()]
+  };
+
+  if (leagueBookingState.seasonOptions.length) {
+    const firstSeason = leagueBookingState.seasonOptions[0];
+    leagueBookingState.values.seasonLabel = firstSeason.seasonLabel;
+    leagueBookingState.values.seasonStartSunday = firstSeason.seasonStartSunday;
+  }
+}
+
 function closeLeagueBookingModal() {
   if (!leagueBookingState.modal) return;
   leagueBookingState.isOpen = false;
@@ -635,94 +982,140 @@ function closeLeagueBookingModal() {
   document.body.style.overflow = "";
 }
 
-function setLeagueStep(step) {
-  leagueBookingState.step = Math.max(1, Math.min(4, step));
-  renderLeagueBookingFlow();
-}
-
-function buildLeagueSeasonOptions() {
-  const data = window.TEX_AXES_LEAGUE_DATES;
-  if (!data || !Array.isArray(data.seasons)) return [];
-
-  const timeZone = data.timezone || "America/Chicago";
-  const disciplineLanes = data.disciplineLanes || {};
-  const selectedDiscipline = leagueBookingState.values.discipline;
-  const lanes = Array.isArray(disciplineLanes[selectedDiscipline])
-    ? disciplineLanes[selectedDiscipline]
-    : [];
-
-  return data.seasons.flatMap((season) => {
-    const seasonStart = parseLeagueDate(season.startSunday);
-
-    return lanes.map((lane, index) => {
-      const laneDate = addLeagueDays(seasonStart, lane.dayOffset || 0);
-      return {
-        id: `${season.label}-${selectedDiscipline}-${index}`,
-        seasonLabel: season.label,
-        seasonStartSunday: season.startSunday,
-        laneLabel: lane.label,
-        laneDate: laneDate.toISOString().slice(0, 10),
-        laneDateDisplay: formatLeagueLongDate(laneDate, timeZone),
-        laneTime: lane.time,
-        summary: `${lane.label} · ${formatLeagueShortDate(laneDate, timeZone)} · ${lane.time}`
-      };
-    });
-  });
-}
-
-function syncLeagueSeasonOptions() {
-  leagueBookingState.seasonOptions = buildLeagueSeasonOptions();
-
-  const hasSelected = leagueBookingState.seasonOptions.some(
-    (option) =>
-      option.seasonLabel === leagueBookingState.values.seasonLabel &&
-      option.laneLabel === leagueBookingState.values.laneLabel &&
-      option.laneTime === leagueBookingState.values.laneTime
-  );
-
-  if (!hasSelected && leagueBookingState.seasonOptions.length) {
-    const first = leagueBookingState.seasonOptions[0];
-    leagueBookingState.values.seasonLabel = first.seasonLabel;
-    leagueBookingState.values.seasonStartSunday = first.seasonStartSunday;
-    leagueBookingState.values.laneLabel = first.laneLabel;
-    leagueBookingState.values.laneDate = first.laneDate;
-    leagueBookingState.values.laneTime = first.laneTime;
-  }
-}
-
 function openLeagueBookingModal(prefillDiscipline = "") {
   createLeagueBookingModal();
+  resetLeagueBookingState();
 
-  if (prefillDiscipline) {
-    leagueBookingState.values.discipline = prefillDiscipline;
+  if (prefillDiscipline && leagueBookingState.values.players.length) {
+    const laneOptions = buildLeagueLaneOptionsForSeason(leagueBookingState.values.seasonStartSunday);
+    const matching = laneOptions.filter((item) => item.discipline === prefillDiscipline);
+    if (matching.length) {
+      leagueBookingState.activePlayerIndex = 0;
+    }
   }
 
-  syncLeagueSeasonOptions();
-
   leagueBookingState.isOpen = true;
-  leagueBookingState.step = 1;
   leagueBookingState.modal.classList.add("is-open");
   document.body.style.overflow = "hidden";
   renderLeagueBookingFlow();
 }
 
+function setLeagueStep(step) {
+  leagueBookingState.step = Math.max(1, Math.min(4, step));
+  renderLeagueBookingFlow();
+}
+
+function setLeagueSeason(optionId) {
+  const option = leagueBookingState.seasonOptions.find((item) => item.id === optionId);
+  if (!option) return;
+
+  leagueBookingState.values.seasonLabel = option.seasonLabel;
+  leagueBookingState.values.seasonStartSunday = option.seasonStartSunday;
+
+  leagueBookingState.values.players.forEach((player) => {
+    player.entries = [];
+  });
+
+  renderLeagueBookingFlow();
+}
+
+function addLeaguePlayer() {
+  leagueBookingState.values.players.push(createEmptyLeaguePlayer());
+  leagueBookingState.activePlayerIndex = leagueBookingState.values.players.length - 1;
+  renderLeagueBookingFlow();
+}
+
+function removeLeaguePlayer(playerIndex) {
+  if (leagueBookingState.values.players.length <= 1) return;
+  leagueBookingState.values.players.splice(playerIndex, 1);
+  leagueBookingState.activePlayerIndex = Math.min(
+    leagueBookingState.activePlayerIndex,
+    leagueBookingState.values.players.length - 1
+  );
+  renderLeagueBookingFlow();
+}
+
+function setActiveLeaguePlayer(playerIndex) {
+  leagueBookingState.activePlayerIndex = Math.max(
+    0,
+    Math.min(playerIndex, leagueBookingState.values.players.length - 1)
+  );
+  renderLeagueBookingFlow();
+}
+
+function getActiveLeaguePlayer() {
+  return leagueBookingState.values.players[leagueBookingState.activePlayerIndex] || leagueBookingState.values.players[0];
+}
+
+function playerHasLeagueEntry(player, option) {
+  return player.entries.some(
+    (entry) =>
+      entry.discipline === option.discipline &&
+      entry.laneLabel === option.laneLabel &&
+      entry.laneDate === option.laneDate &&
+      entry.laneTime === option.laneTime &&
+      entry.seasonStartSunday === option.seasonStartSunday
+  );
+}
+
+function toggleLeagueEntryForActivePlayer(option) {
+  const player = getActiveLeaguePlayer();
+  if (!player) return;
+
+  const existingIndex = player.entries.findIndex(
+    (entry) =>
+      entry.discipline === option.discipline &&
+      entry.laneLabel === option.laneLabel &&
+      entry.laneDate === option.laneDate &&
+      entry.laneTime === option.laneTime &&
+      entry.seasonStartSunday === option.seasonStartSunday
+  );
+
+  if (existingIndex >= 0) {
+    player.entries.splice(existingIndex, 1);
+  } else {
+    player.entries.push({
+      discipline: option.discipline,
+      seasonLabel: option.seasonLabel,
+      seasonStartSunday: option.seasonStartSunday,
+      laneLabel: option.laneLabel,
+      laneDate: option.laneDate,
+      laneTime: option.laneTime
+    });
+  }
+
+  renderLeagueBookingFlow();
+}
+
+function removeLeagueEntry(playerIndex, entryIndex) {
+  const player = leagueBookingState.values.players[playerIndex];
+  if (!player) return;
+  player.entries.splice(entryIndex, 1);
+  renderLeagueBookingFlow();
+}
+
 function buildLeaguePayload() {
   return {
-    discipline: leagueBookingState.values.discipline,
     season_label: leagueBookingState.values.seasonLabel,
     season_start_sunday: leagueBookingState.values.seasonStartSunday,
-    lane_label: leagueBookingState.values.laneLabel,
-    lane_date: leagueBookingState.values.laneDate,
-    lane_time: leagueBookingState.values.laneTime,
-    player: {
-      first_name: leagueBookingState.values.first_name.trim(),
-      last_name: leagueBookingState.values.last_name.trim(),
-      email: leagueBookingState.values.email.trim(),
-      phone: leagueBookingState.values.phone.trim() || null,
-      experience_level: leagueBookingState.values.experience_level,
-      notes: leagueBookingState.values.notes.trim() || null,
-      marketing_opt_in: Boolean(leagueBookingState.values.marketing_opt_in)
-    },
+    players: leagueBookingState.values.players.map((player) => ({
+      first_name: player.first_name.trim(),
+      last_name: player.last_name.trim(),
+      email: player.email.trim(),
+      phone: player.phone.trim() || null,
+      experience_level: player.experience_level,
+      notes: player.notes.trim() || null,
+      marketing_opt_in: Boolean(player.marketing_opt_in),
+      entries: player.entries.map((entry) => ({
+        discipline: entry.discipline,
+        season_label: entry.seasonLabel,
+        season_start_sunday: entry.seasonStartSunday,
+        lane_label: entry.laneLabel,
+        lane_date: entry.laneDate,
+        lane_time: entry.laneTime
+      }))
+    })),
+    pricing: computeLeagueSessionPricing(leagueBookingState.values.players),
     registration_source: "public_league_modal"
   };
 }
@@ -737,7 +1130,10 @@ async function submitLeagueBooking() {
   try {
     const payload = buildLeaguePayload();
 
-    if (window.TEX_AXES_LEAGUE_BOOKING && typeof window.TEX_AXES_LEAGUE_BOOKING.submit === "function") {
+    if (
+      window.TEX_AXES_LEAGUE_BOOKING &&
+      typeof window.TEX_AXES_LEAGUE_BOOKING.submit === "function"
+    ) {
       await window.TEX_AXES_LEAGUE_BOOKING.submit(payload);
       alert("League registration request submitted.");
       closeLeagueBookingModal();
@@ -750,7 +1146,9 @@ async function submitLeagueBooking() {
       })
     );
 
-    alert("League registration details captured. Wire a real submit handler with window.TEX_AXES_LEAGUE_BOOKING.submit(payload) when the backend is ready.");
+    alert(
+      "League registration details captured. Wire a real submit handler with window.TEX_AXES_LEAGUE_BOOKING.submit(payload) when the backend is ready."
+    );
     closeLeagueBookingModal();
   } catch (error) {
     console.error("League booking submit failed", error);
@@ -783,76 +1181,302 @@ function renderLeagueStepPills() {
 }
 
 function renderLeagueStepOne() {
-  const options = getLeagueDisciplineOptions();
+  const activeSeason = getActiveSeasonObject();
 
   return `
     <div>
       <div class="tx-league-step-head">
-        <h3 class="tx-league-step-title">Which league are you joining?</h3>
+        <h3 class="tx-league-step-title">Which season are you registering for?</h3>
         <p class="tx-league-step-copy">
-          Start with the discipline you want to register for. You’ll choose the season lane and weekly slot next.
+          Start with the season. After that, you can add one or more players and assign every league they want within that season.
         </p>
       </div>
 
-      <div class="tx-league-grid-2">
-        ${options
-          .map((option) => {
-            const selected = leagueBookingState.values.discipline === option.key ? "is-selected" : "";
-            return `
-              <button
-                type="button"
-                class="tx-league-choice ${selected}"
-                data-league-discipline="${option.key}"
-              >
-                <div class="tx-league-choice-title">${option.title}</div>
-                <div class="tx-league-choice-meta">${option.meta}</div>
-                <p class="tx-league-choice-copy">${option.copy}</p>
-              </button>
-            `;
-          })
-          .join("")}
-      </div>
-    </div>
-  `;
-}
-
-function renderLeagueStepTwo() {
-  const selectedDiscipline =
-    getLeagueDisciplineOptions().find((item) => item.key === leagueBookingState.values.discipline)?.title ||
-    "League";
-
-  return `
-    <div>
-      <div class="tx-league-step-head">
-        <h3 class="tx-league-step-title">Choose your season lane</h3>
-        <p class="tx-league-step-copy">
-          ${selectedDiscipline} uses the season dates already posted on the site. Choose the lane that fits your weekly schedule.
-        </p>
-      </div>
-
-      <div class="tx-league-grid-2">
+      <div class="tx-league-season-list">
         ${leagueBookingState.seasonOptions
           .map((option) => {
             const selected =
-              leagueBookingState.values.seasonLabel === option.seasonLabel &&
-              leagueBookingState.values.laneLabel === option.laneLabel &&
-              leagueBookingState.values.laneTime === option.laneTime
+              option.seasonLabel === leagueBookingState.values.seasonLabel &&
+              option.seasonStartSunday === leagueBookingState.values.seasonStartSunday
                 ? "is-selected"
                 : "";
 
             return `
               <button
                 type="button"
-                class="tx-league-slot ${selected}"
-                data-league-season-id="${option.id}"
+                class="tx-league-choice ${selected}"
+                data-league-season-option="${option.id}"
               >
-                <div class="tx-league-slot-title">${option.seasonLabel}</div>
-                <div class="tx-league-slot-copy">
-                  <div>${option.laneLabel}</div>
-                  <div>${option.laneDateDisplay}</div>
-                  <div>${option.laneTime}</div>
-                </div>
+                <div class="tx-league-choice-title">${option.seasonLabel}</div>
+                <div class="tx-league-choice-meta">Opening Sunday</div>
+                <p class="tx-league-choice-copy">${option.seasonStartDisplay}</p>
               </button>
+            `;
+          })
+          .join("")}
+      </div>
+
+      ${
+        activeSeason
+          ? `<div class="tx-league-pill-strip">
+              <div class="tx-league-pricing-pill">Selected season: ${activeSeason.seasonLabel}</div>
+              <div class="tx-league-pricing-pill">Starts ${activeSeason.seasonStartDisplay}</div>
+            </div>`
+          : ""
+      }
+    </div>
+  `;
+}
+
+function renderLeaguePlayerForm(player, playerIndex) {
+  const firstNameInvalid = player.first_name.trim().length === 0;
+  const lastNameInvalid = player.last_name.trim().length === 0;
+  const emailInvalid = player.email.trim().length > 0 && !isValidEmail(player.email);
+
+  return `
+    <div class="tx-league-player-card">
+      <div class="tx-league-player-card-head">
+        <div class="tx-league-player-card-title">Player ${playerIndex + 1}</div>
+        ${
+          leagueBookingState.values.players.length > 1
+            ? `<button type="button" class="tx-league-remove-btn" data-remove-player="${playerIndex}">Remove Player</button>`
+            : ""
+        }
+      </div>
+
+      <div class="tx-league-grid-2">
+        <div class="tx-league-field">
+          <label class="tx-league-label" for="tx-league-first-name-${playerIndex}">First name</label>
+          <input
+            id="tx-league-first-name-${playerIndex}"
+            class="tx-league-input ${firstNameInvalid ? "tx-league-field-error" : ""}"
+            type="text"
+            data-player-input="${playerIndex}"
+            data-player-field="first_name"
+            value="${player.first_name}"
+          />
+        </div>
+
+        <div class="tx-league-field">
+          <label class="tx-league-label" for="tx-league-last-name-${playerIndex}">Last name</label>
+          <input
+            id="tx-league-last-name-${playerIndex}"
+            class="tx-league-input ${lastNameInvalid ? "tx-league-field-error" : ""}"
+            type="text"
+            data-player-input="${playerIndex}"
+            data-player-field="last_name"
+            value="${player.last_name}"
+          />
+        </div>
+      </div>
+
+      <div class="tx-league-grid-2">
+        <div class="tx-league-field">
+          <label class="tx-league-label" for="tx-league-email-${playerIndex}">Email</label>
+          <input
+            id="tx-league-email-${playerIndex}"
+            class="tx-league-input ${emailInvalid ? "tx-league-field-error" : ""}"
+            type="email"
+            data-player-input="${playerIndex}"
+            data-player-field="email"
+            value="${player.email}"
+          />
+        </div>
+
+        <div class="tx-league-field">
+          <label class="tx-league-label" for="tx-league-phone-${playerIndex}">Phone</label>
+          <input
+            id="tx-league-phone-${playerIndex}"
+            class="tx-league-input"
+            type="tel"
+            data-player-input="${playerIndex}"
+            data-player-field="phone"
+            value="${player.phone}"
+          />
+        </div>
+      </div>
+
+      <div class="tx-league-field">
+        <label class="tx-league-label" for="tx-league-experience-${playerIndex}">Experience level</label>
+        <select
+          id="tx-league-experience-${playerIndex}"
+          class="tx-league-select"
+          data-player-input="${playerIndex}"
+          data-player-field="experience_level"
+        >
+          <option value="new" ${player.experience_level === "new" ? "selected" : ""}>New to league play</option>
+          <option value="returning" ${player.experience_level === "returning" ? "selected" : ""}>Returning league thrower</option>
+          <option value="experienced" ${player.experience_level === "experienced" ? "selected" : ""}>Experienced / competitive</option>
+        </select>
+      </div>
+
+      <div class="tx-league-field">
+        <label class="tx-league-label" for="tx-league-notes-${playerIndex}">Notes</label>
+        <textarea
+          id="tx-league-notes-${playerIndex}"
+          class="tx-league-textarea"
+          placeholder="Anything we should know about this player?"
+          data-player-input="${playerIndex}"
+          data-player-field="notes"
+        >${player.notes}</textarea>
+      </div>
+
+      <label class="tx-league-checkbox">
+        <input
+          type="checkbox"
+          data-player-checkbox="${playerIndex}"
+          data-player-field="marketing_opt_in"
+          ${player.marketing_opt_in ? "checked" : ""}
+        />
+        <span>I’m okay receiving occasional league updates or announcements from Tex Axes for this player.</span>
+      </label>
+
+      ${
+        emailInvalid
+          ? `<div class="tx-league-error">Please enter a valid email address for Player ${playerIndex + 1}.</div>`
+          : ""
+      }
+    </div>
+  `;
+}
+
+function renderLeagueStepTwo() {
+  return `
+    <div>
+      <div class="tx-league-step-head">
+        <h3 class="tx-league-step-title">Build your roster</h3>
+        <p class="tx-league-step-copy">
+          Add every player you want to register in this session. Families and groups can register together, and the session-wide discount ladder will apply across total league registrations.
+        </p>
+      </div>
+
+      <div class="tx-league-btn-row" style="margin-bottom:18px;">
+        <button type="button" class="tx-league-btn tx-league-btn-primary" id="tx-league-add-player">
+          + Add Player
+        </button>
+      </div>
+
+      <div class="tx-league-player-list">
+        ${leagueBookingState.values.players
+          .map((player, playerIndex) => renderLeaguePlayerForm(player, playerIndex))
+          .join("")}
+      </div>
+    </div>
+  `;
+}
+
+function renderSelectedEntriesForPlayer(player, playerIndex) {
+  if (!player.entries.length) {
+    return `<div class="tx-league-inline-note">No leagues selected for this player yet.</div>`;
+  }
+
+  return `
+    <div class="tx-league-selected-list">
+      ${player.entries
+        .map((entry, entryIndex) => {
+          const base = getLeagueBasePrice(entry.discipline);
+          return `
+            <div class="tx-league-selected-entry">
+              <div>
+                <div class="tx-league-selected-entry-title">${getLeagueDisciplineTitle(entry.discipline)}</div>
+                <div class="tx-league-selected-entry-copy">
+                  ${entry.laneLabel} · ${formatLeagueLongDate(parseLeagueDate(entry.laneDate))} · ${entry.laneTime}
+                </div>
+                <div class="tx-league-selected-entry-copy">Base price: ${formatMoney(base)}</div>
+              </div>
+              <button
+                type="button"
+                class="tx-league-remove-btn"
+                data-remove-entry="${playerIndex}:${entryIndex}"
+              >
+                Remove
+              </button>
+            </div>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
+function renderLeagueStepThree() {
+  const season = getActiveSeasonObject();
+  const laneGroups = getLeagueLaneOptionsGrouped();
+  const activePlayer = getActiveLeaguePlayer();
+
+  return `
+    <div>
+      <div class="tx-league-step-head">
+        <h3 class="tx-league-step-title">Choose leagues for each player</h3>
+        <p class="tx-league-step-copy">
+          Select every discipline and day each player wants for ${season ? season.seasonLabel : "this season"}. Sunday stackers, multi-day throwers, and families can all be registered in one session.
+        </p>
+      </div>
+
+      <div class="tx-league-player-tab-grid">
+        ${leagueBookingState.values.players
+          .map((player, index) => {
+            const selected = index === leagueBookingState.activePlayerIndex ? "is-selected" : "";
+            const playerName =
+              `${player.first_name || ""} ${player.last_name || ""}`.trim() ||
+              `Player ${index + 1}`;
+
+            return `
+              <button
+                type="button"
+                class="tx-league-player-tab ${selected}"
+                data-active-player="${index}"
+              >
+                <div class="tx-league-player-tab-title">${playerName}</div>
+                <div class="tx-league-player-tab-meta">${player.entries.length} league${player.entries.length === 1 ? "" : "s"} selected</div>
+                <p class="tx-league-player-tab-copy">
+                  ${player.email ? player.email : "Select this player to assign leagues."}
+                </p>
+              </button>
+            `;
+          })
+          .join("")}
+      </div>
+
+      <div class="tx-league-review-card" style="margin-bottom:18px;">
+        <h4 class="tx-league-review-card-title">
+          Selected leagues for ${
+            activePlayer
+              ? (`${activePlayer.first_name || ""} ${activePlayer.last_name || ""}`.trim() || `Player ${leagueBookingState.activePlayerIndex + 1}`)
+              : "active player"
+          }
+        </h4>
+        ${activePlayer ? renderSelectedEntriesForPlayer(activePlayer, leagueBookingState.activePlayerIndex) : ""}
+      </div>
+
+      <div class="tx-league-lane-groups">
+        ${Object.entries(laneGroups)
+          .map(([groupLabel, options]) => {
+            return `
+              <div class="tx-league-lane-group">
+                <h4 class="tx-league-lane-group-title">${groupLabel}</h4>
+                <div class="tx-league-lane-grid">
+                  ${options
+                    .map((option) => {
+                      const selected = activePlayer && playerHasLeagueEntry(activePlayer, option) ? "is-selected" : "";
+                      return `
+                        <button
+                          type="button"
+                          class="tx-league-slot ${selected}"
+                          data-league-entry-id="${option.id}"
+                        >
+                          <div class="tx-league-slot-title">${option.disciplineTitle}</div>
+                          <div class="tx-league-slot-copy">
+                            <div>${option.laneDateDisplay}</div>
+                            <div>${option.laneTime}</div>
+                            <div>${formatMoney(option.price)} ${option.price === DUALS_PLAYER_PRICE ? "per player" : "per player"}</div>
+                          </div>
+                        </button>
+                      `;
+                    })
+                    .join("")}
+                </div>
+              </div>
             `;
           })
           .join("")}
@@ -861,96 +1485,84 @@ function renderLeagueStepTwo() {
   `;
 }
 
-function renderLeagueStepThree() {
-  const v = leagueBookingState.values;
-  const firstNameInvalid = v.first_name.trim().length === 0;
-  const lastNameInvalid = v.last_name.trim().length === 0;
-  const emailInvalid = v.email.trim().length > 0 && !isValidEmail(v.email);
-
-  return `
-    <div>
-      <div class="tx-league-step-head">
-        <h3 class="tx-league-step-title">Who is registering?</h3>
-        <p class="tx-league-step-copy">
-          Add your player details so the league registration can be reviewed and confirmed.
-        </p>
-      </div>
-
-      <div class="tx-league-grid-2">
-        <div class="tx-league-field">
-          <label class="tx-league-label" for="tx-league-first-name">First name</label>
-          <input id="tx-league-first-name" class="tx-league-input ${firstNameInvalid ? "tx-league-field-error" : ""}" type="text" value="${v.first_name}" />
-        </div>
-
-        <div class="tx-league-field">
-          <label class="tx-league-label" for="tx-league-last-name">Last name</label>
-          <input id="tx-league-last-name" class="tx-league-input ${lastNameInvalid ? "tx-league-field-error" : ""}" type="text" value="${v.last_name}" />
-        </div>
-      </div>
-
-      <div class="tx-league-grid-2">
-        <div class="tx-league-field">
-          <label class="tx-league-label" for="tx-league-email">Email</label>
-          <input id="tx-league-email" class="tx-league-input ${emailInvalid ? "tx-league-field-error" : ""}" type="email" value="${v.email}" />
-          <div class="tx-league-inline-note">League confirmation and follow-up will go here.</div>
-        </div>
-
-        <div class="tx-league-field">
-          <label class="tx-league-label" for="tx-league-phone">Phone</label>
-          <input id="tx-league-phone" class="tx-league-input" type="tel" value="${v.phone}" />
-          <div class="tx-league-inline-note">Helpful if someone needs to confirm your lane.</div>
-        </div>
-      </div>
-
-      <div class="tx-league-field">
-        <label class="tx-league-label" for="tx-league-experience">Experience level</label>
-        <select id="tx-league-experience" class="tx-league-select">
-          <option value="new" ${v.experience_level === "new" ? "selected" : ""}>New to league play</option>
-          <option value="returning" ${v.experience_level === "returning" ? "selected" : ""}>Returning league thrower</option>
-          <option value="experienced" ${v.experience_level === "experienced" ? "selected" : ""}>Experienced / competitive</option>
-        </select>
-      </div>
-
-      <div class="tx-league-field">
-        <label class="tx-league-label" for="tx-league-notes">Notes</label>
-        <textarea id="tx-league-notes" class="tx-league-textarea" placeholder="Anything we should know about your registration?">${v.notes}</textarea>
-        <div class="tx-league-inline-note">Optional: teammate preferences, questions, or anything helpful for coordination.</div>
-      </div>
-
-      <label class="tx-league-checkbox">
-        <input id="tx-league-marketing-opt-in" type="checkbox" ${v.marketing_opt_in ? "checked" : ""} />
-        <span>I’m okay receiving occasional league updates or announcements from Tex Axes.</span>
-      </label>
-
-      ${emailInvalid ? `<div class="tx-league-error">Please enter a valid email address to continue.</div>` : ""}
-    </div>
-  `;
-}
-
 function renderLeagueStepFour() {
-  const v = leagueBookingState.values;
-  const disciplineTitle =
-    getLeagueDisciplineOptions().find((item) => item.key === v.discipline)?.title || v.discipline;
+  const pricing = computeLeagueSessionPricing(leagueBookingState.values.players);
+  const season = getActiveSeasonObject();
 
   return `
     <div>
       <div class="tx-league-step-head">
-        <h3 class="tx-league-step-title">Review your registration</h3>
+        <h3 class="tx-league-step-title">Review your registration bundle</h3>
         <p class="tx-league-step-copy">
-          Review the details below, then send your registration through for confirmation.
+          Review the full session below. Discounts are applied across total league registrations in this session, not just per player.
         </p>
       </div>
 
-      <div class="tx-league-kv"><span>Discipline</span><strong>${disciplineTitle}</strong></div>
-      <div class="tx-league-kv"><span>Season</span><strong>${v.seasonLabel || "Not selected"}</strong></div>
-      <div class="tx-league-kv"><span>Lane</span><strong>${v.laneLabel || "Not selected"}</strong></div>
-      <div class="tx-league-kv"><span>Start date</span><strong>${v.laneDate ? formatLeagueLongDate(parseLeagueDate(v.laneDate)) : "Not selected"}</strong></div>
-      <div class="tx-league-kv"><span>Time</span><strong>${v.laneTime || "Not selected"}</strong></div>
-      <div class="tx-league-kv"><span>Player</span><strong>${v.first_name || ""} ${v.last_name || ""}</strong></div>
-      <div class="tx-league-kv"><span>Email</span><strong>${v.email || "Not added"}</strong></div>
+      <div class="tx-league-review-list">
+        <div class="tx-league-review-card">
+          <h4 class="tx-league-review-card-title">Season</h4>
+          <div class="tx-league-pricing-row"><span>Season</span><strong>${leagueBookingState.values.seasonLabel || "Not selected"}</strong></div>
+          <div class="tx-league-pricing-row"><span>Opening Sunday</span><strong>${season ? season.seasonStartDisplay : "Not selected"}</strong></div>
+          <div class="tx-league-pricing-row"><span>Players</span><strong>${leagueBookingState.values.players.length}</strong></div>
+          <div class="tx-league-pricing-row"><span>Total registrations</span><strong>${pricing.registrationCount}</strong></div>
+        </div>
 
-      <div class="tx-league-inline-note" style="margin-top:16px;">
-        This flow captures the league registration request. Final placement and confirmation should be handled by the configured registration process.
+        <div class="tx-league-review-card">
+          <h4 class="tx-league-review-card-title">Players and league selections</h4>
+          ${leagueBookingState.values.players
+            .map((player, playerIndex) => {
+              const playerName =
+                `${player.first_name || ""} ${player.last_name || ""}`.trim() ||
+                `Player ${playerIndex + 1}`;
+
+              return `
+                <div class="tx-league-pricing-row">
+                  <span><strong>${playerName}</strong></span>
+                  <strong>${player.entries.length} league${player.entries.length === 1 ? "" : "s"}</strong>
+                </div>
+                ${player.entries
+                  .map((entry) => {
+                    return `
+                      <div class="tx-league-pricing-row">
+                        <span>${getLeagueDisciplineTitle(entry.discipline)} · ${entry.laneLabel} · ${entry.laneTime}</span>
+                        <strong>${formatMoney(getLeagueBasePrice(entry.discipline))}</strong>
+                      </div>
+                    `;
+                  })
+                  .join("")}
+              `;
+            })
+            .join("")}
+        </div>
+
+        <div class="tx-league-review-card">
+          <h4 class="tx-league-review-card-title">Pricing and discounts</h4>
+          ${pricing.rows
+            .map((row, index) => {
+              const discountLabel = row.discountRate > 0
+                ? `-${Math.round(row.discountRate * 100)}%`
+                : "Full price";
+
+              return `
+                <div class="tx-league-pricing-row">
+                  <span>
+                    ${index + 1}. ${row.playerName} · ${getLeagueDisciplineTitle(row.discipline)} · ${row.laneLabel}
+                    <br />
+                    <span class="tx-league-muted">Base ${formatMoney(row.base)} · ${discountLabel}</span>
+                  </span>
+                  <strong>${formatMoney(row.finalPrice)}</strong>
+                </div>
+              `;
+            })
+            .join("")}
+          <div class="tx-league-pricing-row"><span>Base total</span><strong>${formatMoney(pricing.baseTotal)}</strong></div>
+          <div class="tx-league-pricing-row"><span>Total savings</span><strong>${formatMoney(pricing.savingsTotal)}</strong></div>
+          <div class="tx-league-pricing-row"><span>Final total</span><strong>${formatMoney(pricing.finalTotal)}</strong></div>
+        </div>
+
+        <div class="tx-league-inline-note">
+          Discount ladder: 2nd registration gets 5% off, 3rd gets 10% off, 4th gets 15% off, and 5th+ gets 20% off. Duals entries are priced at ${formatMoney(DUALS_PLAYER_PRICE)} per player.
+        </div>
       </div>
     </div>
   `;
@@ -965,21 +1577,38 @@ function renderLeagueMainStepContent() {
 
 function renderLeagueSidePanel() {
   const side = leagueBookingState.modal.querySelector("#tx-league-side");
-  const v = leagueBookingState.values;
-  const disciplineTitle =
-    getLeagueDisciplineOptions().find((item) => item.key === v.discipline)?.title || "League";
+  const pricing = computeLeagueSessionPricing(leagueBookingState.values.players);
+  const season = getActiveSeasonObject();
 
   side.innerHTML = `
     <div class="tx-league-side-block">
-      <h4 class="tx-league-side-title">League registration</h4>
-      <div class="tx-league-kv"><span>Discipline</span><strong>${disciplineTitle}</strong></div>
-      <div class="tx-league-kv"><span>Season</span><strong>${v.seasonLabel || "Not selected"}</strong></div>
-      <div class="tx-league-kv"><span>Lane</span><strong>${v.laneLabel || "Not selected"}</strong></div>
-      <div class="tx-league-kv"><span>Time</span><strong>${v.laneTime || "Not selected"}</strong></div>
+      <h4 class="tx-league-side-title">Registration bundle</h4>
+      <div class="tx-league-kv"><span>Season</span><strong>${leagueBookingState.values.seasonLabel || "Not selected"}</strong></div>
+      <div class="tx-league-kv"><span>Opening Sunday</span><strong>${season ? season.seasonStartDisplay : "Not selected"}</strong></div>
+      <div class="tx-league-kv"><span>Players</span><strong>${leagueBookingState.values.players.length}</strong></div>
+      <div class="tx-league-kv"><span>Registrations</span><strong>${pricing.registrationCount}</strong></div>
     </div>
 
     <div class="tx-league-side-block">
-      <h4 class="tx-league-side-title">Registration status</h4>
+      <h4 class="tx-league-side-title">Discount ladder</h4>
+      <div class="tx-league-inline-note">2nd registration: 5% off</div>
+      <div class="tx-league-inline-note">3rd registration: 10% off</div>
+      <div class="tx-league-inline-note">4th registration: 15% off</div>
+      <div class="tx-league-inline-note">5th+ registrations: 20% off</div>
+      <div class="tx-league-inline-note" style="margin-top:12px;">
+        Hatchet Duals and Knife Duals are priced at ${formatMoney(DUALS_PLAYER_PRICE)} per player.
+      </div>
+    </div>
+
+    <div class="tx-league-side-block">
+      <h4 class="tx-league-side-title">Pricing</h4>
+      <div class="tx-league-kv"><span>Base total</span><strong>${formatMoney(pricing.baseTotal)}</strong></div>
+      <div class="tx-league-kv"><span>Savings</span><strong>${formatMoney(pricing.savingsTotal)}</strong></div>
+      <div class="tx-league-kv"><span>Final total</span><strong>${formatMoney(pricing.finalTotal)}</strong></div>
+    </div>
+
+    <div class="tx-league-side-block">
+      <h4 class="tx-league-side-title">Status</h4>
       <div class="tx-league-inline-note">
         ${
           leagueBookingState.step < 4
@@ -1025,124 +1654,9 @@ function renderLeagueMainPanel() {
 
 function renderLeagueBookingFlow() {
   if (!leagueBookingState.modal) return;
-  syncLeagueSeasonOptions();
   renderLeagueMainPanel();
   renderLeagueSidePanel();
   attachLeagueMainPanelEvents();
-}
-
-function attachLeagueMainPanelEvents() {
-  const main = leagueBookingState.modal.querySelector("#tx-league-main");
-
-  main.querySelectorAll("[data-league-discipline]").forEach((button) => {
-    button.addEventListener("click", () => {
-      leagueBookingState.values.discipline = button.getAttribute("data-league-discipline") || "hatchet";
-      leagueBookingState.values.seasonLabel = "";
-      leagueBookingState.values.seasonStartSunday = "";
-      leagueBookingState.values.laneLabel = "";
-      leagueBookingState.values.laneDate = "";
-      leagueBookingState.values.laneTime = "";
-      renderLeagueBookingFlow();
-    });
-  });
-
-  main.querySelectorAll("[data-league-season-id]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const id = button.getAttribute("data-league-season-id");
-      const season = leagueBookingState.seasonOptions.find((item) => item.id === id);
-      if (!season) return;
-
-      leagueBookingState.values.seasonLabel = season.seasonLabel;
-      leagueBookingState.values.seasonStartSunday = season.seasonStartSunday;
-      leagueBookingState.values.laneLabel = season.laneLabel;
-      leagueBookingState.values.laneDate = season.laneDate;
-      leagueBookingState.values.laneTime = season.laneTime;
-      renderLeagueBookingFlow();
-    });
-  });
-
-  const firstName = main.querySelector("#tx-league-first-name");
-  if (firstName) {
-    firstName.addEventListener("input", (event) => {
-      leagueBookingState.values.first_name = event.target.value;
-      renderLeagueSidePanel();
-      updateLeagueCurrentStepButtonState();
-    });
-  }
-
-  const lastName = main.querySelector("#tx-league-last-name");
-  if (lastName) {
-    lastName.addEventListener("input", (event) => {
-      leagueBookingState.values.last_name = event.target.value;
-      renderLeagueSidePanel();
-      updateLeagueCurrentStepButtonState();
-    });
-  }
-
-  const email = main.querySelector("#tx-league-email");
-  if (email) {
-    email.addEventListener("input", (event) => {
-      leagueBookingState.values.email = event.target.value;
-      renderLeagueSidePanel();
-      updateLeagueCurrentStepButtonState();
-    });
-  }
-
-  const phone = main.querySelector("#tx-league-phone");
-  if (phone) {
-    phone.addEventListener("input", (event) => {
-      leagueBookingState.values.phone = event.target.value;
-      renderLeagueSidePanel();
-      updateLeagueCurrentStepButtonState();
-    });
-  }
-
-  const experience = main.querySelector("#tx-league-experience");
-  if (experience) {
-    experience.addEventListener("change", (event) => {
-      leagueBookingState.values.experience_level = event.target.value;
-      updateLeagueCurrentStepButtonState();
-    });
-  }
-
-  const notes = main.querySelector("#tx-league-notes");
-  if (notes) {
-    notes.addEventListener("input", (event) => {
-      leagueBookingState.values.notes = event.target.value;
-      updateLeagueCurrentStepButtonState();
-    });
-  }
-
-  const marketingOptIn = main.querySelector("#tx-league-marketing-opt-in");
-  if (marketingOptIn) {
-    marketingOptIn.addEventListener("change", (event) => {
-      leagueBookingState.values.marketing_opt_in = Boolean(event.target.checked);
-      updateLeagueCurrentStepButtonState();
-    });
-  }
-
-  const prevBtn = main.querySelector("#tx-league-prev-step");
-  if (prevBtn) {
-    prevBtn.addEventListener("click", () => {
-      setLeagueStep(leagueBookingState.step - 1);
-    });
-  }
-
-  const nextBtn = main.querySelector("#tx-league-next-step");
-  if (nextBtn) {
-    nextBtn.addEventListener("click", () => {
-      if (leagueStepIsValid(leagueBookingState.step)) {
-        setLeagueStep(leagueBookingState.step + 1);
-      } else if (leagueBookingState.step === 3) {
-        renderLeagueBookingFlow();
-      }
-    });
-  }
-
-  const submitBtn = main.querySelector("#tx-league-submit");
-  if (submitBtn) {
-    submitBtn.addEventListener("click", submitLeagueBooking);
-  }
 }
 
 function updateLeagueCurrentStepButtonState() {
@@ -1157,6 +1671,108 @@ function updateLeagueCurrentStepButtonState() {
 
   if (submitBtn) {
     submitBtn.disabled = !(leagueStepIsValid(4) && !leagueBookingState.isSubmitting);
+  }
+}
+
+function attachLeagueMainPanelEvents() {
+  const main = leagueBookingState.modal.querySelector("#tx-league-main");
+
+  main.querySelectorAll("[data-league-season-option]").forEach((button) => {
+    button.addEventListener("click", () => {
+      setLeagueSeason(button.getAttribute("data-league-season-option"));
+    });
+  });
+
+  const addPlayerBtn = main.querySelector("#tx-league-add-player");
+  if (addPlayerBtn) {
+    addPlayerBtn.addEventListener("click", addLeaguePlayer);
+  }
+
+  main.querySelectorAll("[data-remove-player]").forEach((button) => {
+    button.addEventListener("click", () => {
+      removeLeaguePlayer(Number(button.getAttribute("data-remove-player")));
+    });
+  });
+
+  main.querySelectorAll("[data-player-input]").forEach((input) => {
+    input.addEventListener("input", (event) => {
+      const playerIndex = Number(event.target.getAttribute("data-player-input"));
+      const field = event.target.getAttribute("data-player-field");
+      const player = leagueBookingState.values.players[playerIndex];
+      if (!player || !field) return;
+      player[field] = event.target.value;
+      renderLeagueSidePanel();
+      updateLeagueCurrentStepButtonState();
+    });
+
+    input.addEventListener("change", (event) => {
+      const playerIndex = Number(event.target.getAttribute("data-player-input"));
+      const field = event.target.getAttribute("data-player-field");
+      const player = leagueBookingState.values.players[playerIndex];
+      if (!player || !field) return;
+      player[field] = event.target.value;
+      renderLeagueSidePanel();
+      updateLeagueCurrentStepButtonState();
+    });
+  });
+
+  main.querySelectorAll("[data-player-checkbox]").forEach((input) => {
+    input.addEventListener("change", (event) => {
+      const playerIndex = Number(event.target.getAttribute("data-player-checkbox"));
+      const field = event.target.getAttribute("data-player-field");
+      const player = leagueBookingState.values.players[playerIndex];
+      if (!player || !field) return;
+      player[field] = Boolean(event.target.checked);
+      renderLeagueSidePanel();
+      updateLeagueCurrentStepButtonState();
+    });
+  });
+
+  main.querySelectorAll("[data-active-player]").forEach((button) => {
+    button.addEventListener("click", () => {
+      setActiveLeaguePlayer(Number(button.getAttribute("data-active-player")));
+    });
+  });
+
+  const laneOptions = buildLeagueLaneOptionsForSeason(leagueBookingState.values.seasonStartSunday);
+  main.querySelectorAll("[data-league-entry-id]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const option = laneOptions.find((item) => item.id === button.getAttribute("data-league-entry-id"));
+      if (!option) return;
+      toggleLeagueEntryForActivePlayer(option);
+    });
+  });
+
+  main.querySelectorAll("[data-remove-entry]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const [playerIndex, entryIndex] = String(button.getAttribute("data-remove-entry") || "")
+        .split(":")
+        .map(Number);
+      removeLeagueEntry(playerIndex, entryIndex);
+    });
+  });
+
+  const prevBtn = main.querySelector("#tx-league-prev-step");
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      setLeagueStep(leagueBookingState.step - 1);
+    });
+  }
+
+  const nextBtn = main.querySelector("#tx-league-next-step");
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      if (leagueStepIsValid(leagueBookingState.step)) {
+        setLeagueStep(leagueBookingState.step + 1);
+      } else {
+        renderLeagueBookingFlow();
+      }
+    });
+  }
+
+  const submitBtn = main.querySelector("#tx-league-submit");
+  if (submitBtn) {
+    submitBtn.addEventListener("click", submitLeagueBooking);
   }
 }
 
@@ -1184,13 +1800,22 @@ function wireLeagueBookingButtons() {
 
       if (!isLeagueTrigger) return;
 
-      el.addEventListener("click", async (event) => {
+      const openHandler = async (event) => {
         event.preventDefault();
         await ensureLeagueData();
+        openLeagueBookingModal();
+      };
 
-        const discipline = el.getAttribute("data-league-discipline") || "";
-        openLeagueBookingModal(discipline);
-      });
+      el.addEventListener("click", openHandler);
+
+      if (el.getAttribute("role") === "button" || el.classList.contains("js-league-booking")) {
+        el.addEventListener("keydown", async (event) => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          await ensureLeagueData();
+          openLeagueBookingModal();
+        });
+      }
 
       seen.add(el);
     });
