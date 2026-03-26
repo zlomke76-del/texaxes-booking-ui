@@ -86,7 +86,7 @@ function getStepTitles() {
     "Party & Date",
     "Time",
     "Details",
-    "Add-ons",
+    "Extras",
     "Review"
   ];
 }
@@ -96,17 +96,16 @@ function getExperienceOptions() {
     {
       key: "axe_throwing",
       title: "Axe Throwing",
-      copy: "First-timers, date nights, birthdays, and repeat throwers."
-    },
-    {
-      key: "axe_throwing_plus",
-      title: "Axe Throwing + Add-ons",
-      copy: "Book your lane, then enhance it with BYOB, WKTL knives, and specialty throws."
+      copy: "Perfect for first-timers, date nights, birthdays, and repeat throwers.",
+      meta: "Starts at $29 per thrower",
+      sell: "Coaching included • No experience needed • Real league lanes"
     },
     {
       key: "large_group",
-      title: "Large Group / Event",
-      copy: "Best for team outings, parties, and bigger bookings up to the public online limit."
+      title: "Group Events",
+      copy: "Best for team outings, celebrations, parties, and larger hosted experiences.",
+      meta: "Ideal for bigger groups",
+      sell: "Great for work events • Higher-touch coordination • Built for shared experiences"
     }
   ];
 }
@@ -125,8 +124,8 @@ function ensureBookingStyles() {
       align-items: center;
       justify-content: center;
       padding: 24px;
-      background: rgba(4, 8, 18, 0.72);
-      backdrop-filter: blur(10px);
+      background: rgba(4, 8, 18, 0.76);
+      backdrop-filter: blur(12px);
     }
 
     .tx-booking-overlay.is-open {
@@ -134,16 +133,16 @@ function ensureBookingStyles() {
     }
 
     .tx-booking-modal {
-      width: min(1040px, 100%);
+      width: min(1080px, 100%);
       max-height: calc(100vh - 40px);
       overflow: auto;
       border-radius: 28px;
       color: #f5f7fb;
       background:
         radial-gradient(circle at top left, rgba(92, 125, 255, 0.16), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(255, 122, 89, 0.16), transparent 26%),
-        linear-gradient(180deg, rgba(12, 18, 36, 0.98), rgba(10, 14, 28, 0.98));
-      border: 1px solid rgba(255, 255, 255, 0.1);
+        radial-gradient(circle at bottom right, rgba(255, 122, 89, 0.18), transparent 26%),
+        linear-gradient(180deg, rgba(12, 18, 36, 0.98), rgba(9, 13, 26, 0.98));
+      border: 1px solid rgba(255, 255, 255, 0.12);
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
     }
 
@@ -161,15 +160,17 @@ function ensureBookingStyles() {
 
     .tx-booking-title {
       margin: 0;
-      font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+      font-size: clamp(1.7rem, 2.8vw, 2.5rem);
       letter-spacing: -0.03em;
+      color: #ffffff;
     }
 
     .tx-booking-subtitle {
       margin: 8px 0 0;
-      color: rgba(255,255,255,0.74);
+      color: rgba(255,255,255,0.76);
       max-width: 62ch;
-      line-height: 1.5;
+      line-height: 1.55;
+      font-size: 0.98rem;
     }
 
     .tx-booking-close {
@@ -182,6 +183,13 @@ function ensureBookingStyles() {
       height: 42px;
       font-size: 1.1rem;
       cursor: pointer;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+    }
+
+    .tx-booking-close:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,122,89,0.32);
     }
 
     .tx-booking-layout {
@@ -229,12 +237,13 @@ function ensureBookingStyles() {
       font-size: 0.92rem;
       line-height: 1.3;
       font-weight: 700;
+      color: #ffffff;
     }
 
     .tx-grid-2 {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+      gap: 16px;
     }
 
     .tx-grid-3 {
@@ -245,26 +254,42 @@ function ensureBookingStyles() {
 
     .tx-card-choice,
     .tx-slot-card {
+      appearance: none;
+      width: 100%;
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(255,255,255,0.04);
-      border-radius: 18px;
-      padding: 16px;
+      border-radius: 20px;
+      padding: 18px;
       cursor: pointer;
-      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+      text-align: left;
+      color: #ffffff;
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        background 180ms ease,
+        box-shadow 180ms ease;
     }
 
     .tx-card-choice:hover,
     .tx-slot-card:hover {
-      transform: translateY(-1px);
+      transform: translateY(-2px) scale(1.01);
       border-color: rgba(255,122,89,0.34);
-      background: rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.07);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.18);
     }
 
     .tx-card-choice.is-selected,
     .tx-slot-card.is-selected {
-      border-color: rgba(255,122,89,0.54);
-      background: rgba(255,122,89,0.12);
-      box-shadow: inset 0 0 0 1px rgba(255,122,89,0.18);
+      border-color: rgba(255,122,89,0.56);
+      background: linear-gradient(
+        135deg,
+        rgba(255,122,89,0.18),
+        rgba(255,122,89,0.08)
+      );
+      box-shadow:
+        inset 0 0 0 1px rgba(255,122,89,0.18),
+        0 18px 34px rgba(255,122,89,0.12);
+      transform: scale(1.015);
     }
 
     .tx-card-choice.is-disabled,
@@ -274,17 +299,51 @@ function ensureBookingStyles() {
       pointer-events: none;
     }
 
+    .tx-step-head {
+      margin-bottom: 16px;
+    }
+
+    .tx-step-title {
+      margin: 0 0 8px;
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .tx-step-copy {
+      margin: 0;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.5;
+    }
+
     .tx-card-title {
-      font-size: 1.02rem;
+      font-size: 1.08rem;
       font-weight: 800;
       margin: 0 0 6px;
+      color: #ffffff;
+      letter-spacing: -0.02em;
     }
 
     .tx-card-copy {
       margin: 0;
-      color: rgba(255,255,255,0.72);
+      color: rgba(255,255,255,0.8);
+      line-height: 1.5;
+      font-size: 0.96rem;
+    }
+
+    .tx-card-meta {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #ffd1bd;
+    }
+
+    .tx-card-sell {
+      margin-top: 8px;
+      font-size: 0.88rem;
       line-height: 1.45;
-      font-size: 0.95rem;
+      color: rgba(255,255,255,0.92);
     }
 
     .tx-field {
@@ -298,7 +357,7 @@ function ensureBookingStyles() {
     .tx-label {
       font-size: 0.9rem;
       font-weight: 700;
-      color: rgba(255,255,255,0.84);
+      color: #ffffff;
     }
 
     .tx-input,
@@ -307,11 +366,16 @@ function ensureBookingStyles() {
       width: 100%;
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(8, 12, 22, 0.82);
-      color: #fff;
+      color: #ffffff;
       border-radius: 14px;
       padding: 13px 14px;
       font: inherit;
       box-sizing: border-box;
+    }
+
+    .tx-input::placeholder,
+    .tx-textarea::placeholder {
+      color: rgba(255,255,255,0.42);
     }
 
     .tx-input[type="date"] {
@@ -323,7 +387,7 @@ function ensureBookingStyles() {
 
     .tx-input[type="date"]::-webkit-calendar-picker-indicator {
       filter: invert(1);
-      opacity: 0.78;
+      opacity: 0.88;
       cursor: pointer;
     }
 
@@ -336,12 +400,12 @@ function ensureBookingStyles() {
     .tx-error,
     .tx-muted {
       font-size: 0.92rem;
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
     .tx-inline-note,
     .tx-muted {
-      color: rgba(255,255,255,0.68);
+      color: rgba(255,255,255,0.72);
     }
 
     .tx-error {
@@ -364,12 +428,13 @@ function ensureBookingStyles() {
       font-size: 1rem;
       font-weight: 800;
       margin-bottom: 6px;
+      color: #ffffff;
     }
 
     .tx-slot-meta {
-      color: rgba(255,255,255,0.7);
+      color: rgba(255,255,255,0.78);
       font-size: 0.9rem;
-      line-height: 1.35;
+      line-height: 1.38;
     }
 
     .tx-status-chip {
@@ -382,7 +447,7 @@ function ensureBookingStyles() {
       border: 1px solid rgba(255,255,255,0.1);
       font-size: 0.82rem;
       font-weight: 700;
-      color: rgba(255,255,255,0.84);
+      color: #ffffff;
     }
 
     .tx-addon-row,
@@ -409,15 +474,16 @@ function ensureBookingStyles() {
 
     .tx-addon-title {
       font-weight: 700;
+      color: #ffffff;
     }
 
     .tx-addon-meta {
-      color: rgba(255,255,255,0.68);
+      color: rgba(255,255,255,0.74);
       font-size: 0.9rem;
     }
 
     .tx-addon-sell {
-      color: rgba(255,255,255,0.9);
+      color: rgba(255,255,255,0.92);
       font-size: 0.9rem;
       line-height: 1.45;
       margin-top: 2px;
@@ -447,16 +513,17 @@ function ensureBookingStyles() {
       appearance: none;
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(255,255,255,0.06);
-      color: #fff;
+      color: #ffffff;
       border-radius: 14px;
       padding: 13px 18px;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 160ms ease, opacity 160ms ease, border-color 160ms ease;
+      transition: transform 160ms ease, opacity 160ms ease, border-color 160ms ease, background 160ms ease;
     }
 
     .tx-btn:hover {
       transform: translateY(-1px);
+      background: rgba(255,255,255,0.08);
     }
 
     .tx-btn:disabled {
@@ -466,9 +533,13 @@ function ensureBookingStyles() {
     }
 
     .tx-btn-primary {
-      background: linear-gradient(135deg, rgba(255,122,89,0.96), rgba(234,94,73,0.96));
+      background: linear-gradient(135deg, rgba(255,122,89,0.98), rgba(234,94,73,0.96));
       border-color: rgba(255,122,89,0.42);
       box-shadow: 0 14px 30px rgba(255,122,89,0.18);
+    }
+
+    .tx-btn-primary:hover {
+      background: linear-gradient(135deg, rgba(255,132,99,1), rgba(240,102,81,0.98));
     }
 
     .tx-side-block + .tx-side-block {
@@ -481,6 +552,7 @@ function ensureBookingStyles() {
       margin: 0 0 12px;
       font-size: 1rem;
       font-weight: 800;
+      color: #ffffff;
     }
 
     .tx-kv {
@@ -488,12 +560,12 @@ function ensureBookingStyles() {
       justify-content: space-between;
       gap: 10px;
       padding: 8px 0;
-      color: rgba(255,255,255,0.78);
+      color: rgba(255,255,255,0.82);
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
     .tx-kv strong {
-      color: #fff;
+      color: #ffffff;
       text-align: right;
     }
 
@@ -501,8 +573,8 @@ function ensureBookingStyles() {
       display: flex;
       align-items: start;
       gap: 10px;
-      color: rgba(255,255,255,0.78);
-      line-height: 1.45;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.48;
       font-size: 0.93rem;
     }
 
@@ -511,7 +583,7 @@ function ensureBookingStyles() {
       padding: 18px;
       background: rgba(255,255,255,0.04);
       border: 1px dashed rgba(255,255,255,0.14);
-      color: rgba(255,255,255,0.68);
+      color: rgba(255,255,255,0.72);
     }
 
     @media (max-width: 960px) {
@@ -556,7 +628,7 @@ function createBookingModal() {
           <div>
             <h2 class="tx-booking-title" id="tx-booking-title">Book Your Experience</h2>
             <p class="tx-booking-subtitle">
-              Choose what you are booking, select a live time, personalize the visit, and continue to checkout.
+              Choose your throwing experience, pick a live time, personalize the visit, and lock it in with checkout.
             </p>
           </div>
           <button class="tx-booking-close" type="button" aria-label="Close booking flow">✕</button>
@@ -707,7 +779,7 @@ async function loadAvailability() {
 
 function getAvailabilityHint() {
   if (!bookingState.values.date || !bookingState.values.throwers) {
-    return "Choose your party size and date to load live times.";
+    return "Choose your group size and date to load live times.";
   }
 
   if (bookingState.availabilityLoading) {
@@ -715,10 +787,10 @@ function getAvailabilityHint() {
   }
 
   if (!bookingState.availability.length) {
-    return "No online times are currently available for that date and party size. Try another date.";
+    return "No online times are currently available for that date and group size. Try another date.";
   }
 
-  return "Select a live time below. These slots reflect backend booking availability.";
+  return "Select a live time below. Weekend times can fill quickly.";
 }
 
 function getSelectedExperienceTitle() {
@@ -752,7 +824,7 @@ function buildBookingPayload() {
     booking_type: "open",
     customer_notes:
       bookingState.values.experience === "large_group"
-        ? "Customer selected Large Group / Event path from Tex Axes public booking flow."
+        ? "Customer selected Group Events path from Tex Axes public booking flow."
         : null
   };
 }
@@ -833,8 +905,14 @@ function renderStepOne() {
 
   return `
     <div>
-      <h3 class="tx-card-title" style="margin-bottom:14px;">What are you booking?</h3>
-      <div class="tx-grid-3">
+      <div class="tx-step-head">
+        <h3 class="tx-step-title">What kind of experience are you booking?</h3>
+        <p class="tx-step-copy">
+          Start with the type of visit you want. You can personalize everything else after you choose the experience.
+        </p>
+      </div>
+
+      <div class="tx-grid-2">
         ${options
           .map((option) => {
             const selected = bookingState.values.experience === option.key ? "is-selected" : "";
@@ -846,6 +924,8 @@ function renderStepOne() {
               >
                 <div class="tx-card-title">${option.title}</div>
                 <p class="tx-card-copy">${option.copy}</p>
+                <div class="tx-card-meta">${option.meta}</div>
+                <div class="tx-card-sell">${option.sell}</div>
               </button>
             `;
           })
@@ -853,7 +933,7 @@ function renderStepOne() {
       </div>
 
       <div class="tx-inline-note" style="margin-top:16px;">
-        Online booking is for public sessions up to 24 throwers. Larger or custom events can be routed into a higher-touch path next.
+        Public online booking supports up to 24 throwers. Group Events is the better path for larger, more coordinated visits.
       </div>
     </div>
   `;
@@ -862,7 +942,12 @@ function renderStepOne() {
 function renderStepTwo() {
   return `
     <div>
-      <h3 class="tx-card-title" style="margin-bottom:14px;">How many are throwing, and what day do you want?</h3>
+      <div class="tx-step-head">
+        <h3 class="tx-step-title">How many are throwing, and when do you want to come in?</h3>
+        <p class="tx-step-copy">
+          Pick your group size and choose your date. Friday and Saturday times are the most popular.
+        </p>
+      </div>
 
       <div class="tx-grid-2">
         <div class="tx-field">
@@ -891,6 +976,14 @@ function renderStepTwo() {
         </div>
       </div>
 
+      ${
+        bookingState.values.throwers && bookingState.values.date
+          ? `<div class="tx-inline-note" style="margin: 4px 0 16px; color:#ffffff;">
+              ${bookingState.values.throwers} thrower(s) on ${bookingState.values.date}
+            </div>`
+          : ""
+      }
+
       <button type="button" class="tx-btn tx-btn-primary" id="tx-load-availability">
         ${bookingState.availabilityLoading ? "Loading..." : "Show Available Times"}
       </button>
@@ -904,8 +997,10 @@ function renderStepThree() {
 
   return `
     <div>
-      <h3 class="tx-card-title" style="margin-bottom:14px;">Choose a live time</h3>
-      <div class="tx-inline-note" style="margin-bottom:16px;">${hint}</div>
+      <div class="tx-step-head">
+        <h3 class="tx-step-title">Choose a live time</h3>
+        <p class="tx-step-copy">${hint}</p>
+      </div>
 
       ${
         bookingState.availabilityLoading
@@ -962,7 +1057,12 @@ function renderStepFour() {
 
   return `
     <div>
-      <h3 class="tx-card-title" style="margin-bottom:14px;">Who is booking?</h3>
+      <div class="tx-step-head">
+        <h3 class="tx-step-title">Who is booking?</h3>
+        <p class="tx-step-copy">
+          Add your details so we can confirm the booking and send the checkout receipt.
+        </p>
+      </div>
 
       <div class="tx-grid-2">
         <div class="tx-field">
@@ -1049,16 +1149,18 @@ function renderStepFive() {
 
   return `
     <div>
-      <h3 class="tx-card-title" style="margin-bottom:14px;">Enhance your experience</h3>
-      <div class="tx-inline-note" style="margin-bottom:12px;">
-        Your time is already selected. Add-ons below are optional ways to make the visit more memorable.
+      <div class="tx-step-head">
+        <h3 class="tx-step-title">Make it your experience</h3>
+        <p class="tx-step-copy">
+          Your time is already selected. Most groups add at least one upgrade to make the visit more memorable.
+        </p>
       </div>
 
       ${renderAddonRow(
         "byob_guests",
         "BYOB Guests",
         "$5 per guest",
-        "Bring your own drinks and make it your night.",
+        "Bring your own drinks and turn it into a full night out.",
         addons.byob_guests
       )}
 
@@ -1066,7 +1168,7 @@ function renderStepFive() {
         "wktl_knife_rental_qty",
         "WKTL Knife Rental",
         "$20 each",
-        "Try certified knife throwing on the same visit.",
+        "Try certified knife throwing — only available at select venues.",
         addons.wktl_knife_rental_qty
       )}
 
@@ -1090,7 +1192,7 @@ function renderStepFive() {
         "shovel_qty",
         "Shovel Throw",
         "$20 each",
-        "A memorable specialty throw that turns the session into a story.",
+        "A specialty throw that turns the session into a story people remember.",
         addons.shovel_qty
       )}
     </div>
@@ -1128,7 +1230,12 @@ function renderStepSix() {
 
   return `
     <div>
-      <h3 class="tx-card-title" style="margin-bottom:14px;">Review your booking</h3>
+      <div class="tx-step-head">
+        <h3 class="tx-step-title">Review your booking</h3>
+        <p class="tx-step-copy">
+          Review the details below, then continue to checkout to finalize your booking.
+        </p>
+      </div>
 
       <div class="tx-summary-row"><span>Experience</span><strong>${getSelectedExperienceTitle()}</strong></div>
       <div class="tx-summary-row"><span>Date</span><strong>${bookingState.values.date || "Not selected"}</strong></div>
@@ -1137,7 +1244,7 @@ function renderStepSix() {
       <div style="margin-top:12px;">${renderSummaryRows()}</div>
 
       <div class="tx-inline-note" style="margin-top:16px;">
-        Final booking admissibility, bay allocation, and payment session creation are all decided by the backend at checkout start.
+        Final booking admissibility, bay allocation, and payment session creation are decided by the backend when checkout starts.
       </div>
     </div>
   `;
