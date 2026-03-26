@@ -459,17 +459,17 @@ async function startBookingFlow() {
 
     const data = await res.json();
 
-    if (!res.ok) {
-      console.error(data);
-      alert("Booking failed");
-      return;
-    }
+    if (!response.ok) {
+  const data = await response.json();
+  console.error(data);
 
-    window.location.href = data.checkout_url;
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong");
+  if (response.status === 409) {
+    alert("That time slot is no longer available. Please choose another time.");
+    return;
   }
+
+  alert(data.error || "Something went wrong");
+  return;
 }
 
 function wireBookingButtons() {
