@@ -14,25 +14,11 @@
           </div>
 
           <div class="hero-logos">
-            <a
-              class="hero-logo-chip watl"
-              href="https://axethrowing.org/watl"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Open WATL world leaderboard"
-              title="Open WATL world leaderboard"
-            >
+            <a class="hero-logo-chip watl" href="https://axethrowing.org/watl" target="_blank" rel="noopener noreferrer">
               <img src="/assets/image_logo_watl_01.png" alt="WATL logo" />
             </a>
 
-            <a
-              class="hero-logo-chip wktl"
-              href="https://axethrowing.org/watl"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Open WATL world leaderboard"
-              title="Open WATL world leaderboard"
-            >
+            <a class="hero-logo-chip wktl" href="https://axethrowing.org/watl" target="_blank" rel="noopener noreferrer">
               <img src="/assets/image_logo_wktl_01.png" alt="WKTL logo" />
             </a>
           </div>
@@ -50,8 +36,14 @@
           </p>
 
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#book">Book Your Session</a>
-            <a class="btn btn-secondary" href="#pricing">See Pricing</a>
+            <!-- 🔥 PRIMARY ENTRY -->
+            <button class="btn btn-primary js-start-booking">
+              Book Your Experience
+            </button>
+
+            <a class="btn btn-secondary" href="#pricing">
+              See Pricing
+            </a>
           </div>
         </div>
 
@@ -59,29 +51,38 @@
           <div class="panel-card" id="book">
             <div class="panel-top">
               <div class="panel-title">Book your lane</div>
-              <div class="pill">Book by the hour</div>
+              <div class="pill">Live availability</div>
             </div>
 
+            <!-- 🔥 NEW: EXPERIENCE ENTRY OPTIONS -->
             <div class="booking-grid">
-          <div class="booking-row">
-            <div>
-              <strong>Axe Throwing</strong>
-              <span>$29 / thrower / hour — includes hatchet + coaching</span>
-            </div>
-            <em>Book now</em>
-          </div>
+              <button class="booking-row js-start-booking" data-experience="axe_throwing">
+                <div>
+                  <strong>Axe Throwing</strong>
+                  <span>$29 / thrower / hour — includes coaching</span>
+                </div>
+                <em>Select</em>
+              </button>
 
-          <div class="booking-row">
-            <div>
-              <strong>Optional add-ons</strong>
-              <span>BYOB, WKTL knives, and specialty throws available</span>
+              <button class="booking-row js-start-booking" data-experience="axe_throwing_plus">
+                <div>
+                  <strong>Axe Throwing + Add-ons</strong>
+                  <span>BYOB, WKTL knives, and specialty throws</span>
+                </div>
+                <em>Customize</em>
+              </button>
+
+              <button class="booking-row js-start-booking" data-experience="large_group">
+                <div>
+                  <strong>Large Group / Event</strong>
+                  <span>Team events, parties, and full-venue experiences</span>
+                </div>
+                <em>Start</em>
+              </button>
             </div>
-            <em>Optional</em>
-          </div>
-        </div>
 
             <div class="panel-note" style="margin-top: 16px;">
-              Limited lanes available — weekends fill fast.
+              Live lane availability updates in real time — weekends fill fast.
             </div>
 
             <div class="panel-note" style="margin-top: 10px;">
@@ -89,8 +90,14 @@
             </div>
 
             <div style="margin-top: 18px; display: flex; gap: 12px; flex-wrap: wrap;">
-              <a class="btn btn-primary" href="#">Start Booking</a>
-              <a class="btn btn-secondary" href="#pricing">View Pricing</a>
+              <!-- 🔥 PRIMARY CTA -->
+              <button class="btn btn-primary js-start-booking">
+                Start Booking
+              </button>
+
+              <a class="btn btn-secondary" href="#pricing">
+                View Pricing
+              </a>
             </div>
 
             <div class="booking-trust" style="margin-top: 14px; display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; opacity: 0.9;">
