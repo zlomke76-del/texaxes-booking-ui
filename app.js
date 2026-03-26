@@ -439,6 +439,10 @@ function getInitialBookingDate() {
   return new Date(next.getTime() - tzOffsetMs).toISOString().slice(0, 10);
 }
 
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(email || "").trim());
+}
+
 function computeLocalPricingSnapshot() {
   const throwers = Number(bookingState.values.throwers || 0);
   const addons = bookingState.values.addons;
@@ -466,12 +470,12 @@ function computeLocalPricingSnapshot() {
 
 function getStepTitles() {
   return [
-    "Choose Experience",
-    "Party Size & Date",
-    "Choose Time",
+    "Experience",
+    "Party & Date",
+    "Time",
+    "Details",
     "Add-ons",
-    "Your Details",
-    "Review & Checkout"
+    "Review"
   ];
 }
 
@@ -480,17 +484,17 @@ function getExperienceOptions() {
     {
       key: "axe_throwing",
       title: "Axe Throwing",
-      copy: "The core Tex Axes experience for first-timers, date nights, birthdays, and repeat throwers."
+      copy: "First-timers, date nights, birthdays, and repeat throwers."
     },
     {
       key: "axe_throwing_plus",
       title: "Axe Throwing + Add-ons",
-      copy: "Book your lane first, then layer in BYOB, WKTL knives, pro axe, big axe, or shovel."
+      copy: "Book your lane, then enhance it with BYOB, WKTL knives, and specialty throws."
     },
     {
       key: "large_group",
       title: "Large Group / Event",
-      copy: "Ideal for bigger team outings or event-style bookings. Public online booking still caps at 24 throwers."
+      copy: "Best for team outings, parties, and bigger bookings up to the public online limit."
     }
   ];
 }
@@ -676,6 +680,7 @@ function ensureBookingStyles() {
       flex-direction: column;
       gap: 8px;
       margin-bottom: 14px;
+      min-width: 0;
     }
 
     .tx-label {
@@ -695,6 +700,19 @@ function ensureBookingStyles() {
       padding: 13px 14px;
       font: inherit;
       box-sizing: border-box;
+    }
+
+    .tx-input[type="date"] {
+      appearance: none;
+      -webkit-appearance: none;
+      min-height: 52px;
+      cursor: pointer;
+    }
+
+    .tx-input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      opacity: 0.78;
+      cursor: pointer;
     }
 
     .tx-textarea {
@@ -717,6 +735,11 @@ function ensureBookingStyles() {
     .tx-error {
       color: #ffb7ae;
       margin-top: 12px;
+    }
+
+    .tx-field-error {
+      border-color: rgba(255, 122, 89, 0.52);
+      box-shadow: 0 0 0 1px rgba(255, 122, 89, 0.18);
     }
 
     .tx-slot-grid {
@@ -756,7 +779,7 @@ function ensureBookingStyles() {
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 10px 0;
+      padding: 12px 0;
       border-bottom: 1px solid rgba(255,255,255,0.08);
     }
 
@@ -769,6 +792,7 @@ function ensureBookingStyles() {
       display: flex;
       flex-direction: column;
       gap: 4px;
+      min-width: 0;
     }
 
     .tx-addon-title {
@@ -780,8 +804,16 @@ function ensureBookingStyles() {
       font-size: 0.9rem;
     }
 
+    .tx-addon-sell {
+      color: rgba(255,255,255,0.9);
+      font-size: 0.9rem;
+      line-height: 1.45;
+      margin-top: 2px;
+    }
+
     .tx-qty {
       width: 92px;
+      flex-shrink: 0;
     }
 
     .tx-actions {
@@ -850,6 +882,7 @@ function ensureBookingStyles() {
 
     .tx-kv strong {
       color: #fff;
+      text-align: right;
     }
 
     .tx-checkbox {
@@ -883,6 +916,15 @@ function ensureBookingStyles() {
       .tx-grid-2 {
         grid-template-columns: 1fr;
       }
+
+      .tx-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .tx-btn-row {
+        justify-content: flex-end;
+      }
     }
   `;
   document.head.appendChild(style);
@@ -902,7 +944,7 @@ function createBookingModal() {
           <div>
             <h2 class="tx-booking-title" id="tx-booking-title">Book Your Experience</h2>
             <p class="tx-booking-subtitle">
-              Choose what you are booking, select a live time, customize your visit, and complete checkout.
+              Choose what you are booking, select a live time, personalize the visit, and continue to checkout.
             </p>
           </div>
           <button class="tx-booking-close" type="button" aria-label="Close booking flow">✕</button>
@@ -979,19 +1021,19 @@ function stepIsValid(step) {
   }
 
   if (step === 4) {
-    return true;
-  }
-
-  if (step === 5) {
-    return Boolean(
-      values.customer.first_name.trim() &&
-      values.customer.last_name.trim() &&
-      values.customer.email.trim()
+    return (
+      values.customer.first_name.trim().length > 0 &&
+      values.customer.last_name.trim().length > 0 &&
+      isValidEmail(values.customer.email)
     );
   }
 
+  if (step === 5) {
+    return true;
+  }
+
   if (step === 6) {
-    return stepIsValid(1) && stepIsValid(2) && stepIsValid(3) && stepIsValid(5);
+    return stepIsValid(1) && stepIsValid(2) && stepIsValid(3) && stepIsValid(4);
   }
 
   return false;
@@ -1001,6 +1043,20 @@ function normalizeIntegerInput(value, fallback = 0) {
   const n = Number(value);
   if (!Number.isFinite(n) || n < 0) return fallback;
   return Math.floor(n);
+}
+
+function updateCurrentStepButtonState() {
+  if (!bookingState.modal) return;
+  const nextBtn = bookingState.modal.querySelector("#tx-next-step");
+  const submitBtn = bookingState.modal.querySelector("#tx-submit-booking");
+
+  if (nextBtn) {
+    nextBtn.disabled = !stepIsValid(bookingState.step);
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = !(stepIsValid(6) && !bookingState.isSubmitting);
+  }
 }
 
 async function loadAvailability() {
@@ -1050,7 +1106,7 @@ function getAvailabilityHint() {
     return "No online times are currently available for that date and party size. Try another date.";
   }
 
-  return "Times below reflect live booking availability for your selected group.";
+  return "Select a live time below. These slots reflect backend booking availability.";
 }
 
 function getSelectedExperienceTitle() {
@@ -1194,7 +1250,7 @@ function renderStepOne() {
 function renderStepTwo() {
   return `
     <div>
-      <h3 class="tx-card-title" style="margin-bottom:14px;">How many are throwing, and when do you want to come in?</h3>
+      <h3 class="tx-card-title" style="margin-bottom:14px;">How many are throwing, and what day do you want?</h3>
 
       <div class="tx-grid-2">
         <div class="tx-field">
@@ -1211,7 +1267,7 @@ function renderStepTwo() {
         </div>
 
         <div class="tx-field">
-          <label class="tx-label" for="tx-date">Date</label>
+          <label class="tx-label" for="tx-date">Select date</label>
           <input
             id="tx-date"
             class="tx-input"
@@ -1219,7 +1275,7 @@ function renderStepTwo() {
             min="${getTodayLocalDate()}"
             value="${bookingState.values.date}"
           />
-          <div class="tx-inline-note">Live time slots will load for your selected date and party size.</div>
+          <div class="tx-inline-note">Use the calendar picker to choose your date. Live times load from that selection.</div>
         </div>
       </div>
 
@@ -1286,45 +1342,11 @@ function renderStepThree() {
   `;
 }
 
-function renderAddonRow(id, title, meta, value) {
-  return `
-    <div class="tx-addon-row">
-      <div class="tx-addon-copy">
-        <div class="tx-addon-title">${title}</div>
-        <div class="tx-addon-meta">${meta}</div>
-      </div>
-      <input
-        class="tx-input tx-qty"
-        type="number"
-        min="0"
-        value="${value}"
-        data-addon-key="${id}"
-      />
-    </div>
-  `;
-}
-
 function renderStepFour() {
-  const addons = bookingState.values.addons;
-
-  return `
-    <div>
-      <h3 class="tx-card-title" style="margin-bottom:14px;">Customize your booking</h3>
-      <div class="tx-inline-note" style="margin-bottom:12px;">
-        Add-ons are optional and will be included in your booking total before checkout.
-      </div>
-
-      ${renderAddonRow("byob_guests", "BYOB Guests", "$5 per guest", addons.byob_guests)}
-      ${renderAddonRow("wktl_knife_rental_qty", "WKTL Knife Rental", "$20 each", addons.wktl_knife_rental_qty)}
-      ${renderAddonRow("pro_axe_qty", "Pro Axe", "$10 each", addons.pro_axe_qty)}
-      ${renderAddonRow("big_axe_qty", "Big Axe", "$15 each", addons.big_axe_qty)}
-      ${renderAddonRow("shovel_qty", "Shovel Throw", "$20 each", addons.shovel_qty)}
-    </div>
-  `;
-}
-
-function renderStepFive() {
   const customer = bookingState.values.customer;
+  const firstNameInvalid = bookingState.step === 4 && customer.first_name.trim().length === 0;
+  const lastNameInvalid = bookingState.step === 4 && customer.last_name.trim().length === 0;
+  const emailInvalid = bookingState.step === 4 && customer.email.trim().length > 0 && !isValidEmail(customer.email);
 
   return `
     <div>
@@ -1333,24 +1355,26 @@ function renderStepFive() {
       <div class="tx-grid-2">
         <div class="tx-field">
           <label class="tx-label" for="tx-first-name">First name</label>
-          <input id="tx-first-name" class="tx-input" type="text" value="${customer.first_name}" />
+          <input id="tx-first-name" class="tx-input ${firstNameInvalid ? "tx-field-error" : ""}" type="text" value="${customer.first_name}" />
         </div>
 
         <div class="tx-field">
           <label class="tx-label" for="tx-last-name">Last name</label>
-          <input id="tx-last-name" class="tx-input" type="text" value="${customer.last_name}" />
+          <input id="tx-last-name" class="tx-input ${lastNameInvalid ? "tx-field-error" : ""}" type="text" value="${customer.last_name}" />
         </div>
       </div>
 
       <div class="tx-grid-2">
         <div class="tx-field">
           <label class="tx-label" for="tx-email">Email</label>
-          <input id="tx-email" class="tx-input" type="email" value="${customer.email}" />
+          <input id="tx-email" class="tx-input ${emailInvalid ? "tx-field-error" : ""}" type="email" value="${customer.email}" />
+          <div class="tx-inline-note">Your confirmation and payment receipt will go here.</div>
         </div>
 
         <div class="tx-field">
           <label class="tx-label" for="tx-phone">Phone</label>
           <input id="tx-phone" class="tx-input" type="tel" value="${customer.phone}" />
+          <div class="tx-inline-note">Helpful if we need to reach you about your booking.</div>
         </div>
       </div>
 
@@ -1379,6 +1403,84 @@ function renderStepFive() {
         <input id="tx-marketing-opt-in" type="checkbox" ${customer.marketing_opt_in ? "checked" : ""} />
         <span>I’m okay receiving occasional updates or special offers from Tex Axes.</span>
       </label>
+
+      ${
+        emailInvalid
+          ? `<div class="tx-error">Please enter a valid email address to continue.</div>`
+          : ""
+      }
+    </div>
+  `;
+}
+
+function renderAddonRow(id, title, meta, sell, value) {
+  return `
+    <div class="tx-addon-row">
+      <div class="tx-addon-copy">
+        <div class="tx-addon-title">${title}</div>
+        <div class="tx-addon-meta">${meta}</div>
+        <div class="tx-addon-sell">${sell}</div>
+      </div>
+      <input
+        class="tx-input tx-qty"
+        type="number"
+        min="0"
+        value="${value}"
+        data-addon-key="${id}"
+      />
+    </div>
+  `;
+}
+
+function renderStepFive() {
+  const addons = bookingState.values.addons;
+
+  return `
+    <div>
+      <h3 class="tx-card-title" style="margin-bottom:14px;">Enhance your experience</h3>
+      <div class="tx-inline-note" style="margin-bottom:12px;">
+        Your time is already selected. Add-ons below are optional ways to make the visit more memorable.
+      </div>
+
+      ${renderAddonRow(
+        "byob_guests",
+        "BYOB Guests",
+        "$5 per guest",
+        "Bring your own drinks and make it your night.",
+        addons.byob_guests
+      )}
+
+      ${renderAddonRow(
+        "wktl_knife_rental_qty",
+        "WKTL Knife Rental",
+        "$20 each",
+        "Try certified knife throwing on the same visit.",
+        addons.wktl_knife_rental_qty
+      )}
+
+      ${renderAddonRow(
+        "pro_axe_qty",
+        "Pro Axe",
+        "$10 each",
+        "Step up from the standard hatchet with a stronger throwing feel.",
+        addons.pro_axe_qty
+      )}
+
+      ${renderAddonRow(
+        "big_axe_qty",
+        "Big Axe",
+        "$15 each",
+        "Add a heavier challenge for guests who want something more intense.",
+        addons.big_axe_qty
+      )}
+
+      ${renderAddonRow(
+        "shovel_qty",
+        "Shovel Throw",
+        "$20 each",
+        "A memorable specialty throw that turns the session into a story.",
+        addons.shovel_qty
+      )}
     </div>
   `;
 }
@@ -1528,6 +1630,7 @@ function attachMainPanelEvents() {
       bookingState.selectedSlot = null;
       bookingState.availability = [];
       renderSidePanel();
+      updateCurrentStepButtonState();
     });
   }
 
@@ -1538,6 +1641,13 @@ function attachMainPanelEvents() {
       bookingState.selectedSlot = null;
       bookingState.availability = [];
       renderSidePanel();
+      updateCurrentStepButtonState();
+    });
+
+    dateInput.addEventListener("click", (event) => {
+      if (typeof event.target.showPicker === "function") {
+        event.target.showPicker();
+      }
     });
   }
 
@@ -1568,6 +1678,7 @@ function attachMainPanelEvents() {
       if (!key) return;
       bookingState.values.addons[key] = normalizeIntegerInput(event.target.value, 0);
       renderSidePanel();
+      updateCurrentStepButtonState();
     });
   });
 
@@ -1576,6 +1687,7 @@ function attachMainPanelEvents() {
     firstName.addEventListener("input", (event) => {
       bookingState.values.customer.first_name = event.target.value;
       renderSidePanel();
+      updateCurrentStepButtonState();
     });
   }
 
@@ -1584,6 +1696,7 @@ function attachMainPanelEvents() {
     lastName.addEventListener("input", (event) => {
       bookingState.values.customer.last_name = event.target.value;
       renderSidePanel();
+      updateCurrentStepButtonState();
     });
   }
 
@@ -1592,6 +1705,7 @@ function attachMainPanelEvents() {
     email.addEventListener("input", (event) => {
       bookingState.values.customer.email = event.target.value;
       renderSidePanel();
+      updateCurrentStepButtonState();
     });
   }
 
@@ -1600,6 +1714,7 @@ function attachMainPanelEvents() {
     phone.addEventListener("input", (event) => {
       bookingState.values.customer.phone = event.target.value;
       renderSidePanel();
+      updateCurrentStepButtonState();
     });
   }
 
@@ -1607,6 +1722,13 @@ function attachMainPanelEvents() {
   if (birthDate) {
     birthDate.addEventListener("input", (event) => {
       bookingState.values.customer.birth_date = event.target.value;
+      updateCurrentStepButtonState();
+    });
+
+    birthDate.addEventListener("click", (event) => {
+      if (typeof event.target.showPicker === "function") {
+        event.target.showPicker();
+      }
     });
   }
 
@@ -1614,6 +1736,7 @@ function attachMainPanelEvents() {
   if (isMinor) {
     isMinor.addEventListener("change", (event) => {
       bookingState.values.customer.is_minor = Boolean(event.target.checked);
+      updateCurrentStepButtonState();
     });
   }
 
@@ -1621,6 +1744,7 @@ function attachMainPanelEvents() {
   if (notes) {
     notes.addEventListener("input", (event) => {
       bookingState.values.customer.notes = event.target.value;
+      updateCurrentStepButtonState();
     });
   }
 
@@ -1628,6 +1752,7 @@ function attachMainPanelEvents() {
   if (marketingOptIn) {
     marketingOptIn.addEventListener("change", (event) => {
       bookingState.values.customer.marketing_opt_in = Boolean(event.target.checked);
+      updateCurrentStepButtonState();
     });
   }
 
@@ -1646,6 +1771,8 @@ function attachMainPanelEvents() {
       }
       if (stepIsValid(bookingState.step)) {
         setBookingStep(bookingState.step + 1);
+      } else if (bookingState.step === 4) {
+        renderBookingFlow();
       }
     });
   }
@@ -1687,6 +1814,12 @@ function wireBookingButtons() {
 
       el.addEventListener("click", (event) => {
         event.preventDefault();
+
+        const experience = el.getAttribute("data-experience");
+        if (experience) {
+          bookingState.values.experience = experience;
+        }
+
         openBookingModal();
       });
 
