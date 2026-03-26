@@ -436,5 +436,54 @@ async function boot() {
   const year = document.getElementById("year");
   if (year) year.textContent = new Date().getFullYear();
 }
+async function startBookingFlow() {
+  try {
+    // TEMP: fixed values (we’ll replace with UI later)
+    const payload = {
+      date: "2026-03-28",
+      time: "16:00",
+      throwers: 4,
+      customer: {
+        first_name: "Guest",
+        last_name: "Booking",
+        email: "guest@example.com",
+        phone: "555-555-5555",
+        is_minor: false
+      },
+      addons: {
+        byob_guests: 0,
+        wktl_knife_rental_qty: 0,
+        pro_axe_qty: 0,
+        big_axe_qty: 0,
+        shovel_qty: 0
+      },
+      booking_source: "public",
+      booking_type: "open"
+    };
 
+    const res = await fetch("https://texaxes-ops.vercel.app/api/book", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error(data);
+      alert("Booking failed");
+      return;
+    }
+
+    // 🔥 redirect to Stripe
+    window.location.href = data.checkout_url;
+
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong");
+  }
+}
 boot();
+
