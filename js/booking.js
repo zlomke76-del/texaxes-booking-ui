@@ -1,4 +1,6 @@
-const BOOKING_API_BASE = "https://texaxes-ops.vercel.app/api";
+from pathlib import Path
+
+content = r'''const BOOKING_API_BASE = "https://texaxes-ops.vercel.app/api";
 const PUBLIC_MAX_PARTY_SIZE = 24;
 
 const bookingState = {
@@ -1010,9 +1012,12 @@ async function loadAvailability() {
       throwers: String(bookingState.values.throwers)
     });
 
-    const response = await fetch(`${BOOKING_API_BASE}/availability?${params.toString()}`, {
-      method: "GET"
-    });
+    const response = await fetch(
+      `https://texaxes-ops.vercel.app/availability?${params.toString()}`,
+      {
+        method: "GET"
+      }
+    );
 
     const data = await response.json();
 
@@ -1866,3 +1871,7 @@ export function initBooking() {
   createBookingModal();
   wireBookingButtons();
 }
+'''
+path = Path("/mnt/data/booking.js")
+path.write_text(content, encoding="utf-8")
+print(path)
