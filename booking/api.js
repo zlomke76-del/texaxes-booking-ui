@@ -1,6 +1,6 @@
 import { bookingState } from "./state.js";
 
-const BASE = "https://texaxes-ops.vercel.app/api";
+const BASE = "https://texaxes-ops.vercel.app";
 
 export async function loadAvailability() {
   bookingState.availabilityLoading = true;
@@ -8,7 +8,7 @@ export async function loadAvailability() {
 
   const params = new URLSearchParams({
     date: bookingState.values.date,
-    throwers: bookingState.values.throwers
+    throwers: String(bookingState.values.throwers)
   });
 
   const res = await fetch(`${BASE}/availability?${params}`);
@@ -19,7 +19,7 @@ export async function loadAvailability() {
 }
 
 export async function submitBooking(payload) {
-  const res = await fetch(`${BASE}/book`, {
+  const res = await fetch(`${BASE}/api/book`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
