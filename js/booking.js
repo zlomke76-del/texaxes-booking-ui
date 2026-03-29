@@ -1869,7 +1869,4 @@ export function initBooking() {
   createBookingModal();
   wireBookingButtons();
 }
-'''
-path = Path("/mnt/data/booking.js")
-path.write_text(content, encoding="utf-8")
-print(path)
+)
