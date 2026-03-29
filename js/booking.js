@@ -1,6 +1,4 @@
-from pathlib import Path
-
-content = r'''const BOOKING_API_BASE = "https://texaxes-ops.vercel.app/api";
+const BOOKING_API_BASE = "https://texaxes-ops.vercel.app/api";
 const PUBLIC_MAX_PARTY_SIZE = 24;
 
 const bookingState = {
