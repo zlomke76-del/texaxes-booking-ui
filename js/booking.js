@@ -1869,4 +1869,3 @@ export function initBooking() {
   createBookingModal();
   wireBookingButtons();
 }
-)
