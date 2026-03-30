@@ -453,6 +453,49 @@ h1 {
   background: rgba(93, 125, 255, 0.14);
   border: 1px solid rgba(93, 125, 255, 0.28);
 }
+.hero-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 16px 0 0;
+  color: #dbe3f0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.hero-trust-rating {
+  font-weight: 800;
+  color: #fff2dc;
+}
+
+.hero-trust-divider {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.hero-trust-quote {
+  color: var(--muted);
+}
+
+@keyframes livePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(93, 125, 255, 0.38);
+    transform: scale(1);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(93, 125, 255, 0);
+    transform: scale(1.03);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(93, 125, 255, 0);
+    transform: scale(1);
+  }
+}
+
+.pill-live {
+  animation: livePulse 2.2s ease-out infinite;
+}
+
 
 .booking-grid {
   display: grid;
