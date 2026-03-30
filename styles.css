@@ -150,7 +150,23 @@ img {
   color: var(--text);
   font-size: 1.2rem;
 }
+.nav-social {
+  display: flex;
+  gap: 10px;
+  margin-right: 12px;
+}
 
+.nav-social a {
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.nav-social a:hover {
+  color: #fff;
+  transform: translateY(-1px);
+}
 /* =========================
    BUTTONS
 ========================= */
