@@ -1862,7 +1862,60 @@ h1 {
 .footer-links a:hover {
   color: var(--text);
 }
+.footer-contact {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
 
+.footer-contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.footer-block h4 {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #dbe4ff;
+}
+
+.footer-block p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.footer-block a {
+  color: var(--text);
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+
+.footer-block a:hover {
+  opacity: 0.7;
+}
+
+.footer-sub {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.footer-note {
+  font-size: 0.82rem;
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* Mobile */
+@media (max-width: 840px) {
+  .footer-contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
 /* =========================
    RESPONSIVE
 ========================= */
