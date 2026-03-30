@@ -922,6 +922,18 @@ function closeBookingModal() {
   document.body.style.overflow = "";
 }
 
+// 👇 ADD THIS RIGHT HERE
+window.closeBookingAndScrollToLuke = function () {
+  closeBookingModal();
+
+  requestAnimationFrame(() => {
+    document.getElementById("contact-luke")?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+  });
+};
+
 function setBookingStep(step) {
   bookingState.step = Math.max(1, Math.min(6, step));
   renderBookingFlow();
@@ -1253,11 +1265,16 @@ function renderStepTwo() {
         />
         <div class="tx-inline-note">
           Planning for more than 24 guests?
-          <a href="#contact-luke" class="tx-inline-link">Contact Luke</a>
+          <button
+            type="button"
+            class="tx-inline-link"
+            onclick="closeBookingAndScrollToLuke()"
+          >
+            Contact Luke
+          </button>
           and we’ll set up the perfect event for you.
         </div>
         </div>
-
         <div class="tx-party-card">
           <h4 class="tx-party-title">When do you want to come in?</h4>
           <p class="tx-party-copy">
