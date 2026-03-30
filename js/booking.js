@@ -1242,21 +1242,21 @@ function renderStepTwo() {
           </div>
 
           <div class="tx-field" style="margin-bottom:0;">
-  <label class="tx-label" for="tx-throwers">Exact number of throwers</label>
-  <input
-    id="tx-throwers"
-    class="tx-input"
-    type="number"
-    min="1"
-    max="${PUBLIC_MAX_PARTY_SIZE}"
-    value="${bookingState.values.throwers}"
-  />
-  <div class="tx-inline-note">
-    Planning for more than 24 guests?
-    <a href="tel:12819615867" class="tx-inline-link">Contact Luke</a>
-    and we’ll set up the perfect event for you.
-  </div>
-</div>
+          <label class="tx-label" for="tx-throwers">Exact number of throwers</label>
+        <input
+          id="tx-throwers"
+          class="tx-input"
+          type="number"
+          min="1"
+          max="${PUBLIC_MAX_PARTY_SIZE}"
+          value="${bookingState.values.throwers}"
+        />
+        <div class="tx-inline-note">
+          Planning for more than 24 guests?
+          <a href="#contact-luke" class="tx-inline-link">Contact Luke</a>
+          and we’ll set up the perfect event for you.
+        </div>
+        </div>
 
         <div class="tx-party-card">
           <h4 class="tx-party-title">When do you want to come in?</h4>
