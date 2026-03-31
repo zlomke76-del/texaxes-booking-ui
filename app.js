@@ -21,13 +21,77 @@ async function loadPartial(targetId, path) {
   const target = document.getElementById(targetId);
   if (!target) return;
 
-  const response = await fetch(path, { cache: "no-store" });
-  if (!response.ok) {
+  try {
+    const response = await fetch(path, { cache: "no-store" });
+
+    if (!response.ok) {
+      target.innerHTML = `<div class="container" style="padding:40px 0;color:#ffb4b4;">Failed to load section: ${path}</div>`;
+      return;
+    }
+
+    target.innerHTML = await response.text();
+  } catch (error) {
+    console.error(`Failed to load partial: ${path}`, error);
     target.innerHTML = `<div class="container" style="padding:40px 0;color:#ffb4b4;">Failed to load section: ${path}</div>`;
-    return;
+  }
+}
+
+function initMobileMenu() {
+  const toggle = document.querySelector(".menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+
+  if (!toggle || !menu) return;
+
+  const setOpen = (isOpen) => {
+    menu.hidden = !isOpen;
+    menu.classList.toggle("is-open", isOpen);
+    toggle.setAttribute("aria-expanded", String(isOpen));
+  };
+
+  setOpen(false);
+
+  toggle.addEventListener("click", () => {
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+    setOpen(!isOpen);
+  });
+
+  menu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 840) {
+      setOpen(false);
+    }
+  });
+}
+
+async function initPageFeatures() {
+  const hasLeagueSection =
+    document.getElementById("league-callout-section") ||
+    document.querySelector(".league-section") ||
+    document.querySelector(".league-callout");
+
+  if (hasLeagueSection) {
+    await ensureLeagueData();
+    initLeagueCallout();
   }
 
-  target.innerHTML = await response.text();
+  const hasBookingSection =
+    document.getElementById("hero-section") ||
+    document.querySelector("[data-booking-root]") ||
+    document.querySelector(".booking-grid");
+
+  if (hasBookingSection) {
+    initBooking();
+  }
+}
+
+function initYear() {
+  const year = document.getElementById("year");
+  if (year) {
+    year.textContent = new Date().getFullYear();
+  }
 }
 
 async function boot() {
@@ -35,12 +99,9 @@ async function boot() {
     Object.entries(partialMap).map(([targetId, path]) => loadPartial(targetId, path))
   );
 
-  await ensureLeagueData();
-  initLeagueCallout();
-  initBooking();
-
-  const year = document.getElementById("year");
-  if (year) year.textContent = new Date().getFullYear();
+  initMobileMenu();
+  await initPageFeatures();
+  initYear();
 }
 
 boot();
