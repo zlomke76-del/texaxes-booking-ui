@@ -2654,3 +2654,10 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+.store-category-meta {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--gold);
+  font-weight: 700;
+}
