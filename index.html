@@ -11,11 +11,18 @@
     <meta name="theme-color" content="#101318" />
     <link rel="stylesheet" href="/styles.css" />
 
-    <!-- Vercel Analytics -->
+    <!-- Vercel Analytics (FIXED) -->
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      window.va =
+        window.va ||
+        function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
     </script>
-    <script defer src="/_vercel/insights/script.js"></script>
+    <script
+      defer
+      src="https://va.vercel-scripts.com/v1/script.js"
+    ></script>
   </head>
   <body>
     <div id="site-header"></div>
