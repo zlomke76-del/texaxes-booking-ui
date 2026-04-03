@@ -1023,7 +1023,7 @@ async function loadAvailability() {
     });
 
     const response = await fetch(
-      `https://texaxes-ops.vercel.app/availability?${params.toString()}`,
+      `${BOOKING_API_BASE}/availability?${params.toString()}`,
       {
         method: "GET"
       }
