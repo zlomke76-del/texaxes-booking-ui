@@ -1023,7 +1023,7 @@ async function loadAvailability() {
     });
 
     const response = await fetch(
-      `${BOOKING_API_BASE}/availability?${params.toString()}`,
+  `    ${BOOKING_API_BASE}/availability?${params.toString()}`,
       {
         method: "GET"
       }
