@@ -74,7 +74,7 @@ function computeLocalPricingSnapshot() {
   const throwers = Number(bookingState.values.throwers || 0);
   const addons = bookingState.values.addons;
 
-  const basePrice = throwers * 29;
+  const basePrice = throwers * 29 * bookingState.values.duration_hours;
   const addonsSubtotal =
     (Number(addons.byob_guests || 0) * 5) +
     (Number(addons.wktl_knife_rental_qty || 0) * 20) +
@@ -1019,9 +1019,10 @@ async function loadAvailability() {
 
   try {
     const params = new URLSearchParams({
-      date: bookingState.values.date,
-      throwers: String(bookingState.values.throwers)
-    });
+  date: bookingState.values.date,
+  throwers: String(bookingState.values.throwers),
+  duration_hours: String(bookingState.values.duration_hours)
+});
 
     const response = await fetch(
   `    ${BOOKING_API_BASE}/availability?${params.toString()}`,
@@ -1072,6 +1073,7 @@ function buildBookingPayload() {
     date: bookingState.values.date,
     time: bookingState.selectedSlot ? bookingState.selectedSlot.start : "",
     throwers: Number(bookingState.values.throwers),
+    duration_hours: bookingState.values.duration_hours,
     customer: {
       first_name: bookingState.values.customer.first_name.trim(),
       last_name: bookingState.values.customer.last_name.trim(),
