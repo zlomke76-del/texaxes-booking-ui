@@ -11,6 +11,7 @@ export const bookingState = {
   values: {
     experience: "axe_throwing",
     throwers: 4,
+    duration_hours: 1,
     date: "",
     addons: {
       byob_guests: 0,
