@@ -10,9 +10,10 @@ const bookingState = {
   availability: [],
   selectedSlot: null,
   values: {
-    experience: "axe_throwing",
-    throwers: 4,
-    date: "",
+  experience: "axe_throwing",
+  throwers: 4,
+  duration_hours: 1,
+  date: "",
     addons: {
       byob_guests: 0,
       wktl_knife_rental_qty: 0,
@@ -1229,30 +1230,41 @@ function renderStepTwo() {
       </div>
 
       <div class="tx-party-shell">
-        <div class="tx-party-card">
-          <h4 class="tx-party-title">How many are throwing?</h4>
-          <p class="tx-party-copy">
-            Most online bookings are small groups, date nights, and celebrations. Start with a quick pick or enter your exact count.
-          </p>
+  <div class="tx-party-card">
+    <h4 class="tx-party-title">How many are throwing?</h4>
+    <p class="tx-party-copy">
+      Most online bookings are small groups, date nights, and celebrations. Start with a quick pick or enter your exact count.
+    </p>
 
-          <div class="tx-count-grid">
-            ${presets
-              .map((count) => {
-                const selected = throwers === count ? "is-selected" : "";
-                return `
-                  <button
-                    type="button"
-                    class="tx-count-chip ${selected}"
-                    data-throwers-preset="${count}"
-                  >
-                    <div class="tx-count-value">${count}</div>
-                    <div class="tx-count-meta">${count === 2 ? "Great for date night" : count <= 6 ? "Popular size" : "Group booking"}</div>
-                  </button>
-                `;
-              })
-              .join("")}
-          </div>
+    <div class="tx-field">
+      <label class="tx-label" for="tx-duration">How long are you booking?</label>
+      <select id="tx-duration" class="tx-select">
+        <option value="1" ${bookingState.values.duration_hours === 1 ? "selected" : ""}>1 Hour</option>
+        <option value="2" ${bookingState.values.duration_hours === 2 ? "selected" : ""}>2 Hours</option>
+        <option value="3" ${bookingState.values.duration_hours === 3 ? "selected" : ""}>3 Hours</option>
+      </select>
+      <div class="tx-inline-note">
+        Most groups book 1–2 hours depending on size and experience level.
+      </div>
+    </div>
 
+    <div class="tx-count-grid">
+      ${presets
+        .map((count) => {
+          const selected = throwers === count ? "is-selected" : "";
+          return `
+            <button
+              type="button"
+              class="tx-count-chip ${selected}"
+              data-throwers-preset="${count}"
+            >
+              <div class="tx-count-value">${count}</div>
+              <div class="tx-count-meta">${count === 2 ? "Great for date night" : count <= 6 ? "Popular size" : "Group booking"}</div>
+            </button>
+          `;
+        })
+        .join("")}
+    </div>
           <div class="tx-field" style="margin-bottom:0;">
           <label class="tx-label" for="tx-throwers">Exact number of throwers</label>
         <input
@@ -1686,6 +1698,16 @@ function attachMainPanelEvents() {
       renderBookingFlow();
     });
   });
+
+  const durationSelect = main.querySelector("#tx-duration");
+  if (durationSelect) {
+    durationSelect.addEventListener("change", (event) => {
+      bookingState.values.duration_hours = Number(event.target.value);
+      bookingState.selectedSlot = null;
+      bookingState.availability = [];
+      renderBookingFlow();
+    });
+  }
 
   const throwersInput = main.querySelector("#tx-throwers");
   if (throwersInput) {
