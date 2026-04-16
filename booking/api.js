@@ -8,7 +8,8 @@ export async function loadAvailability() {
 
   const params = new URLSearchParams({
     date: bookingState.values.date,
-    throwers: String(bookingState.values.throwers)
+    throwers: String(bookingState.values.throwers),
+    duration_hours: String(bookingState.values.duration_hours || 1)
   });
 
   const res = await fetch(`${BASE}/availability?${params}`);
@@ -19,10 +20,15 @@ export async function loadAvailability() {
 }
 
 export async function submitBooking(payload) {
+  const enrichedPayload = {
+    ...payload,
+    duration_hours: bookingState.values.duration_hours || 1
+  };
+
   const res = await fetch(`${BASE}/api/book`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(enrichedPayload)
   });
 
   return res.json();
